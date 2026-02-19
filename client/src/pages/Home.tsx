@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Calculator, TrendingUp, Users, AlertCircle, DollarSign, Clock, FileText } from "lucide-react";
 import CostSummary from "@/components/CostSummary";
+import BenchmarkComparison from "@/components/BenchmarkComparison";
 import ROIComparison from "@/components/ROIComparison";
 
 interface CostInputs {
@@ -347,6 +348,16 @@ export default function Home() {
             <CostSummary costs={costs} />
           </div>
         </div>
+
+        {/* Benchmark Comparison Section */}
+        {showResults && (
+          <div className="mt-12">
+            <BenchmarkComparison 
+              costs={costs}
+              numberOfEmployees={inputs.numberOfEmployees}
+            />
+          </div>
+        )}
 
         {/* ROI Comparison Section */}
         {showResults && (
