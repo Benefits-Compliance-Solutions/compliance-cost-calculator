@@ -25,6 +25,7 @@ interface BenchmarkComparisonProps {
     opportunityCost: number;
     productivityCost: number;
     penaltyRisk: number;
+    totalOperationalCost: number;
     totalCost: number;
   };
   numberOfEmployees: number;
@@ -94,7 +95,7 @@ function ComparisonIndicator({ comparison }: { comparison: BenchmarkComparisonTy
 
 export default function BenchmarkComparison({ costs, numberOfEmployees }: BenchmarkComparisonProps) {
   const benchmark = getAgencySizeBenchmark(numberOfEmployees);
-  const costPerEmployee = calculateCostPerEmployee(costs.totalCost, numberOfEmployees);
+  const costPerEmployee = calculateCostPerEmployee(costs.totalOperationalCost, numberOfEmployees);
   const overallComparison = compareToBenchmark(costPerEmployee, benchmark.totalCostPerEmployee);
   const categoryComparisons = compareCostBreakdown(costs, numberOfEmployees);
 
@@ -266,10 +267,12 @@ export default function BenchmarkComparison({ costs, numberOfEmployees }: Benchm
             <div className="flex items-start gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-2" />
               <p>
-                <span className="font-semibold">High Priority:</span> Your compliance costs are {Math.abs(overallComparison.percentageDifference).toFixed(0)}% above industry average, 
+                <span className="font-semibold">High Priority:</span> Your operational compliance costs are {Math.abs(overallComparison.percentageDifference).toFixed(0)}% above industry average, 
                 representing approximately <span className="font-bold text-destructive">
                   ${((costPerEmployee - benchmark.totalCostPerEmployee.average) * numberOfEmployees).toLocaleString()}
-                </span> in excess annual costs.
+                </span> in excess annual operational costs. Additionally, your compliance liability exposure of <span className="font-bold text-destructive">
+                  ${costs.penaltyRisk.toLocaleString()}
+                </span> represents significant financial risk across your book of business.
               </p>
             </div>
           )}
@@ -299,8 +302,17 @@ export default function BenchmarkComparison({ costs, numberOfEmployees }: Benchm
           <div className="flex items-start gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2" />
             <p>
-              <span className="font-semibold">Competitive Advantage:</span> Lower compliance costs free up resources 
-              to invest in growth, technology, and client service—helping you win and retain larger clients.
+              <span className="font-semibold">Revenue Opportunity:</span> Beyond cost savings, strong compliance capabilities 
+              enable you to retain more clients, pursue larger accounts, and win new business by leading with compliance 
+              expertise in your sales process.
+            </p>
+          </div>
+          
+          <div className="flex items-start gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2" />
+            <p>
+              <span className="font-semibold">Competitive Advantage:</span> Lower operational costs and reduced liability exposure 
+              free up resources to invest in growth, technology, and client service—helping you win and retain larger clients.
             </p>
           </div>
         </CardContent>

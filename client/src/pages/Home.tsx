@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Calculator, TrendingUp, Users, AlertCircle, DollarSign, Clock, FileText, Building2, Target } from "lucide-react";
 import CostSummary from "@/components/CostSummary";
+import PotentialROI from "@/components/PotentialROI";
 import BenchmarkComparison from "@/components/BenchmarkComparison";
 import ROIComparison from "@/components/ROIComparison";
 
@@ -47,11 +48,11 @@ export default function Home() {
   const [inputs, setInputs] = useState<CostInputs>({
     numberOfEmployees: 50,
     averageHourlyRate: 75,
-    totalClients: 30,
+    totalClients: 200,
     hoursPerComplianceIssue: 3,
     complianceIssuesPerMonth: 8,
     clientsLostPerYear: 2,
-    averageClientValue: 15000,
+    averageClientValue: 50000,
     largeClientsLost: 1,
     averageLargeClientValue: 150000,
     newClientsWonPerYear: 5,
@@ -211,9 +212,9 @@ export default function Home() {
                       id="totalClients"
                       value={[inputs.totalClients]}
                       onValueChange={([value]) => updateInput('totalClients', value)}
-                      min={5}
-                      max={200}
-                      step={1}
+                      min={50}
+                      max={1000}
+                      step={10}
                       className="flex-1"
                     />
                     <span className="text-sm font-semibold w-16 text-right">{inputs.totalClients}</span>
@@ -301,9 +302,9 @@ export default function Home() {
                       id="clientValue"
                       value={[inputs.averageClientValue]}
                       onValueChange={([value]) => updateInput('averageClientValue', value)}
-                      min={5000}
-                      max={100000}
-                      step={1000}
+                      min={50000}
+                      max={700000}
+                      step={10000}
                       className="flex-1"
                     />
                     <span className="text-sm font-semibold w-20 text-right">${(inputs.averageClientValue / 1000).toFixed(0)}K</span>
@@ -450,6 +451,14 @@ export default function Home() {
           {/* Right Column: Results */}
           <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <CostSummary costs={costs} />
+            <PotentialROI 
+              costs={{
+                clientChurnCost: costs.clientChurnCost,
+                staffTimeCost: costs.staffTimeCost,
+                productivityCost: costs.productivityCost,
+              }}
+              revenueGrowth={costs.revenueGrowth}
+            />
           </div>
         </div>
 

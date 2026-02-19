@@ -137,7 +137,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
           </p>
           
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-            <p className="text-sm text-destructive-foreground">
+            <p className="text-sm text-foreground">
               <strong>Risk Assessment:</strong> Based on your book of business, this represents the potential 
               financial exposure from compliance violations across all client employers. Industry data shows 
               average penalties of $70K-$150K for smaller employers and $350K+ for larger employers.

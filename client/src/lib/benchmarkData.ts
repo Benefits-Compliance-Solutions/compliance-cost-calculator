@@ -146,8 +146,8 @@ export function compareToBenchmark(
   };
 }
 
-export function calculateCostPerEmployee(totalCost: number, numberOfEmployees: number): number {
-  return numberOfEmployees > 0 ? totalCost / numberOfEmployees : 0;
+export function calculateCostPerEmployee(operationalCost: number, numberOfEmployees: number): number {
+  return numberOfEmployees > 0 ? Math.round((operationalCost / numberOfEmployees) * 100) / 100 : 0;
 }
 
 export interface CategoryComparison {

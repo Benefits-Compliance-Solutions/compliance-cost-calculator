@@ -252,7 +252,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   
   // Get benchmark data
   const benchmark = getAgencySizeBenchmark(inputs.numberOfEmployees);
-  const costPerEmployee = calculateCostPerEmployee(costs.totalCost, inputs.numberOfEmployees);
+  const costPerEmployee = calculateCostPerEmployee(costs.totalOperationalCost, inputs.numberOfEmployees);
   const overallComparison = compareToBenchmark(costPerEmployee, benchmark.totalCostPerEmployee);
   const categoryComparisons = compareCostBreakdown(costs, inputs.numberOfEmployees);
   
@@ -378,7 +378,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(gray[0], gray[1], gray[2]);
     const excessCost = (costPerEmployee - benchmark.totalCostPerEmployee.average) * inputs.numberOfEmployees;
-    const alertText = `Your compliance costs are ${Math.abs(overallComparison.percentageDifference).toFixed(0)}% above industry average, representing approximately $${excessCost.toLocaleString()} in excess annual costs. This is a major opportunity for improvement through compliance partnership.`;
+    const alertText = `Your operational compliance costs are ${Math.abs(overallComparison.percentageDifference).toFixed(0)}% above industry average, representing approximately $${excessCost.toLocaleString()} in excess annual operational costs. Additionally, your compliance liability exposure of $${costs.penaltyRisk.toLocaleString()} represents significant financial risk. This is a major opportunity for improvement through compliance partnership.`;
     const alertLines = doc.splitTextToSize(alertText, 160);
     let alertY = yPos + 16;
     alertLines.forEach((line: string) => {

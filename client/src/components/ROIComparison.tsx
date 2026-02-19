@@ -79,6 +79,17 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               <p className="text-sm text-muted-foreground">Annual compliance costs</p>
             </div>
             
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="p-3 bg-card rounded-lg border border-destructive/20">
+                <p className="text-xs text-muted-foreground mb-1">Operational Costs</p>
+                <p className="font-bold text-destructive">${costs.totalOperationalCost.toLocaleString()}</p>
+              </div>
+              <div className="p-3 bg-card rounded-lg border border-destructive/20">
+                <p className="text-xs text-muted-foreground mb-1">Liability Exposure</p>
+                <p className="font-bold text-destructive">${costs.totalLiabilityExposure.toLocaleString()}</p>
+              </div>
+            </div>
+            
             <div className="space-y-2 pt-4 border-t border-destructive/20">
               <p className="text-sm font-medium">Current challenges:</p>
               <ul className="space-y-2 text-sm text-muted-foreground">
