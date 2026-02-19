@@ -26,10 +26,14 @@ interface ROIComparisonProps {
     totalCost: number;
   };
   inputs: {
+    agencyName?: string;
     numberOfEmployees: number;
     averageHourlyRate: number;
     hoursPerComplianceIssue: number;
     complianceIssuesPerMonth: number;
+    totalClients?: number;
+    newClientsWonPerYear?: number;
+    averageNewClientValue?: number;
   };
 }
 
@@ -170,9 +174,9 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               <p className="text-xs text-destructive/80 mt-2">Annual operational costs draining your agency</p>
             </div>
             <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
-              <p className="text-sm text-muted-foreground mb-2">Potential Revenue Gains</p>
-              <p className="text-3xl font-bold text-accent">${(estimatedSavings + costs.revenueGrowth).toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-2">Annual savings + new business revenue</p>
+              <p className="text-sm text-muted-foreground mb-2">Annual New Business Revenue</p>
+              <p className="text-3xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-2">From winning new clients with compliance expertise</p>
             </div>
           </div>
 

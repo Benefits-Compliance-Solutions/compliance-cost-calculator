@@ -56,10 +56,10 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
       </CardHeader>
       <CardContent>
         <div className="text-5xl font-bold text-accent mb-6">
-          ${totalPotentialROI.toLocaleString()}
+          ${newBusinessRevenue.toLocaleString()}
         </div>
         <p className="text-sm text-muted-foreground mb-6">
-          Annual revenue opportunity beyond cost savings
+          Annual new business revenue from stronger compliance capabilities
         </p>
         
         {/* ROI Breakdown */}

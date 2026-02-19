@@ -479,10 +479,14 @@ export default function Home() {
               totalCost={costs.totalCost} 
               costs={costs}
               inputs={{
+                agencyName: inputs.agencyName,
                 numberOfEmployees: inputs.numberOfEmployees,
                 averageHourlyRate: inputs.averageHourlyRate,
                 hoursPerComplianceIssue: inputs.hoursPerComplianceIssue,
                 complianceIssuesPerMonth: inputs.complianceIssuesPerMonth,
+                totalClients: inputs.totalClients,
+                newClientsWonPerYear: inputs.newClientsWonPerYear,
+                averageNewClientValue: inputs.averageNewClientValue,
               }}
             />
           </div>
