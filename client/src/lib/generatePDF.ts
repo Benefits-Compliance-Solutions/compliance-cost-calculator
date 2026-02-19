@@ -38,6 +38,14 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFillColor(navyBlue[0], navyBlue[1], navyBlue[2]);
   doc.rect(0, 0, 210, 35, 'F');
   
+  // Add BCS logo (small, in header)
+  const logoUrl = 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/nuKbXpgdTmBwocxJ.png';
+  try {
+    doc.addImage(logoUrl, 'PNG', 15, 8, 20, 20);
+  } catch (e) {
+    console.log('Logo load failed, continuing without logo');
+  }
+  
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
@@ -307,39 +315,6 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   yPos += 50;
   
   // Investment Summary
-  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('INVESTMENT SUMMARY', 20, yPos);
-  
-  yPos += 10;
-  
-  const summaryItems = [
-    { label: 'Estimated Annual Savings', value: estimatedSavings, color: teal },
-    { label: 'Estimated Partnership Investment', value: estimatedBCSCost, color: navyBlue },
-    { label: 'Net Annual Savings', value: netSavings, color: teal },
-  ];
-  
-  summaryItems.forEach((item) => {
-    doc.setFillColor(item.color[0], item.color[1], item.color[2]);
-    doc.setDrawColor(item.color[0], item.color[1], item.color[2]);
-    doc.roundedRect(20, yPos, 170, 15, 2, 2, 'D');
-    
-    doc.setTextColor(gray[0], gray[1], gray[2]);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text(item.label, 25, yPos + 9);
-    
-    doc.setTextColor(item.color[0], item.color[1], item.color[2]);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`$${item.value.toLocaleString()}`, 185, yPos + 9, { align: 'right' });
-    
-    yPos += 20;
-  });
-  
-  // ROI Highlight
-  // Investment Summary with 4 boxes
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
@@ -369,39 +344,45 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   
   xPos += boxWidth + gap;
   
-  // Annual Cost Savings
-  doc.setFillColor(240, 255, 250);
-  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  // WITHOUT BCS Partnership (RED BOX)
+  const redColor = [220, 100, 100];
+  doc.setFillColor(255, 240, 240);
+  doc.setDrawColor(redColor[0], redColor[1], redColor[2]);
+  doc.setLineWidth(1.5);
   doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
-  doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFontSize(9);
-  doc.text('Annual Cost Savings', xPos + boxWidth/2, yPos + 9, { align: 'center' });
-  doc.setTextColor(teal[0], teal[1], teal[2]);
-  doc.setFontSize(14);
+  doc.setLineWidth(0.5);
+  doc.setTextColor(redColor[0], redColor[1], redColor[2]);
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
-  doc.text(`$${estimatedSavings.toLocaleString()}`, xPos + boxWidth/2, yPos + 20, { align: 'center' });
-  doc.setFontSize(7);
+  doc.text('WITHOUT BCS', xPos + boxWidth/2, yPos + 7, { align: 'center' });
+  doc.setFontSize(14);
+  doc.text(`$${costs.totalOperationalCost.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.setFontSize(6);
   doc.setFont('helvetica', 'normal');
-  doc.text(`${reductionPercentage}% reduction`, xPos + boxWidth/2, yPos + 26, { align: 'center' });
+  doc.text('Annual costs draining', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  doc.text('your agency', xPos + boxWidth/2, yPos + 28, { align: 'center' });
   
   xPos += boxWidth + gap;
   
-  // Net Annual Savings
+  // Potential Revenue Gains
+  const potentialGains = estimatedSavings + costs.revenueGrowth;
   doc.setFillColor(245, 255, 250);
   doc.setDrawColor(teal[0], teal[1], teal[2]);
   doc.setLineWidth(1.5);
   doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
   doc.setLineWidth(0.5);
   doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFontSize(9);
-  doc.text('Net Annual Savings', xPos + boxWidth/2, yPos + 9, { align: 'center' });
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Potential Revenue Gains', xPos + boxWidth/2, yPos + 9, { align: 'center' });
   doc.setTextColor(teal[0], teal[1], teal[2]);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`$${netSavings.toLocaleString()}`, xPos + boxWidth/2, yPos + 20, { align: 'center' });
-  doc.setFontSize(7);
+  doc.text(`$${potentialGains.toLocaleString()}`, xPos + boxWidth/2, yPos + 20, { align: 'center' });
+  doc.setFontSize(6);
   doc.setFont('helvetica', 'normal');
-  doc.text('After partnership cost', xPos + boxWidth/2, yPos + 26, { align: 'center' });
+  doc.text('Annual savings +', xPos + boxWidth/2, yPos + 25, { align: 'center' });
+  doc.text('new business revenue', xPos + boxWidth/2, yPos + 29, { align: 'center' });
   
   yPos += boxHeight + 15;
   

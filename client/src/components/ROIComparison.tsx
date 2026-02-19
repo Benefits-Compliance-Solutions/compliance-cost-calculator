@@ -114,11 +114,10 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
-              <div className="p-3 bg-card rounded-lg border border-accent/20">
-                <p className="text-xs text-muted-foreground mb-1">Operational Cost Savings</p>
+              <div className="p-3 bg-card rounded-lg border border-accent/20">                <p className="text-xs text-muted-foreground mb-1">Annual Savings</p>
                 <p className="text-2xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
                 <Progress value={reductionPercentage} className="mt-2 h-2" />
-                <p className="text-xs text-muted-foreground mt-1">{reductionPercentage}% reduction in staff time, client churn, and lost opportunities</p>
+                <p className="text-xs text-muted-foreground mt-1">Savings from reducing your current ${costs.totalOperationalCost.toLocaleString()} operational costs by {reductionPercentage}%</p>
               </div>
               <div className="p-3 bg-accent/10 rounded-lg border border-accent/30">
                 <p className="text-xs text-muted-foreground mb-1">Annual New Business Revenue</p>
@@ -165,15 +164,15 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               <p className="text-3xl font-bold text-primary">${estimatedBCSCost.toLocaleString()}</p>
               <p className="text-xs text-muted-foreground mt-2">Annual</p>
             </div>
-            <div className="text-center p-6 rounded-lg bg-accent/10 border-2 border-accent/30">
-              <p className="text-sm text-muted-foreground mb-2">Annual Cost Savings</p>
-              <p className="text-3xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-2">{reductionPercentage}% reduction from reduced staff time, lower churn, and fewer missed opportunities</p>
+            <div className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg">
+              <p className="text-sm font-semibold text-destructive mb-2">WITHOUT BCS Partnership</p>
+              <p className="text-3xl font-bold text-destructive">${costs.totalOperationalCost.toLocaleString()}</p>
+              <p className="text-xs text-destructive/80 mt-2">Annual operational costs draining your agency</p>
             </div>
             <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
-              <p className="text-sm text-muted-foreground mb-2">Net Annual Savings</p>
-              <p className="text-3xl font-bold text-accent">${netSavings.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-2">After partnership cost</p>
+              <p className="text-sm text-muted-foreground mb-2">Potential Revenue Gains</p>
+              <p className="text-3xl font-bold text-accent">${(estimatedSavings + costs.revenueGrowth).toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-2">Annual savings + new business revenue</p>
             </div>
           </div>
 

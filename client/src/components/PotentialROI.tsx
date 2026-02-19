@@ -50,9 +50,9 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-accent">
           <Target className="w-5 h-5" />
-          Potential ROI
+          What You're Leaving on the Table
         </CardTitle>
-        <CardDescription>Revenue gains from stronger compliance capabilities</CardDescription>
+        <CardDescription>Revenue and opportunities you could have captured with stronger compliance capabilities</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="text-5xl font-bold text-accent mb-6">

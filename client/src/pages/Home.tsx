@@ -18,6 +18,7 @@ import ROIComparison from "@/components/ROIComparison";
 
 interface CostInputs {
   // Company basics
+  agencyName: string;
   numberOfEmployees: number;
   averageHourlyRate: number;
   totalClients: number;
@@ -45,6 +46,7 @@ interface CostInputs {
 
 export default function Home() {
   const [inputs, setInputs] = useState<CostInputs>({
+    agencyName: "",
     numberOfEmployees: 50,
     averageHourlyRate: 75,
     totalClients: 200,
@@ -62,7 +64,7 @@ export default function Home() {
 
   // Results are always visible - no toggle needed
 
-  const updateInput = (field: keyof CostInputs, value: number) => {
+  const updateInput = (field: keyof CostInputs, value: number | string) => {
     setInputs(prev => ({ ...prev, [field]: value }));
   };
 
@@ -174,6 +176,17 @@ export default function Home() {
                 <CardDescription>Tell us about your agency</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="agencyName">Agency Name</Label>
+                  <Input
+                    id="agencyName"
+                    type="text"
+                    placeholder="Enter your agency name"
+                    value={inputs.agencyName}
+                    onChange={(e) => updateInput('agencyName', e.target.value)}
+                    className="text-base"
+                  />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="employees">Number of Employee Benefits Staff Members</Label>
                   <div className="flex items-center gap-4">
