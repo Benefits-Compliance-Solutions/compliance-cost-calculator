@@ -67,6 +67,8 @@ export default function Home() {
   };
 
   const calculateCosts = () => {
+    // OPERATIONAL COSTS (Labor, Lost Deals, Churn)
+    
     // Staff time costs
     const staffTimeCost = inputs.hoursPerComplianceIssue * 
                           inputs.complianceIssuesPerMonth * 
@@ -85,6 +87,11 @@ export default function Home() {
                             2080 * // hours per year
                             (inputs.productivityLossPercentage / 100);
     
+    // Total operational costs
+    const totalOperationalCost = staffTimeCost + clientChurnCost + opportunityCost + productivityCost;
+    
+    // LIABILITY EXPOSURE (Potential penalties for entire book of business)
+    
     // Calculate penalty risk based on client portfolio
     // Count clients by size (assuming average employer size distribution)
     const smallClients = Math.floor(inputs.totalClients * 0.7); // 70% under 50 employees
@@ -93,20 +100,32 @@ export default function Home() {
     // Average liability: $70K-$150K for small, $350K for large
     const smallClientRisk = smallClients * 110000; // midpoint of $70K-$150K
     const largeClientRisk = largeClients * 350000;
-    const penaltyRisk = smallClientRisk + largeClientRisk;
+    const totalLiabilityExposure = smallClientRisk + largeClientRisk;
     
     // Revenue growth from new clients
     const revenueGrowth = inputs.newClientsWonPerYear * inputs.averageNewClientValue;
+    const lifetimeValueGrowth = revenueGrowth * 6; // 6-year industry standard
     
-    const totalCost = staffTimeCost + clientChurnCost + opportunityCost + productivityCost + penaltyRisk;
+    // Combined total for benchmark comparison
+    const totalCost = totalOperationalCost + totalLiabilityExposure;
     
     return {
+      // Operational costs breakdown
       staffTimeCost,
       clientChurnCost,
       opportunityCost,
       productivityCost,
-      penaltyRisk,
+      totalOperationalCost,
+      
+      // Liability exposure
+      totalLiabilityExposure,
+      
+      // Revenue growth
       revenueGrowth,
+      lifetimeValueGrowth,
+      
+      // Legacy fields for compatibility
+      penaltyRisk: totalLiabilityExposure,
       totalCost,
     };
   };

@@ -11,8 +11,11 @@ interface CostData {
   clientChurnCost: number;
   opportunityCost: number;
   productivityCost: number;
+  totalOperationalCost: number;
+  totalLiabilityExposure: number;
   penaltyRisk: number;
   revenueGrowth: number;
+  lifetimeValueGrowth: number;
   totalCost: number;
 }
 
@@ -85,63 +88,118 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   
   yPos += 35;
   
-  // Cost Breakdown Section
+  // Operational Costs Section
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('COST BREAKDOWN', 20, yPos);
+  doc.text('OPERATIONAL COSTS', 20, yPos);
   
-  yPos += 8;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.text('Labor, lost deals, and client churn', 20, yPos + 5);
   
-  const costItems = [
+  yPos += 12;
+  
+  // Operational costs total
+  doc.setFillColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setDrawColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.roundedRect(20, yPos, 170, 15, 2, 2, 'FD');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${costs.totalOperationalCost.toLocaleString()}`, 105, yPos + 10, { align: 'center' });
+  
+  yPos += 20;
+  
+  const operationalItems = [
     { label: 'Staff Time on Compliance Issues', value: costs.staffTimeCost },
     { label: 'Client Churn', value: costs.clientChurnCost },
     { label: 'Lost Large Client Opportunities', value: costs.opportunityCost },
     { label: 'Lost Productivity', value: costs.productivityCost },
-    { label: 'Penalty & Fine Risk', value: costs.penaltyRisk },
   ];
   
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
+  doc.setFontSize(9);
   
-  costItems.forEach((item) => {
-    const percentage = costs.totalCost > 0 ? (item.value / costs.totalCost) * 100 : 0;
+  operationalItems.forEach((item) => {
+    const percentage = costs.totalOperationalCost > 0 ? (item.value / costs.totalOperationalCost) * 100 : 0;
     
-    // Item label
     doc.setTextColor(gray[0], gray[1], gray[2]);
     doc.text(item.label, 25, yPos);
     
-    // Amount
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
     doc.text(`$${item.value.toLocaleString()}`, 190, yPos, { align: 'right' });
     
-    yPos += 5;
+    yPos += 4;
     
-    // Progress bar
     const barWidth = 165;
     const fillWidth = (barWidth * percentage) / 100;
     
     doc.setDrawColor(200, 200, 200);
     doc.setFillColor(240, 240, 240);
-    doc.roundedRect(25, yPos, barWidth, 4, 1, 1, 'FD');
+    doc.roundedRect(25, yPos, barWidth, 3, 1, 1, 'FD');
     
-    doc.setFillColor(teal[0], teal[1], teal[2]);
+    doc.setFillColor(navyBlue[0], navyBlue[1], navyBlue[2]);
     if (fillWidth > 0) {
-      doc.roundedRect(25, yPos, fillWidth, 4, 1, 1, 'F');
+      doc.roundedRect(25, yPos, fillWidth, 3, 1, 1, 'F');
     }
     
-    // Percentage
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor(gray[0], gray[1], gray[2]);
-    doc.text(`${percentage.toFixed(1)}%`, 190, yPos + 3, { align: 'right' });
+    doc.text(`${percentage.toFixed(1)}%`, 192, yPos + 2);
     
-    yPos += 10;
-    doc.setFontSize(10);
+    yPos += 6;
+    doc.setFontSize(9);
   });
   
-  yPos += 5;
+  yPos += 10;
+  
+  // Liability Exposure Section
+  doc.setTextColor(180, 50, 50);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('LIABILITY EXPOSURE', 20, yPos);
+  
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.text('Potential penalties for entire book of business', 20, yPos + 5);
+  
+  yPos += 12;
+  
+  // Liability total
+  doc.setFillColor(220, 100, 100);
+  doc.setDrawColor(220, 100, 100);
+  doc.roundedRect(20, yPos, 170, 15, 2, 2, 'FD');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${costs.totalLiabilityExposure.toLocaleString()}`, 105, yPos + 10, { align: 'center' });
+  
+  yPos += 20;
+  
+  // Liability explanation
+  doc.setFillColor(255, 240, 240);
+  doc.setDrawColor(220, 100, 100);
+  doc.roundedRect(20, yPos, 170, 25, 2, 2, 'FD');
+  
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  const liabilityText = 'This represents potential financial exposure from compliance violations across all client employers. Industry data shows average penalties of $70K-$150K for smaller employers and $350K+ for larger employers.';
+  const liabilityLines = doc.splitTextToSize(liabilityText, 160);
+  let liabilityY = yPos + 6;
+  liabilityLines.forEach((line: string) => {
+    doc.text(line, 25, liabilityY);
+    liabilityY += 4;
+  });
+  
+  yPos += 10;
   
   // Key Insights Section
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
@@ -462,29 +520,45 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
     
     yPos += 8;
     
+    // Annual Revenue
+    doc.setFillColor(245, 245, 245);
+    doc.setDrawColor(teal[0], teal[1], teal[2]);
+    doc.roundedRect(20, yPos, 82, 25, 3, 3, 'FD');
+    
+    doc.setTextColor(gray[0], gray[1], gray[2]);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Annual New Client Revenue', 61, yPos + 8, { align: 'center' });
+    
+    doc.setTextColor(teal[0], teal[1], teal[2]);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`$${costs.revenueGrowth.toLocaleString()}`, 61, yPos + 18, { align: 'center' });
+    
+    // Lifetime Value
     doc.setFillColor(teal[0], teal[1], teal[2]);
     doc.setDrawColor(teal[0], teal[1], teal[2]);
-    doc.roundedRect(20, yPos, 170, 25, 3, 3, 'FD');
+    doc.roundedRect(108, yPos, 82, 25, 3, 3, 'FD');
     
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(10);
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text('Potential Annual Revenue from New Clients Won', 105, yPos + 8, { align: 'center' });
+    doc.text('6-Year Lifetime Value', 149, yPos + 8, { align: 'center' });
     
-    doc.setFontSize(18);
+    doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text(`$${costs.revenueGrowth.toLocaleString()}`, 105, yPos + 18, { align: 'center' });
+    doc.text(`$${costs.lifetimeValueGrowth.toLocaleString()}`, 149, yPos + 18, { align: 'center' });
     
     yPos += 30;
     
-    doc.setFontSize(9);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(gray[0], gray[1], gray[2]);
-    const growthText = `With stronger compliance capabilities, your agency can confidently pursue and win more clients. This represents significant revenue upside beyond cost savings.`;
+    const growthText = `With stronger compliance capabilities, your agency can confidently pursue and win more clients. Based on industry standard 6-year client retention, this represents $${costs.lifetimeValueGrowth.toLocaleString()} in lifetime value—significant revenue upside beyond cost savings.`;
     const growthLines = doc.splitTextToSize(growthText, 170);
     growthLines.forEach((line: string) => {
       doc.text(line, 20, yPos);
-      yPos += 5;
+      yPos += 4;
     });
     
     yPos += 10;

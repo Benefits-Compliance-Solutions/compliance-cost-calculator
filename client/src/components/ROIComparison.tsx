@@ -18,8 +18,11 @@ interface ROIComparisonProps {
     clientChurnCost: number;
     opportunityCost: number;
     productivityCost: number;
-    penaltyRisk: number;
+    totalOperationalCost: number;
+    totalLiabilityExposure: number;
     revenueGrowth: number;
+    lifetimeValueGrowth: number;
+    penaltyRisk: number;
     totalCost: number;
   };
   inputs: {
@@ -148,6 +151,37 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           </CardContent>
         </Card>
       </div>
+
+      {/* Revenue Growth Section */}
+      {costs.revenueGrowth > 0 && (
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/30 shadow-lg">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl text-accent">Revenue Growth Opportunity</CardTitle>
+            <CardDescription>Additional revenue from winning new clients with stronger compliance capabilities</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid sm:grid-cols-2 gap-6 mb-6">
+              <div className="text-center p-6 rounded-lg bg-card border-2 border-accent/20">
+                <p className="text-sm text-muted-foreground mb-2">Annual New Client Revenue</p>
+                <p className="text-4xl font-bold text-accent mb-1">${costs.revenueGrowth.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">First year revenue</p>
+              </div>
+              <div className="text-center p-6 rounded-lg bg-accent/10 border-2 border-accent/30">
+                <p className="text-sm text-muted-foreground mb-2">6-Year Lifetime Value</p>
+                <p className="text-4xl font-bold text-accent mb-1">${costs.lifetimeValueGrowth.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">Industry standard client retention</p>
+              </div>
+            </div>
+            <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
+              <p className="text-sm text-accent-foreground">
+                <strong>Growth Impact:</strong> With stronger compliance capabilities, your agency can confidently 
+                pursue and win more clients. Based on your inputs, this represents <strong>${costs.revenueGrowth.toLocaleString()}</strong> in 
+                annual revenue and <strong>${costs.lifetimeValueGrowth.toLocaleString()}</strong> in lifetime value—significant upside beyond cost savings.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* ROI Summary */}
       <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20 shadow-xl">
