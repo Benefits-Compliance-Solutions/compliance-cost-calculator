@@ -1,0 +1,341 @@
+import { jsPDF } from 'jspdf';
+
+interface CostData {
+  staffTimeCost: number;
+  clientChurnCost: number;
+  opportunityCost: number;
+  productivityCost: number;
+  penaltyRisk: number;
+  totalCost: number;
+}
+
+interface CompanyInputs {
+  numberOfEmployees: number;
+  averageHourlyRate: number;
+  hoursPerComplianceIssue: number;
+  complianceIssuesPerMonth: number;
+}
+
+export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
+  const doc = new jsPDF();
+  
+  // BCS Brand Colors
+  const navyBlue = [43, 43, 104]; // #2B2B68
+  const teal = [116, 178, 175]; // #74B2AF
+  const gray = [100, 100, 100];
+  
+  let yPos = 20;
+  
+  // Header with BCS branding
+  doc.setFillColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.rect(0, 0, 210, 35, 'F');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.text('COMPLIANCE COST ANALYSIS', 105, 15, { align: 'center' });
+  
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Benefits Compliance Solutions', 105, 25, { align: 'center' });
+  
+  yPos = 45;
+  
+  // Date
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.setFontSize(10);
+  doc.text(`Report Generated: ${new Date().toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  })}`, 20, yPos);
+  
+  yPos += 15;
+  
+  // Executive Summary Section
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('EXECUTIVE SUMMARY', 20, yPos);
+  
+  yPos += 10;
+  
+  // Total Cost Highlight Box
+  doc.setFillColor(teal[0], teal[1], teal[2]);
+  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  doc.roundedRect(20, yPos, 170, 25, 3, 3, 'FD');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(12);
+  doc.text('Total Annual Compliance Cost', 105, yPos + 8, { align: 'center' });
+  
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${costs.totalCost.toLocaleString()}`, 105, yPos + 19, { align: 'center' });
+  
+  yPos += 35;
+  
+  // Cost Breakdown Section
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('COST BREAKDOWN', 20, yPos);
+  
+  yPos += 8;
+  
+  const costItems = [
+    { label: 'Staff Time on Compliance Issues', value: costs.staffTimeCost },
+    { label: 'Client Churn', value: costs.clientChurnCost },
+    { label: 'Lost Large Client Opportunities', value: costs.opportunityCost },
+    { label: 'Lost Productivity', value: costs.productivityCost },
+    { label: 'Penalty & Fine Risk', value: costs.penaltyRisk },
+  ];
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  
+  costItems.forEach((item) => {
+    const percentage = costs.totalCost > 0 ? (item.value / costs.totalCost) * 100 : 0;
+    
+    // Item label
+    doc.setTextColor(gray[0], gray[1], gray[2]);
+    doc.text(item.label, 25, yPos);
+    
+    // Amount
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+    doc.text(`$${item.value.toLocaleString()}`, 190, yPos, { align: 'right' });
+    
+    yPos += 5;
+    
+    // Progress bar
+    const barWidth = 165;
+    const fillWidth = (barWidth * percentage) / 100;
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(25, yPos, barWidth, 4, 1, 1, 'FD');
+    
+    doc.setFillColor(teal[0], teal[1], teal[2]);
+    if (fillWidth > 0) {
+      doc.roundedRect(25, yPos, fillWidth, 4, 1, 1, 'F');
+    }
+    
+    // Percentage
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(gray[0], gray[1], gray[2]);
+    doc.text(`${percentage.toFixed(1)}%`, 190, yPos + 3, { align: 'right' });
+    
+    yPos += 10;
+    doc.setFontSize(10);
+  });
+  
+  yPos += 5;
+  
+  // Key Insights Section
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('KEY INSIGHTS', 20, yPos);
+  
+  yPos += 8;
+  
+  const monthlyHours = (costs.staffTimeCost / (inputs.averageHourlyRate * 12)).toFixed(0);
+  const revenueImpact = costs.clientChurnCost + costs.opportunityCost;
+  
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  
+  const insights = [
+    `• Your team spends approximately ${monthlyHours} hours per month dealing with compliance emergencies`,
+    `• Lost opportunities and client churn cost $${revenueImpact.toLocaleString()} annually`,
+    `• Compliance limitations prevent pursuit of larger, more profitable clients`,
+    `• Current approach creates ongoing drain on resources and growth potential`
+  ];
+  
+  insights.forEach((insight) => {
+    const lines = doc.splitTextToSize(insight, 165);
+    lines.forEach((line: string) => {
+      doc.text(line, 25, yPos);
+      yPos += 5;
+    });
+  });
+  
+  // New page for ROI Analysis
+  doc.addPage();
+  yPos = 20;
+  
+  // ROI Header
+  doc.setFillColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.rect(0, 0, 210, 35, 'F');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.text('ROI ANALYSIS', 105, 15, { align: 'center' });
+  
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'normal');
+  doc.text('The Value of Partnership', 105, 25, { align: 'center' });
+  
+  yPos = 50;
+  
+  // Calculate ROI
+  const reductionPercentage = 70;
+  const estimatedSavings = costs.totalCost * (reductionPercentage / 100);
+  const estimatedBCSCost = costs.totalCost * 0.15;
+  const netSavings = estimatedSavings - estimatedBCSCost;
+  const roi = estimatedBCSCost > 0 ? ((netSavings / estimatedBCSCost) * 100) : 0;
+  
+  // Before/After Comparison
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.text('WITHOUT BCS PARTNERSHIP', 20, yPos);
+  
+  yPos += 8;
+  
+  doc.setFillColor(255, 240, 240);
+  doc.setDrawColor(220, 100, 100);
+  doc.roundedRect(20, yPos, 80, 40, 3, 3, 'FD');
+  
+  doc.setTextColor(180, 50, 50);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${costs.totalCost.toLocaleString()}`, 60, yPos + 15, { align: 'center' });
+  
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Annual Compliance Costs', 60, yPos + 25, { align: 'center' });
+  
+  // With BCS
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.text('WITH BCS PARTNERSHIP', 110, yPos - 8);
+  
+  const costWithBCS = costs.totalCost - estimatedSavings;
+  
+  doc.setFillColor(240, 255, 250);
+  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  doc.roundedRect(110, yPos, 80, 40, 3, 3, 'FD');
+  
+  doc.setTextColor(teal[0], teal[1], teal[2]);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${costWithBCS.toLocaleString()}`, 150, yPos + 15, { align: 'center' });
+  
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Reduced Annual Costs', 150, yPos + 25, { align: 'center' });
+  
+  doc.setTextColor(teal[0], teal[1], teal[2]);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${reductionPercentage}% Reduction`, 150, yPos + 33, { align: 'center' });
+  
+  yPos += 50;
+  
+  // Investment Summary
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('INVESTMENT SUMMARY', 20, yPos);
+  
+  yPos += 10;
+  
+  const summaryItems = [
+    { label: 'Estimated Annual Savings', value: estimatedSavings, color: teal },
+    { label: 'Estimated Partnership Investment', value: estimatedBCSCost, color: navyBlue },
+    { label: 'Net Annual Savings', value: netSavings, color: teal },
+  ];
+  
+  summaryItems.forEach((item) => {
+    doc.setFillColor(item.color[0], item.color[1], item.color[2]);
+    doc.setDrawColor(item.color[0], item.color[1], item.color[2]);
+    doc.roundedRect(20, yPos, 170, 15, 2, 2, 'D');
+    
+    doc.setTextColor(gray[0], gray[1], gray[2]);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(item.label, 25, yPos + 9);
+    
+    doc.setTextColor(item.color[0], item.color[1], item.color[2]);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`$${item.value.toLocaleString()}`, 185, yPos + 9, { align: 'right' });
+    
+    yPos += 20;
+  });
+  
+  // ROI Highlight
+  doc.setFillColor(teal[0], teal[1], teal[2]);
+  doc.roundedRect(20, yPos, 170, 20, 3, 3, 'F');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('First Year Return on Investment (ROI)', 105, yPos + 8, { align: 'center' });
+  
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${roi.toFixed(0)}%`, 105, yPos + 16, { align: 'center' });
+  
+  yPos += 30;
+  
+  // Benefits Section
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('BENEFITS OF BCS PARTNERSHIP', 20, yPos);
+  
+  yPos += 8;
+  
+  const benefits = [
+    'Scalable compliance processes installed and maintained',
+    'Expert support available when compliance issues arise',
+    'Confidence to pursue and retain 6-figure clients',
+    'Reduced client churn through compliance excellence',
+    'Team freed to focus on growth and client service',
+    'Proactive compliance strategy vs. reactive firefighting'
+  ];
+  
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  
+  benefits.forEach((benefit) => {
+    doc.setTextColor(teal[0], teal[1], teal[2]);
+    doc.circle(23, yPos - 1.5, 1.5, 'F');
+    
+    doc.setTextColor(gray[0], gray[1], gray[2]);
+    const lines = doc.splitTextToSize(benefit, 160);
+    lines.forEach((line: string, index: number) => {
+      doc.text(line, 28, yPos + (index * 5));
+    });
+    yPos += lines.length * 5 + 2;
+  });
+  
+  // Footer
+  yPos = 280;
+  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  doc.line(20, yPos, 190, yPos);
+  
+  yPos += 5;
+  doc.setFontSize(9);
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.setFont('helvetica', 'italic');
+  doc.text('These estimates are based on typical results from BCS partnerships.', 105, yPos, { align: 'center' });
+  doc.text('Actual savings may vary based on your specific situation.', 105, yPos + 4, { align: 'center' });
+  
+  yPos += 10;
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.text('Ready to transform your compliance burden into a competitive advantage?', 105, yPos, { align: 'center' });
+  doc.text('Contact Benefits Compliance Solutions today.', 105, yPos + 4, { align: 'center' });
+  
+  // Save the PDF
+  doc.save(`BCS-Compliance-Cost-Report-${new Date().toISOString().split('T')[0]}.pdf`);
+}
