@@ -314,7 +314,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="w-5 h-5 text-accent" />
-                  Lost Opportunities (6-Figure Clients)
+                  Lost Opportunities (Mid to Large Group Employers)
                 </CardTitle>
                 <CardDescription>Large clients you couldn't pursue due to compliance limitations</CardDescription>
               </CardHeader>

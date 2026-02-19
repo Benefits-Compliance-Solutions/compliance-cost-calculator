@@ -344,9 +344,9 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   
   yPos += 10;
   
-  const boxWidth = 40;
-  const boxHeight = 30;
-  const gap = 5;
+  const boxWidth = 55;
+  const boxHeight = 32;
+  const gap = 7;
   let xPos = 20;
   
   // Partnership Investment
@@ -354,68 +354,51 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setDrawColor(navyBlue[0], navyBlue[1], navyBlue[2]);
   doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
   doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFontSize(8);
-  doc.text('Partnership Investment', xPos + boxWidth/2, yPos + 8, { align: 'center' });
+  doc.setFontSize(9);
+  doc.text('Partnership Investment', xPos + boxWidth/2, yPos + 9, { align: 'center' });
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
-  doc.setFontSize(12);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`$${estimatedBCSCost.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.text(`$${estimatedBCSCost.toLocaleString()}`, xPos + boxWidth/2, yPos + 20, { align: 'center' });
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('Annual', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  doc.text('Annual', xPos + boxWidth/2, yPos + 26, { align: 'center' });
   
   xPos += boxWidth + gap;
   
-  // Cost Savings
+  // Annual Cost Savings
   doc.setFillColor(240, 255, 250);
   doc.setDrawColor(teal[0], teal[1], teal[2]);
   doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
   doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFontSize(8);
-  doc.text('Cost Savings', xPos + boxWidth/2, yPos + 8, { align: 'center' });
+  doc.setFontSize(9);
+  doc.text('Annual Cost Savings', xPos + boxWidth/2, yPos + 9, { align: 'center' });
   doc.setTextColor(teal[0], teal[1], teal[2]);
-  doc.setFontSize(12);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`$${estimatedSavings.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.text(`$${estimatedSavings.toLocaleString()}`, xPos + boxWidth/2, yPos + 20, { align: 'center' });
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('Annual', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  doc.text(`${reductionPercentage}% reduction`, xPos + boxWidth/2, yPos + 26, { align: 'center' });
   
   xPos += boxWidth + gap;
   
-  // New Revenue (LTV)
-  doc.setFillColor(240, 255, 250);
-  doc.setDrawColor(teal[0], teal[1], teal[2]);
-  doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
-  doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFontSize(8);
-  doc.text('New Revenue (LTV)', xPos + boxWidth/2, yPos + 8, { align: 'center' });
-  doc.setTextColor(teal[0], teal[1], teal[2]);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`$${costs.lifetimeValueGrowth.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
-  doc.setFontSize(7);
-  doc.setFont('helvetica', 'normal');
-  doc.text('6-year value', xPos + boxWidth/2, yPos + 24, { align: 'center' });
-  
-  xPos += boxWidth + gap;
-  
-  // Total Value
+  // Net Annual Savings
   doc.setFillColor(245, 255, 250);
   doc.setDrawColor(teal[0], teal[1], teal[2]);
   doc.setLineWidth(1.5);
   doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
   doc.setLineWidth(0.5);
   doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFontSize(8);
-  doc.text('Total Value', xPos + boxWidth/2, yPos + 8, { align: 'center' });
+  doc.setFontSize(9);
+  doc.text('Net Annual Savings', xPos + boxWidth/2, yPos + 9, { align: 'center' });
   doc.setTextColor(teal[0], teal[1], teal[2]);
-  doc.setFontSize(12);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`$${totalValue.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.text(`$${netSavings.toLocaleString()}`, xPos + boxWidth/2, yPos + 20, { align: 'center' });
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('Savings + Growth', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  doc.text('After partnership cost', xPos + boxWidth/2, yPos + 26, { align: 'center' });
   
   yPos += boxHeight + 15;
   
@@ -423,7 +406,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(gray[0], gray[1], gray[2]);
-  const valueText = `Total Value combines operational cost savings with new revenue from winning clients with stronger compliance capabilities. Based on industry standard 6-year client retention.`;
+  const valueText = `Net Annual Savings represents the cost reduction after the partnership investment. This does not include additional revenue from new business opportunities enabled by stronger compliance capabilities.`;
   const valueLines = doc.splitTextToSize(valueText, 170);
   valueLines.forEach((line: string) => {
     doc.text(line, 20, yPos);

@@ -121,9 +121,9 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
                 <p className="text-xs text-muted-foreground mt-1">{reductionPercentage}% reduction</p>
               </div>
               <div className="p-3 bg-accent/10 rounded-lg border border-accent/30">
-                <p className="text-xs text-muted-foreground mb-1">New Business Revenue (6-Year LTV)</p>
-                <p className="text-2xl font-bold text-accent">${costs.lifetimeValueGrowth.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground mt-1">Annual: ${costs.revenueGrowth.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mb-1">Annual New Business Revenue</p>
+                <p className="text-2xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mt-1">Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</p>
               </div>
             </div>
             
@@ -159,26 +159,21 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardDescription>Conservative estimate based on typical BCS partnerships</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-4 rounded-lg bg-card border-2 border-primary/20">
-              <p className="text-xs text-muted-foreground mb-1">Partnership Investment</p>
-              <p className="text-xl font-bold text-primary">${estimatedBCSCost.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-1">Annual</p>
+          <div className="grid sm:grid-cols-3 gap-6 mb-6">
+            <div className="text-center p-6 rounded-lg bg-card border-2 border-primary/20">
+              <p className="text-sm text-muted-foreground mb-2">Partnership Investment</p>
+              <p className="text-3xl font-bold text-primary">${estimatedBCSCost.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-2">Annual</p>
             </div>
-            <div className="text-center p-4 rounded-lg bg-accent/10 border-2 border-accent/30">
-              <p className="text-xs text-muted-foreground mb-1">Cost Savings</p>
-              <p className="text-xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-1">Annual</p>
+            <div className="text-center p-6 rounded-lg bg-accent/10 border-2 border-accent/30">
+              <p className="text-sm text-muted-foreground mb-2">Annual Cost Savings</p>
+              <p className="text-3xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-2">{reductionPercentage}% reduction</p>
             </div>
-            <div className="text-center p-4 rounded-lg bg-accent/10 border-2 border-accent/30">
-              <p className="text-xs text-muted-foreground mb-1">New Revenue (LTV)</p>
-              <p className="text-xl font-bold text-accent">${costs.lifetimeValueGrowth.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-1">6-year value</p>
-            </div>
-            <div className="text-center p-4 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
-              <p className="text-xs text-muted-foreground mb-1">Total Value</p>
-              <p className="text-xl font-bold text-accent">${(estimatedSavings + costs.lifetimeValueGrowth).toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-1">Savings + Growth</p>
+            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
+              <p className="text-sm text-muted-foreground mb-2">Net Annual Savings</p>
+              <p className="text-3xl font-bold text-accent">${netSavings.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-2">After partnership cost</p>
             </div>
           </div>
 
