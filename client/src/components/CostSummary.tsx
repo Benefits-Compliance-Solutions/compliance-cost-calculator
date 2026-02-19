@@ -73,7 +73,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-primary">
             <DollarSign className="w-5 h-5" />
-            Operational Costs
+            Your Agency's Operational Costs
           </CardTitle>
           <CardDescription>Labor, lost deals, and client churn</CardDescription>
         </CardHeader>

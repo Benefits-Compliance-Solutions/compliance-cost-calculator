@@ -34,10 +34,10 @@ interface ROIComparisonProps {
 }
 
 export default function ROIComparison({ totalCost, costs, inputs }: ROIComparisonProps) {
-  // Conservative estimate: BCS partnership reduces costs by 60-75%
+  // Conservative estimate: BCS partnership reduces operational costs by 60-75%
   const reductionPercentage = 70;
-  const estimatedSavings = totalCost * (reductionPercentage / 100);
-  const costWithBCS = totalCost - estimatedSavings;
+  const estimatedSavings = costs.totalOperationalCost * (reductionPercentage / 100);
+  const costWithBCS = costs.totalOperationalCost - estimatedSavings;
   
   // BCS partnership investment
   const estimatedBCSCost = 75000; // $75K annual investment
@@ -74,20 +74,9 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardContent className="space-y-4">
             <div>
               <div className="text-4xl font-bold text-destructive mb-2">
-                ${totalCost.toLocaleString()}
+                ${costs.totalOperationalCost.toLocaleString()}
               </div>
-              <p className="text-sm text-muted-foreground">Annual compliance costs</p>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="p-3 bg-card rounded-lg border border-destructive/20">
-                <p className="text-xs text-muted-foreground mb-1">Operational Costs</p>
-                <p className="font-bold text-destructive">${costs.totalOperationalCost.toLocaleString()}</p>
-              </div>
-              <div className="p-3 bg-card rounded-lg border border-destructive/20">
-                <p className="text-xs text-muted-foreground mb-1">Liability Exposure</p>
-                <p className="font-bold text-destructive">${costs.totalLiabilityExposure.toLocaleString()}</p>
-              </div>
+              <p className="text-sm text-muted-foreground">Annual operational costs</p>
             </div>
             
             <div className="space-y-2 pt-4 border-t border-destructive/20">
@@ -124,18 +113,18 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
             <CardDescription>Transform compliance into an advantage</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <div className="text-4xl font-bold text-accent mb-2">
-                ${costWithBCS.toLocaleString()}
+            <div className="space-y-3">
+              <div className="p-3 bg-card rounded-lg border border-accent/20">
+                <p className="text-xs text-muted-foreground mb-1">Operational Cost Savings</p>
+                <p className="text-2xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
+                <Progress value={reductionPercentage} className="mt-2 h-2" />
+                <p className="text-xs text-muted-foreground mt-1">{reductionPercentage}% reduction</p>
               </div>
-              <p className="text-sm text-muted-foreground">Reduced annual costs</p>
-            </div>
-            
-            <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
-              <p className="text-sm font-medium mb-1">Estimated Annual Savings</p>
-              <p className="text-2xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
-              <Progress value={reductionPercentage} className="mt-2 h-2" />
-              <p className="text-xs text-muted-foreground mt-1">{reductionPercentage}% cost reduction</p>
+              <div className="p-3 bg-accent/10 rounded-lg border border-accent/30">
+                <p className="text-xs text-muted-foreground mb-1">New Business Revenue (6-Year LTV)</p>
+                <p className="text-2xl font-bold text-accent">${costs.lifetimeValueGrowth.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mt-1">Annual: ${costs.revenueGrowth.toLocaleString()}</p>
+              </div>
             </div>
             
             <div className="space-y-2 pt-4 border-t border-accent/20">
@@ -163,59 +152,33 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
         </Card>
       </div>
 
-      {/* Revenue Growth Section */}
-      {costs.revenueGrowth > 0 && (
-        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/30 shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-accent">Revenue Growth Opportunity</CardTitle>
-            <CardDescription>Additional revenue from winning new clients with stronger compliance capabilities</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid sm:grid-cols-2 gap-6 mb-6">
-              <div className="text-center p-6 rounded-lg bg-card border-2 border-accent/20">
-                <p className="text-sm text-muted-foreground mb-2">Annual New Client Revenue</p>
-                <p className="text-4xl font-bold text-accent mb-1">${costs.revenueGrowth.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">First year revenue</p>
-              </div>
-              <div className="text-center p-6 rounded-lg bg-accent/10 border-2 border-accent/30">
-                <p className="text-sm text-muted-foreground mb-2">6-Year Lifetime Value</p>
-                <p className="text-4xl font-bold text-accent mb-1">${costs.lifetimeValueGrowth.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">Industry standard client retention</p>
-              </div>
-            </div>
-            <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
-              <p className="text-sm text-accent-foreground">
-                <strong>Growth Impact:</strong> With stronger compliance capabilities, your agency can confidently 
-                pursue and win more clients. Based on your inputs, this represents <strong>${costs.revenueGrowth.toLocaleString()}</strong> in 
-                annual revenue and <strong>${costs.lifetimeValueGrowth.toLocaleString()}</strong> in lifetime value—significant upside beyond cost savings.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ROI Summary */}
+      {/* Investment Analysis */}
       <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20 shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Investment Analysis</CardTitle>
           <CardDescription>Conservative estimate based on typical BCS partnerships</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid sm:grid-cols-3 gap-6 mb-6">
-            <div className="text-center p-4 rounded-lg bg-card">
-              <p className="text-sm text-muted-foreground mb-1">Estimated Partnership Investment</p>
-              <p className="text-2xl font-bold text-primary">${estimatedBCSCost.toLocaleString()}</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="text-center p-4 rounded-lg bg-card border-2 border-primary/20">
+              <p className="text-xs text-muted-foreground mb-1">Partnership Investment</p>
+              <p className="text-xl font-bold text-primary">${estimatedBCSCost.toLocaleString()}</p>
               <p className="text-xs text-muted-foreground mt-1">Annual</p>
             </div>
-            <div className="text-center p-4 rounded-lg bg-card">
-              <p className="text-sm text-muted-foreground mb-1">Net Annual Savings</p>
-              <p className="text-2xl font-bold text-accent">${netSavings.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-1">After partnership cost</p>
+            <div className="text-center p-4 rounded-lg bg-accent/10 border-2 border-accent/30">
+              <p className="text-xs text-muted-foreground mb-1">Cost Savings</p>
+              <p className="text-xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-1">Annual</p>
             </div>
-            <div className="text-center p-4 rounded-lg bg-card">
-              <p className="text-sm text-muted-foreground mb-1">Return on Investment</p>
-              <p className="text-2xl font-bold text-accent">{roi.toFixed(0)}%</p>
-              <p className="text-xs text-muted-foreground mt-1">First year ROI</p>
+            <div className="text-center p-4 rounded-lg bg-accent/10 border-2 border-accent/30">
+              <p className="text-xs text-muted-foreground mb-1">New Revenue (LTV)</p>
+              <p className="text-xl font-bold text-accent">${costs.lifetimeValueGrowth.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-1">6-year value</p>
+            </div>
+            <div className="text-center p-4 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
+              <p className="text-xs text-muted-foreground mb-1">Total Value</p>
+              <p className="text-xl font-bold text-accent">${(estimatedSavings + costs.lifetimeValueGrowth).toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-1">Savings + Growth</p>
             </div>
           </div>
 

@@ -175,7 +175,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="employees">Number of Employees</Label>
+                  <Label htmlFor="employees">Number of Employee Benefits Staff Members</Label>
                   <div className="flex items-center gap-4">
                     <Slider
                       id="employees"
@@ -205,7 +205,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="totalClients">Total Clients</Label>
+                  <Label htmlFor="totalClients">Total Number of Employers in Your Book of Business</Label>
                   <div className="flex items-center gap-4">
                     <Slider
                       id="totalClients"
@@ -218,9 +218,6 @@ export default function Home() {
                     />
                     <span className="text-sm font-semibold w-16 text-right">{inputs.totalClients}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Used to calculate compliance penalty exposure
-                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -410,7 +407,7 @@ export default function Home() {
                   <Calculator className="w-5 h-5 text-primary" />
                   Lost Productivity
                 </CardTitle>
-                <CardDescription>Team members distracted by compliance concerns</CardDescription>
+                <CardDescription>Employee benefits team members distracted by compliance concerns</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">

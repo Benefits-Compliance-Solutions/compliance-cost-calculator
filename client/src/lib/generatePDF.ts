@@ -247,12 +247,12 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   
   yPos = 50;
   
-  // Calculate ROI
+  // Calculate ROI based on operational costs
   const reductionPercentage = 70;
-  const estimatedSavings = costs.totalCost * (reductionPercentage / 100);
+  const estimatedSavings = costs.totalOperationalCost * (reductionPercentage / 100);
   const estimatedBCSCost = 75000; // $75K annual investment
   const netSavings = estimatedSavings - estimatedBCSCost;
-  const roi = estimatedBCSCost > 0 ? ((netSavings / estimatedBCSCost) * 100) : 0;
+  const totalValue = estimatedSavings + costs.lifetimeValueGrowth;
   
   // Before/After Comparison
   doc.setFontSize(14);
@@ -269,11 +269,11 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setTextColor(180, 50, 50);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text(`$${costs.totalCost.toLocaleString()}`, 60, yPos + 15, { align: 'center' });
+  doc.text(`$${costs.totalOperationalCost.toLocaleString()}`, 60, yPos + 15, { align: 'center' });
   
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text('Annual Compliance Costs', 60, yPos + 25, { align: 'center' });
+  doc.text('Annual Operational Costs', 60, yPos + 25, { align: 'center' });
   
   // With BCS
   doc.setFontSize(14);
@@ -281,7 +281,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
   doc.text('WITH BCS PARTNERSHIP', 110, yPos - 8);
   
-  const costWithBCS = costs.totalCost - estimatedSavings;
+  const costWithBCS = costs.totalOperationalCost - estimatedSavings;
   
   doc.setFillColor(240, 255, 250);
   doc.setDrawColor(teal[0], teal[1], teal[2]);
@@ -336,72 +336,101 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   });
   
   // ROI Highlight
-  doc.setFillColor(teal[0], teal[1], teal[2]);
-  doc.roundedRect(20, yPos, 170, 20, 3, 3, 'F');
-  
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  doc.text('First Year Return on Investment (ROI)', 105, yPos + 8, { align: 'center' });
-  
-  doc.setFontSize(18);
+  // Investment Summary with 4 boxes
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`${roi.toFixed(0)}%`, 105, yPos + 16, { align: 'center' });
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.text('INVESTMENT SUMMARY', 20, yPos);
   
-  yPos += 30;
+  yPos += 10;
   
-  // Revenue Growth Section
-  if (costs.revenueGrowth > 0) {
-    doc.setTextColor(teal[0], teal[1], teal[2]);
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('REVENUE GROWTH OPPORTUNITY', 20, yPos);
-    
-    yPos += 8;
-    
-    // Annual Revenue
-    doc.setFillColor(245, 245, 245);
-    doc.setDrawColor(teal[0], teal[1], teal[2]);
-    doc.roundedRect(20, yPos, 82, 25, 3, 3, 'FD');
-    
-    doc.setTextColor(gray[0], gray[1], gray[2]);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Annual New Client Revenue', 61, yPos + 8, { align: 'center' });
-    
-    doc.setTextColor(teal[0], teal[1], teal[2]);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`$${costs.revenueGrowth.toLocaleString()}`, 61, yPos + 18, { align: 'center' });
-    
-    // Lifetime Value
-    doc.setFillColor(teal[0], teal[1], teal[2]);
-    doc.setDrawColor(teal[0], teal[1], teal[2]);
-    doc.roundedRect(108, yPos, 82, 25, 3, 3, 'FD');
-    
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text('6-Year Lifetime Value', 149, yPos + 8, { align: 'center' });
-    
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`$${costs.lifetimeValueGrowth.toLocaleString()}`, 149, yPos + 18, { align: 'center' });
-    
-    yPos += 30;
-    
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(gray[0], gray[1], gray[2]);
-    const growthText = `With stronger compliance capabilities, your agency can confidently pursue and win more clients. Based on industry standard 6-year client retention, this represents $${costs.lifetimeValueGrowth.toLocaleString()} in lifetime value—significant revenue upside beyond cost savings.`;
-    const growthLines = doc.splitTextToSize(growthText, 170);
-    growthLines.forEach((line: string) => {
-      doc.text(line, 20, yPos);
-      yPos += 4;
-    });
-    
-    yPos += 10;
-  }
+  const boxWidth = 40;
+  const boxHeight = 30;
+  const gap = 5;
+  let xPos = 20;
+  
+  // Partnership Investment
+  doc.setFillColor(240, 240, 250);
+  doc.setDrawColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.setFontSize(8);
+  doc.text('Partnership Investment', xPos + boxWidth/2, yPos + 8, { align: 'center' });
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${estimatedBCSCost.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Annual', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  
+  xPos += boxWidth + gap;
+  
+  // Cost Savings
+  doc.setFillColor(240, 255, 250);
+  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.setFontSize(8);
+  doc.text('Cost Savings', xPos + boxWidth/2, yPos + 8, { align: 'center' });
+  doc.setTextColor(teal[0], teal[1], teal[2]);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${estimatedSavings.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Annual', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  
+  xPos += boxWidth + gap;
+  
+  // New Revenue (LTV)
+  doc.setFillColor(240, 255, 250);
+  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.setFontSize(8);
+  doc.text('New Revenue (LTV)', xPos + boxWidth/2, yPos + 8, { align: 'center' });
+  doc.setTextColor(teal[0], teal[1], teal[2]);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${costs.lifetimeValueGrowth.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.text('6-year value', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  
+  xPos += boxWidth + gap;
+  
+  // Total Value
+  doc.setFillColor(245, 255, 250);
+  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  doc.setLineWidth(1.5);
+  doc.roundedRect(xPos, yPos, boxWidth, boxHeight, 2, 2, 'FD');
+  doc.setLineWidth(0.5);
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.setFontSize(8);
+  doc.text('Total Value', xPos + boxWidth/2, yPos + 8, { align: 'center' });
+  doc.setTextColor(teal[0], teal[1], teal[2]);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`$${totalValue.toLocaleString()}`, xPos + boxWidth/2, yPos + 18, { align: 'center' });
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Savings + Growth', xPos + boxWidth/2, yPos + 24, { align: 'center' });
+  
+  yPos += boxHeight + 15;
+  
+  // Note about value
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  const valueText = `Total Value combines operational cost savings with new revenue from winning clients with stronger compliance capabilities. Based on industry standard 6-year client retention.`;
+  const valueLines = doc.splitTextToSize(valueText, 170);
+  valueLines.forEach((line: string) => {
+    doc.text(line, 20, yPos);
+    yPos += 4;
+  });
+  
+  yPos += 5;
   
   // Benefits Section
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
