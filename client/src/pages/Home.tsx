@@ -427,6 +427,7 @@ export default function Home() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="productivityLoss">Productivity Loss Percentage</Label>
+                  <p className="text-xs text-muted-foreground">Industry average: 10-20% of affected staff time lost to compliance distractions</p>
                   <div className="flex items-center gap-4">
                     <Slider
                       id="productivityLoss"

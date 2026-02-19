@@ -118,7 +118,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
                 <p className="text-xs text-muted-foreground mb-1">Operational Cost Savings</p>
                 <p className="text-2xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
                 <Progress value={reductionPercentage} className="mt-2 h-2" />
-                <p className="text-xs text-muted-foreground mt-1">{reductionPercentage}% reduction</p>
+                <p className="text-xs text-muted-foreground mt-1">{reductionPercentage}% reduction in staff time, client churn, and lost opportunities</p>
               </div>
               <div className="p-3 bg-accent/10 rounded-lg border border-accent/30">
                 <p className="text-xs text-muted-foreground mb-1">Annual New Business Revenue</p>
@@ -168,7 +168,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
             <div className="text-center p-6 rounded-lg bg-accent/10 border-2 border-accent/30">
               <p className="text-sm text-muted-foreground mb-2">Annual Cost Savings</p>
               <p className="text-3xl font-bold text-accent">${estimatedSavings.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-2">{reductionPercentage}% reduction</p>
+              <p className="text-xs text-muted-foreground mt-2">{reductionPercentage}% reduction from reduced staff time, lower churn, and fewer missed opportunities</p>
             </div>
             <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
               <p className="text-sm text-muted-foreground mb-2">Net Annual Savings</p>
@@ -178,9 +178,11 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="gap-2 text-lg px-8">
-              Schedule a Consultation
-              <ArrowRight className="w-5 h-5" />
+            <Button size="lg" className="gap-2 text-lg px-8" asChild>
+              <a href="https://calendly.com/benefitscompliancesolutions/bcs-strategy-session" target="_blank" rel="noopener noreferrer">
+                Schedule a Consultation
+                <ArrowRight className="w-5 h-5" />
+              </a>
             </Button>
             <Button 
               size="lg" 

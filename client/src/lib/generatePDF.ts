@@ -74,12 +74,15 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.roundedRect(20, yPos, 170, 25, 3, 3, 'FD');
   
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
-  doc.text('Total Annual Compliance Cost', 105, yPos + 8, { align: 'center' });
+  doc.setFontSize(11);
+  doc.text('Total Annual Compliance Cost', 105, yPos + 7, { align: 'center' });
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.text('(Operational + Employer Liability Exposure)', 105, yPos + 13, { align: 'center' });
   
-  doc.setFontSize(22);
+  doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text(`$${costs.totalCost.toLocaleString()}`, 105, yPos + 19, { align: 'center' });
+  doc.text(`$${costs.totalCost.toLocaleString()}`, 105, yPos + 22, { align: 'center' });
   
   yPos += 35;
   
@@ -194,7 +197,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
     liabilityY += 4;
   });
   
-  yPos += 10;
+  yPos += 30;
   
   // Key Insights Section
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
@@ -414,6 +417,12 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   });
   
   yPos += 5;
+  
+  // Check if we need a new page for Benefits section
+  if (yPos > 200) {
+    doc.addPage();
+    yPos = 20;
+  }
   
   // Benefits Section
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
