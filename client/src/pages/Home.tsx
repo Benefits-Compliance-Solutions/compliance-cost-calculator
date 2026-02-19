@@ -56,7 +56,7 @@ export default function Home() {
     productivityLossPercentage: 15,
   });
 
-  const [showResults, setShowResults] = useState(false);
+  // Results are always visible - no toggle needed
 
   const updateInput = (field: keyof CostInputs, value: number) => {
     setInputs(prev => ({ ...prev, [field]: value }));
@@ -101,27 +101,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container py-4 lg:py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">BCS</span>
-              </div>
-              <div>
-                <h1 className="text-xl lg:text-2xl font-bold text-foreground">Compliance Cost Calculator</h1>
-                <p className="text-sm text-muted-foreground hidden sm:block">Benefits Compliance Solutions</p>
-              </div>
+       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+              <span className="text-white font-bold text-lg">BCS</span>
             </div>
-            <Button 
-              onClick={() => setShowResults(!showResults)}
-              variant="default"
-              className="gap-2"
-            >
-              <FileText className="w-4 h-4" />
-              <span className="hidden sm:inline">View Report</span>
-              <span className="sm:hidden">Report</span>
-            </Button>
+            <div>
+              <h1 className="text-lg font-bold">Compliance Cost Calculator</h1>
+              <p className="text-xs text-muted-foreground">Benefits Compliance Solutions</p>
+            </div>
           </div>
         </div>
       </header>
@@ -350,17 +339,17 @@ export default function Home() {
         </div>
 
         {/* Benchmark Comparison Section */}
-        {showResults && (
+        {
           <div className="mt-12">
             <BenchmarkComparison 
               costs={costs}
               numberOfEmployees={inputs.numberOfEmployees}
             />
           </div>
-        )}
+        }
 
         {/* ROI Comparison Section */}
-        {showResults && (
+        {
           <div className="mt-12">
             <ROIComparison 
               totalCost={costs.totalCost} 
@@ -373,7 +362,7 @@ export default function Home() {
               }}
             />
           </div>
-        )}
+        }
       </main>
 
       {/* Footer */}
