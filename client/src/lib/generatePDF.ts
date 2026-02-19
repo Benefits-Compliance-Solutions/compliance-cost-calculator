@@ -12,6 +12,7 @@ interface CostData {
   opportunityCost: number;
   productivityCost: number;
   penaltyRisk: number;
+  revenueGrowth: number;
   totalCost: number;
 }
 
@@ -20,6 +21,9 @@ interface CompanyInputs {
   averageHourlyRate: number;
   hoursPerComplianceIssue: number;
   complianceIssuesPerMonth: number;
+  totalClients?: number;
+  newClientsWonPerYear?: number;
+  averageNewClientValue?: number;
 }
 
 export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
@@ -349,7 +353,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   // Calculate ROI
   const reductionPercentage = 70;
   const estimatedSavings = costs.totalCost * (reductionPercentage / 100);
-  const estimatedBCSCost = costs.totalCost * 0.15;
+  const estimatedBCSCost = 75000; // $75K annual investment
   const netSavings = estimatedSavings - estimatedBCSCost;
   const roi = estimatedBCSCost > 0 ? ((netSavings / estimatedBCSCost) * 100) : 0;
   
@@ -448,6 +452,43 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.text(`${roi.toFixed(0)}%`, 105, yPos + 16, { align: 'center' });
   
   yPos += 30;
+  
+  // Revenue Growth Section
+  if (costs.revenueGrowth > 0) {
+    doc.setTextColor(teal[0], teal[1], teal[2]);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('REVENUE GROWTH OPPORTUNITY', 20, yPos);
+    
+    yPos += 8;
+    
+    doc.setFillColor(teal[0], teal[1], teal[2]);
+    doc.setDrawColor(teal[0], teal[1], teal[2]);
+    doc.roundedRect(20, yPos, 170, 25, 3, 3, 'FD');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Potential Annual Revenue from New Clients Won', 105, yPos + 8, { align: 'center' });
+    
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`$${costs.revenueGrowth.toLocaleString()}`, 105, yPos + 18, { align: 'center' });
+    
+    yPos += 30;
+    
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(gray[0], gray[1], gray[2]);
+    const growthText = `With stronger compliance capabilities, your agency can confidently pursue and win more clients. This represents significant revenue upside beyond cost savings.`;
+    const growthLines = doc.splitTextToSize(growthText, 170);
+    growthLines.forEach((line: string) => {
+      doc.text(line, 20, yPos);
+      yPos += 5;
+    });
+    
+    yPos += 10;
+  }
   
   // Benefits Section
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);

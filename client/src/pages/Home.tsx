@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Calculator, TrendingUp, Users, AlertCircle, DollarSign, Clock, FileText } from "lucide-react";
+import { Calculator, TrendingUp, Users, AlertCircle, DollarSign, Clock, FileText, Building2, Target } from "lucide-react";
 import CostSummary from "@/components/CostSummary";
 import BenchmarkComparison from "@/components/BenchmarkComparison";
 import ROIComparison from "@/components/ROIComparison";
@@ -20,13 +20,11 @@ interface CostInputs {
   // Company basics
   numberOfEmployees: number;
   averageHourlyRate: number;
+  totalClients: number;
   
   // Staff time costs
   hoursPerComplianceIssue: number;
   complianceIssuesPerMonth: number;
-  
-  // Penalty risks
-  estimatedAnnualPenaltyRisk: number;
   
   // Client churn
   clientsLostPerYear: number;
@@ -35,6 +33,10 @@ interface CostInputs {
   // Opportunity costs
   largeClientsLost: number;
   averageLargeClientValue: number;
+  
+  // Revenue growth
+  newClientsWonPerYear: number;
+  averageNewClientValue: number;
   
   // Lost productivity
   employeesAffectedByCompliance: number;
@@ -45,13 +47,15 @@ export default function Home() {
   const [inputs, setInputs] = useState<CostInputs>({
     numberOfEmployees: 50,
     averageHourlyRate: 75,
+    totalClients: 30,
     hoursPerComplianceIssue: 3,
     complianceIssuesPerMonth: 8,
-    estimatedAnnualPenaltyRisk: 25000,
     clientsLostPerYear: 2,
     averageClientValue: 15000,
     largeClientsLost: 1,
     averageLargeClientValue: 150000,
+    newClientsWonPerYear: 5,
+    averageNewClientValue: 20000,
     employeesAffectedByCompliance: 3,
     productivityLossPercentage: 15,
   });
@@ -81,8 +85,18 @@ export default function Home() {
                             2080 * // hours per year
                             (inputs.productivityLossPercentage / 100);
     
-    // Penalty risk
-    const penaltyRisk = inputs.estimatedAnnualPenaltyRisk;
+    // Calculate penalty risk based on client portfolio
+    // Count clients by size (assuming average employer size distribution)
+    const smallClients = Math.floor(inputs.totalClients * 0.7); // 70% under 50 employees
+    const largeClients = inputs.totalClients - smallClients; // 30% over 50 employees
+    
+    // Average liability: $70K-$150K for small, $350K for large
+    const smallClientRisk = smallClients * 110000; // midpoint of $70K-$150K
+    const largeClientRisk = largeClients * 350000;
+    const penaltyRisk = smallClientRisk + largeClientRisk;
+    
+    // Revenue growth from new clients
+    const revenueGrowth = inputs.newClientsWonPerYear * inputs.averageNewClientValue;
     
     const totalCost = staffTimeCost + clientChurnCost + opportunityCost + productivityCost + penaltyRisk;
     
@@ -92,6 +106,7 @@ export default function Home() {
       opportunityCost,
       productivityCost,
       penaltyRisk,
+      revenueGrowth,
       totalCost,
     };
   };
@@ -122,8 +137,7 @@ export default function Home() {
             What Is Compliance Costing Your Agency?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Employee benefits agencies lose thousands every year to compliance challenges. 
-            Calculate your hidden costs and discover the ROI of partnering with compliance experts.
+            Employee benefits agencies lose thousands every year to compliance challenges. Calculate your hidden costs and discover the ROI of partnering with compliance experts.
           </p>
         </div>
 
@@ -143,23 +157,51 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="employees">Number of Employees</Label>
-                  <Input
-                    id="employees"
-                    type="number"
-                    value={inputs.numberOfEmployees}
-                    onChange={(e) => updateInput('numberOfEmployees', Number(e.target.value))}
-                    min="1"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="employees"
+                      value={[inputs.numberOfEmployees]}
+                      onValueChange={([value]) => updateInput('numberOfEmployees', value)}
+                      min={1}
+                      max={500}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.numberOfEmployees}</span>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="hourlyRate">Average Hourly Rate ($)</Label>
-                  <Input
-                    id="hourlyRate"
-                    type="number"
-                    value={inputs.averageHourlyRate}
-                    onChange={(e) => updateInput('averageHourlyRate', Number(e.target.value))}
-                    min="0"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="hourlyRate"
+                      value={[inputs.averageHourlyRate]}
+                      onValueChange={([value]) => updateInput('averageHourlyRate', value)}
+                      min={25}
+                      max={200}
+                      step={5}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">${inputs.averageHourlyRate}</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="totalClients">Total Clients</Label>
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="totalClients"
+                      value={[inputs.totalClients]}
+                      onValueChange={([value]) => updateInput('totalClients', value)}
+                      min={5}
+                      max={200}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.totalClients}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Used to calculate compliance penalty exposure
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -186,44 +228,25 @@ export default function Home() {
                       step={0.5}
                       className="flex-1"
                     />
-                    <span className="text-sm font-semibold w-12 text-right">{inputs.hoursPerComplianceIssue}h</span>
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.hoursPerComplianceIssue}h</span>
                   </div>
                   <p className="text-xs text-muted-foreground">Industry average: 2-4 hours per issue</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="issuesPerMonth">Compliance Issues per Month</Label>
-                  <Input
-                    id="issuesPerMonth"
-                    type="number"
-                    value={inputs.complianceIssuesPerMonth}
-                    onChange={(e) => updateInput('complianceIssuesPerMonth', Number(e.target.value))}
-                    min="0"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="issuesPerMonth"
+                      value={[inputs.complianceIssuesPerMonth]}
+                      onValueChange={([value]) => updateInput('complianceIssuesPerMonth', value)}
+                      min={0}
+                      max={30}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.complianceIssuesPerMonth}</span>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Penalty Risks */}
-            <Card className="gradient-border-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5 text-destructive" />
-                  Penalty & Fine Risks
-                </CardTitle>
-                <CardDescription>Estimated annual exposure to compliance penalties</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Label htmlFor="penaltyRisk">Estimated Annual Penalty Risk ($)</Label>
-                <Input
-                  id="penaltyRisk"
-                  type="number"
-                  value={inputs.estimatedAnnualPenaltyRisk}
-                  onChange={(e) => updateInput('estimatedAnnualPenaltyRisk', Number(e.target.value))}
-                  min="0"
-                />
-                <p className="text-xs text-muted-foreground">
-                  ACA penalties alone can range from $2,880 to $4,320 per employee
-                </p>
               </CardContent>
             </Card>
 
@@ -239,23 +262,33 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="clientsLost">Clients Lost per Year</Label>
-                  <Input
-                    id="clientsLost"
-                    type="number"
-                    value={inputs.clientsLostPerYear}
-                    onChange={(e) => updateInput('clientsLostPerYear', Number(e.target.value))}
-                    min="0"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="clientsLost"
+                      value={[inputs.clientsLostPerYear]}
+                      onValueChange={([value]) => updateInput('clientsLostPerYear', value)}
+                      min={0}
+                      max={20}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.clientsLostPerYear}</span>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="clientValue">Average Annual Client Value ($)</Label>
-                  <Input
-                    id="clientValue"
-                    type="number"
-                    value={inputs.averageClientValue}
-                    onChange={(e) => updateInput('averageClientValue', Number(e.target.value))}
-                    min="0"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="clientValue"
+                      value={[inputs.averageClientValue]}
+                      onValueChange={([value]) => updateInput('averageClientValue', value)}
+                      min={5000}
+                      max={100000}
+                      step={1000}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-20 text-right">${(inputs.averageClientValue / 1000).toFixed(0)}K</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -272,23 +305,81 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="largeClientsLost">Large Clients Lost per Year</Label>
-                  <Input
-                    id="largeClientsLost"
-                    type="number"
-                    value={inputs.largeClientsLost}
-                    onChange={(e) => updateInput('largeClientsLost', Number(e.target.value))}
-                    min="0"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="largeClientsLost"
+                      value={[inputs.largeClientsLost]}
+                      onValueChange={([value]) => updateInput('largeClientsLost', value)}
+                      min={0}
+                      max={10}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.largeClientsLost}</span>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="largeClientValue">Average Large Client Value ($)</Label>
-                  <Input
-                    id="largeClientValue"
-                    type="number"
-                    value={inputs.averageLargeClientValue}
-                    onChange={(e) => updateInput('averageLargeClientValue', Number(e.target.value))}
-                    min="0"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="largeClientValue"
+                      value={[inputs.averageLargeClientValue]}
+                      onValueChange={([value]) => updateInput('averageLargeClientValue', value)}
+                      min={50000}
+                      max={500000}
+                      step={10000}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-20 text-right">${(inputs.averageLargeClientValue / 1000).toFixed(0)}K</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Revenue Growth */}
+            <Card className="gradient-border-card border-accent/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="w-5 h-5 text-accent" />
+                  Revenue Growth from New Clients
+                </CardTitle>
+                <CardDescription>Additional revenue potential with better compliance capabilities</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="newClients">New Clients Won per Year</Label>
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="newClients"
+                      value={[inputs.newClientsWonPerYear]}
+                      onValueChange={([value]) => updateInput('newClientsWonPerYear', value)}
+                      min={0}
+                      max={50}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.newClientsWonPerYear}</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newClientValue">Average New Client Value ($)</Label>
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="newClientValue"
+                      value={[inputs.averageNewClientValue]}
+                      onValueChange={([value]) => updateInput('averageNewClientValue', value)}
+                      min={5000}
+                      max={200000}
+                      step={5000}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-20 text-right">${(inputs.averageNewClientValue / 1000).toFixed(0)}K</span>
+                  </div>
+                </div>
+                <div className="bg-accent/10 border border-accent/30 rounded-lg p-3 mt-4">
+                  <p className="text-sm font-semibold text-accent-foreground">
+                    Potential Annual Revenue Growth: ${costs.revenueGrowth.toLocaleString()}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -305,13 +396,18 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="affectedEmployees">Employees Affected by Compliance Work</Label>
-                  <Input
-                    id="affectedEmployees"
-                    type="number"
-                    value={inputs.employeesAffectedByCompliance}
-                    onChange={(e) => updateInput('employeesAffectedByCompliance', Number(e.target.value))}
-                    min="0"
-                  />
+                  <div className="flex items-center gap-4">
+                    <Slider
+                      id="affectedEmployees"
+                      value={[inputs.employeesAffectedByCompliance]}
+                      onValueChange={([value]) => updateInput('employeesAffectedByCompliance', value)}
+                      min={0}
+                      max={20}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.employeesAffectedByCompliance}</span>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="productivityLoss">Productivity Loss Percentage</Label>
@@ -325,15 +421,15 @@ export default function Home() {
                       step={5}
                       className="flex-1"
                     />
-                    <span className="text-sm font-semibold w-12 text-right">{inputs.productivityLossPercentage}%</span>
+                    <span className="text-sm font-semibold w-16 text-right">{inputs.productivityLossPercentage}%</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Right Column: Live Summary */}
-          <div className="lg:sticky lg:top-24 h-fit">
+          {/* Right Column: Results */}
+          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <CostSummary costs={costs} />
           </div>
         </div>
@@ -367,9 +463,11 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border/50 bg-card/30 backdrop-blur-sm mt-20">
-        <div className="container py-8 text-center text-sm text-muted-foreground">
-          <p>© 2026 Benefits Compliance Solutions. All rights reserved.</p>
-          <p className="mt-2">Partner with us to reduce compliance costs and grow your agency.</p>
+        <div className="container py-8">
+          <div className="text-center text-sm text-muted-foreground">
+            <p>© 2026 Benefits Compliance Solutions. All rights reserved.</p>
+            <p className="mt-2">These estimates are based on typical results from BCS partnerships. Actual savings may vary based on your specific situation.</p>
+          </div>
         </div>
       </footer>
     </div>

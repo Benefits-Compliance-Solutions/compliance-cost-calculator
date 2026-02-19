@@ -19,6 +19,7 @@ interface ROIComparisonProps {
     opportunityCost: number;
     productivityCost: number;
     penaltyRisk: number;
+    revenueGrowth: number;
     totalCost: number;
   };
   inputs: {
@@ -35,8 +36,8 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
   const estimatedSavings = totalCost * (reductionPercentage / 100);
   const costWithBCS = totalCost - estimatedSavings;
   
-  // Typical BCS partnership cost (example - adjust based on actual pricing)
-  const estimatedBCSCost = totalCost * 0.15; // 15% of current costs
+  // BCS partnership investment
+  const estimatedBCSCost = 75000; // $75K annual investment
   const netSavings = estimatedSavings - estimatedBCSCost;
   const roi = estimatedBCSCost > 0 ? ((netSavings / estimatedBCSCost) * 100) : 0;
 
