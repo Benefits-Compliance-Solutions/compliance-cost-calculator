@@ -14,6 +14,13 @@ interface CostData {
   totalCost: number;
 }
 
+interface LeadData {
+  name: string;
+  email: string;
+  company: string;
+  phone: string;
+}
+
 interface CompanyInputs {
   agencyName?: string;
   numberOfEmployees: number;
@@ -23,6 +30,7 @@ interface CompanyInputs {
   totalClients?: number;
   newClientsWonPerYear?: number;
   averageNewClientValue?: number;
+  leadData?: LeadData;
 }
 
 export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
@@ -66,8 +74,15 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFont('helvetica', 'normal');
   doc.text('Benefits Compliance Solutions', pageWidth / 2, 32, { align: 'center' });
   
-  // Agency name if provided
-  if (inputs.agencyName) {
+  // Lead data or agency name if provided
+  if (inputs.leadData) {
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Prepared for: ${inputs.leadData.name}`, pageWidth / 2, 38, { align: 'center' });
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${inputs.leadData.company} | ${inputs.leadData.email} | ${inputs.leadData.phone}`, pageWidth / 2, 43, { align: 'center' });
+  } else if (inputs.agencyName) {
     doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
     doc.text(`Prepared for: ${inputs.agencyName}`, pageWidth / 2, 40, { align: 'center' });

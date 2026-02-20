@@ -5,11 +5,13 @@ Design: ROI comparison showing savings with BCS partnership
 - Call-to-action for partnership
 */
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, TrendingDown, Download } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { generateCompliancePDF } from "@/lib/generatePDF";
+import LeadCaptureDialog, { LeadData } from "@/components/LeadCaptureDialog";
 
 interface ROIComparisonProps {
   totalCost: number;
@@ -38,6 +40,9 @@ interface ROIComparisonProps {
 }
 
 export default function ROIComparison({ totalCost, costs, inputs }: ROIComparisonProps) {
+  const [showLeadDialog, setShowLeadDialog] = useState(false);
+  const [leadData, setLeadData] = useState<LeadData | null>(null);
+
   // Conservative estimate: BCS partnership reduces operational costs by 60-75%
   const reductionPercentage = 70;
   const estimatedSavings = costs.totalOperationalCost * (reductionPercentage / 100);
@@ -49,7 +54,14 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
   const roi = estimatedBCSCost > 0 ? ((netSavings / estimatedBCSCost) * 100) : 0;
 
   const handleDownloadReport = () => {
-    generateCompliancePDF(costs, inputs);
+    setShowLeadDialog(true);
+  };
+
+  const handleLeadSubmit = (data: LeadData) => {
+    setLeadData(data);
+    setShowLeadDialog(false);
+    // Generate PDF with lead data
+    generateCompliancePDF(costs, { ...inputs, leadData: data });
   };
 
   return (
@@ -204,6 +216,13 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           </p>
         </CardContent>
       </Card>
+
+      {/* Lead Capture Dialog */}
+      <LeadCaptureDialog
+        open={showLeadDialog}
+        onOpenChange={setShowLeadDialog}
+        onSubmit={handleLeadSubmit}
+      />
     </div>
   );
 }
