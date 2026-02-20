@@ -138,7 +138,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               <div className="p-3 bg-accent/10 rounded-lg border border-accent/30">
                 <p className="text-xs text-muted-foreground mb-1">Annual New Business Revenue</p>
                 <p className="text-2xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground mt-1">Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mt-1">From large clients you could pursue with compliance capabilities<br/>Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</p>
               </div>
             </div>
             
@@ -188,7 +188,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
             <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
               <p className="text-sm text-muted-foreground mb-2">Annual New Business Revenue</p>
               <p className="text-3xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-2">From winning new clients with compliance expertise</p>
+              <p className="text-xs text-muted-foreground mt-2">From large clients you could pursue with compliance capabilities</p>
             </div>
           </div>
 

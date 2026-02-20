@@ -104,8 +104,8 @@ export default function Home() {
     const largeClientRisk = largeClients * 350000;
     const totalLiabilityExposure = smallClientRisk + largeClientRisk;
     
-    // Revenue growth from new clients
-    const revenueGrowth = inputs.newClientsWonPerYear * inputs.averageNewClientValue;
+    // Revenue growth from lost opportunities (what they could have won)
+    const revenueGrowth = inputs.largeClientsLost * inputs.averageLargeClientValue;
     const lifetimeValueGrowth = revenueGrowth * 6; // 6-year industry standard
     
     // Combined total for benchmark comparison
@@ -154,7 +154,7 @@ export default function Home() {
       <main className="container py-8 lg:py-12">
         {/* Hero Section */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
-          <h2 className="text-3xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight">
             What Is Compliance Costing Your Agency?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
@@ -323,8 +323,8 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            {/* Opportunity Costs */}
-            <Card className="gradient-border-card">
+            {/* Lost Opportunities (Combined with Revenue Growth) */}
+            <Card className="gradient-border-card border-accent/50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="w-5 h-5 text-accent" />
@@ -361,49 +361,6 @@ export default function Home() {
                       className="flex-1"
                     />
                     <span className="text-sm font-semibold w-20 text-right">${(inputs.averageLargeClientValue / 1000).toFixed(0)}K</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Revenue Growth */}
-            <Card className="gradient-border-card border-accent/50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="w-5 h-5 text-accent" />
-                  Revenue Growth from New Clients
-                </CardTitle>
-                <CardDescription>Additional revenue potential with better compliance capabilities</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="newClients">New Clients Won per Year</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
-                      id="newClients"
-                      value={[inputs.newClientsWonPerYear]}
-                      onValueChange={([value]) => updateInput('newClientsWonPerYear', value)}
-                      min={0}
-                      max={50}
-                      step={1}
-                      className="flex-1"
-                    />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.newClientsWonPerYear}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="newClientValue">Average New Client Value ($)</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
-                      id="newClientValue"
-                      value={[inputs.averageNewClientValue]}
-                      onValueChange={([value]) => updateInput('averageNewClientValue', value)}
-                      min={5000}
-                      max={200000}
-                      step={5000}
-                      className="flex-1"
-                    />
-                    <span className="text-sm font-semibold w-20 text-right">${(inputs.averageNewClientValue / 1000).toFixed(0)}K</span>
                   </div>
                 </div>
                 <div className="bg-accent/10 border border-accent/30 rounded-lg p-3 mt-4">

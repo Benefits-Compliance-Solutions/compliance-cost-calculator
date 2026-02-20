@@ -59,7 +59,7 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
           ${newBusinessRevenue.toLocaleString()}
         </div>
         <p className="text-sm text-muted-foreground mb-6">
-          Annual new business revenue from stronger compliance capabilities
+          Annual revenue from large clients you couldn't pursue due to compliance limitations
         </p>
         
         {/* ROI Breakdown */}
