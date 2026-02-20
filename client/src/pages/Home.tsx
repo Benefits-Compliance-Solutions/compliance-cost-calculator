@@ -141,9 +141,9 @@ export default function Home() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
-              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/iSbOJXBAEeJCKLBx.png" 
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/sKRTXuhESaBvPVmV.jpg" 
               alt="Benefits Compliance Solutions" 
-              className="h-12 w-auto"
+              className="h-14 w-auto"
             />
             <div className="border-l border-border pl-3">
               <h1 className="text-lg font-bold">Compliance Cost Calculator</h1>

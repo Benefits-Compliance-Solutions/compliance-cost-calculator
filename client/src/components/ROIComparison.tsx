@@ -181,18 +181,36 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardDescription>Conservative estimate based on typical BCS partnerships</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid sm:grid-cols-3 gap-6 mb-6">
-            <div className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <div className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg w-full sm:w-64">
               <p className="text-sm font-semibold text-destructive mb-2">WITHOUT BCS Partnership</p>
               <p className="text-3xl font-bold text-destructive">${costs.totalOperationalCost.toLocaleString()}</p>
               <p className="text-xs text-destructive/80 mt-2">Annual operational costs</p>
             </div>
-            <div className="text-center p-6 rounded-lg bg-primary/10 border-2 border-primary/40">
+            
+            {/* Arrow 1 */}
+            <div className="flex items-center justify-center">
+              <ArrowRight className="w-8 h-8 text-primary hidden sm:block" />
+              <div className="block sm:hidden rotate-90">
+                <ArrowRight className="w-8 h-8 text-primary" />
+              </div>
+            </div>
+            
+            <div className="text-center p-6 rounded-lg bg-primary/10 border-2 border-primary/40 w-full sm:w-64">
               <p className="text-sm text-muted-foreground mb-2">Operational Cost Savings</p>
               <p className="text-3xl font-bold text-primary">${estimatedSavings.toLocaleString()}</p>
               <p className="text-xs text-muted-foreground mt-2">What you save annually with BCS</p>
             </div>
-            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
+            
+            {/* Arrow 2 */}
+            <div className="flex items-center justify-center">
+              <ArrowRight className="w-8 h-8 text-accent hidden sm:block" />
+              <div className="block sm:hidden rotate-90">
+                <ArrowRight className="w-8 h-8 text-accent" />
+              </div>
+            </div>
+            
+            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40 w-full sm:w-64">
               <p className="text-sm text-muted-foreground mb-2">Potential Annual New Business Revenue</p>
               <p className="text-3xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
               <p className="text-xs text-muted-foreground mt-2">From large clients you could pursue</p>

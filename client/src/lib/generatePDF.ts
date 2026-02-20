@@ -249,6 +249,14 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
     });
   });
   
+  // Footer for Page 1
+  const footerY = 275; // Position near bottom of page
+  try {
+    doc.addImage('https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/sKRTXuhESaBvPVmV.jpg', 'JPEG', pageWidth / 2 - 20, footerY, 40, 13);
+  } catch (e) {
+    console.log('Footer logo load skipped');
+  }
+  
   // ========== PAGE 2: ROI ANALYSIS ==========
   doc.addPage();
   yPos = 20;
@@ -376,8 +384,8 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  const savingsAmount = Math.round(costs.totalOperationalCost * 0.7);
-  doc.text(`$${savingsAmount.toLocaleString()}`, xPos + summaryBoxWidth / 2, yPos + 18, { align: 'center' });
+  const operationalSavingsAmount = Math.round(costs.totalOperationalCost * 0.7);
+  doc.text(`$${operationalSavingsAmount.toLocaleString()}`, xPos + summaryBoxWidth / 2, yPos + 18, { align: 'center' });
   
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
@@ -468,6 +476,13 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text('Schedule your consultation: benefitscompliancesolutions.com', pageWidth / 2, yPos + 15, { align: 'center' });
+  
+  // Footer for Page 2
+  try {
+    doc.addImage('https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/sKRTXuhESaBvPVmV.jpg', 'JPEG', pageWidth / 2 - 20, 275, 40, 13);
+  } catch (e) {
+    console.log('Footer logo load skipped');
+  }
   
   // Save the PDF
   const fileName = `BCS-Compliance-Cost-Report-${new Date().toISOString().split('T')[0]}.pdf`;
