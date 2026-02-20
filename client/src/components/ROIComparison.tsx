@@ -83,9 +83,9 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
               <TrendingDown className="w-5 h-5" />
-              Without BCS Partnership
+              Your Current Compliance Burden
             </CardTitle>
-            <CardDescription>Your current compliance burden</CardDescription>
+            <CardDescription>Without BCS Partnership</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -93,6 +93,13 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
                 ${costs.totalOperationalCost.toLocaleString()}
               </div>
               <p className="text-sm text-muted-foreground">Annual operational costs</p>
+            </div>
+            
+            <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/30">
+              <div className="text-2xl font-bold text-destructive mb-1">
+                ${costs.totalLiabilityExposure.toLocaleString()}
+              </div>
+              <p className="text-xs text-muted-foreground">Liability exposure for entire book of business</p>
             </div>
             
             <div className="space-y-2 pt-4 border-t border-destructive/20">
@@ -124,9 +131,9 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-accent">
               <CheckCircle2 className="w-5 h-5" />
-              With BCS Partnership
+              Transform Compliance Into An Advantage
             </CardTitle>
-            <CardDescription>Transform compliance into an advantage</CardDescription>
+            <CardDescription>With BCS Partnership</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
@@ -175,20 +182,20 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
         </CardHeader>
         <CardContent>
           <div className="grid sm:grid-cols-3 gap-6 mb-6">
-            <div className="text-center p-6 rounded-lg bg-card border-2 border-primary/20">
-              <p className="text-sm text-muted-foreground mb-2">Partnership Investment</p>
-              <p className="text-3xl font-bold text-primary">${estimatedBCSCost.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-2">Annual</p>
-            </div>
             <div className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg">
               <p className="text-sm font-semibold text-destructive mb-2">WITHOUT BCS Partnership</p>
               <p className="text-3xl font-bold text-destructive">${costs.totalOperationalCost.toLocaleString()}</p>
-              <p className="text-xs text-destructive/80 mt-2">Annual operational costs draining your agency</p>
+              <p className="text-xs text-destructive/80 mt-2">Annual operational costs</p>
+            </div>
+            <div className="text-center p-6 rounded-lg bg-primary/10 border-2 border-primary/40">
+              <p className="text-sm text-muted-foreground mb-2">Operational Cost Savings</p>
+              <p className="text-3xl font-bold text-primary">${estimatedSavings.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-2">What you save annually with BCS</p>
             </div>
             <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/40">
-              <p className="text-sm text-muted-foreground mb-2">Annual New Business Revenue</p>
+              <p className="text-sm text-muted-foreground mb-2">Potential Annual New Business Revenue</p>
               <p className="text-3xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground mt-2">From large clients you could pursue with compliance capabilities</p>
+              <p className="text-xs text-muted-foreground mt-2">From large clients you could pursue</p>
             </div>
           </div>
 

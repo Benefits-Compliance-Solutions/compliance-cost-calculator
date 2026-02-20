@@ -140,12 +140,13 @@ export default function Home() {
        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-white font-bold text-lg">BCS</span>
-            </div>
-            <div>
+            <img 
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/iSbOJXBAEeJCKLBx.png" 
+              alt="Benefits Compliance Solutions" 
+              className="h-12 w-auto"
+            />
+            <div className="border-l border-border pl-3">
               <h1 className="text-lg font-bold">Compliance Cost Calculator</h1>
-              <p className="text-xs text-muted-foreground">Benefits Compliance Solutions</p>
             </div>
           </div>
         </div>

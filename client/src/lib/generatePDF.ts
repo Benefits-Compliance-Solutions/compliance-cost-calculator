@@ -57,7 +57,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.rect(0, 0, pageWidth, 45, 'F');
   
   // Add BCS logo
-  const logoUrl = 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/nuKbXpgdTmBwocxJ.png';
+  const logoUrl = 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/iSbOJXBAEeJCKLBx.png';
   try {
     doc.addImage(logoUrl, 'PNG', margin, 12, 25, 25);
   } catch (e) {
@@ -342,29 +342,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   const summaryBoxHeight = 30;
   let xPos = margin;
   
-  // Box 1: Partnership Investment
-  doc.setFillColor(245, 245, 255);
-  doc.setDrawColor(navyBlue[0], navyBlue[1], navyBlue[2]);
-  doc.setLineWidth(0.8);
-  doc.roundedRect(xPos, yPos, summaryBoxWidth, summaryBoxHeight, 2, 2, 'FD');
-  
-  doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Partnership Investment', xPos + summaryBoxWidth / 2, yPos + 8, { align: 'center' });
-  
-  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`$${estimatedBCSCost.toLocaleString()}`, xPos + summaryBoxWidth / 2, yPos + 18, { align: 'center' });
-  
-  doc.setFontSize(7);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Annual', xPos + summaryBoxWidth / 2, yPos + 24, { align: 'center' });
-  
-  xPos += summaryBoxWidth + 7;
-  
-  // Box 2: WITHOUT BCS (RED)
+  // Box 1: WITHOUT BCS (RED)
   doc.setFillColor(lightRed[0], lightRed[1], lightRed[2]);
   doc.setDrawColor(red[0], red[1], red[2]);
   doc.setLineWidth(1.2);
@@ -378,14 +356,36 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFontSize(16);
   doc.text(`$${costs.totalOperationalCost.toLocaleString()}`, xPos + summaryBoxWidth / 2, yPos + 18, { align: 'center' });
   
-  doc.setFontSize(6);
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('Annual costs draining', xPos + summaryBoxWidth / 2, yPos + 23, { align: 'center' });
-  doc.text('your agency', xPos + summaryBoxWidth / 2, yPos + 27, { align: 'center' });
+  doc.text('Annual operational costs', xPos + summaryBoxWidth / 2, yPos + 24, { align: 'center' });
   
   xPos += summaryBoxWidth + 7;
   
-  // Box 3: Annual New Business Revenue
+  // Box 2: Operational Cost Savings
+  doc.setFillColor(245, 245, 255);
+  doc.setDrawColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setLineWidth(1);
+  doc.roundedRect(xPos, yPos, summaryBoxWidth, summaryBoxHeight, 2, 2, 'FD');
+  
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Operational Cost Savings', xPos + summaryBoxWidth / 2, yPos + 8, { align: 'center' });
+  
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  const savingsAmount = Math.round(costs.totalOperationalCost * 0.7);
+  doc.text(`$${savingsAmount.toLocaleString()}`, xPos + summaryBoxWidth / 2, yPos + 18, { align: 'center' });
+  
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.text('What you save annually', xPos + summaryBoxWidth / 2, yPos + 24, { align: 'center' });
+  
+  xPos += summaryBoxWidth + 7;
+  
+  // Box 3: Potential Annual New Business Revenue
   doc.setFillColor(lightTeal[0], lightTeal[1], lightTeal[2]);
   doc.setDrawColor(teal[0], teal[1], teal[2]);
   doc.setLineWidth(1);
@@ -394,8 +394,8 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setTextColor(gray[0], gray[1], gray[2]);
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('Annual New Business', xPos + summaryBoxWidth / 2, yPos + 7, { align: 'center' });
-  doc.text('Revenue', xPos + summaryBoxWidth / 2, yPos + 11, { align: 'center' });
+  doc.text('Potential Annual New', xPos + summaryBoxWidth / 2, yPos + 7, { align: 'center' });
+  doc.text('Business Revenue', xPos + summaryBoxWidth / 2, yPos + 11, { align: 'center' });
   
   doc.setTextColor(teal[0], teal[1], teal[2]);
   doc.setFontSize(16);
