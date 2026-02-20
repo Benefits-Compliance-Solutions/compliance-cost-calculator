@@ -184,7 +184,8 @@ export default function Home() {
                     placeholder="Enter your agency name"
                     value={inputs.agencyName}
                     onChange={(e) => updateInput('agencyName', e.target.value)}
-                    className="text-base"
+                    className="text-base relative z-10"
+                    style={{ pointerEvents: 'auto' }}
                   />
                 </div>
                 <div className="space-y-2">
