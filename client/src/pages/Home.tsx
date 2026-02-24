@@ -279,12 +279,12 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-24 items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
-              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/sKRTXuhESaBvPVmV.jpg" 
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/TTFgpudajkpyGyUN.png" 
               alt="Benefits Compliance Solutions" 
-              className="h-14 w-auto"
+              className="h-20 w-auto"
             />
             <div className="border-l border-border pl-3">
               <h1 className="text-lg font-bold">Compliance Cost Calculator</h1>
