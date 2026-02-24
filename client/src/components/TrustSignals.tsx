@@ -40,8 +40,8 @@ export default function TrustSignals() {
               <div className="flex justify-center mb-2">
                 <Award className="w-6 h-6 text-primary" />
               </div>
-              <div className="text-2xl font-bold">80+ Years</div>
-              <div className="text-sm text-muted-foreground">Collective Compliance Experience</div>
+              <div className="text-2xl font-bold">99%+</div>
+              <div className="text-sm text-muted-foreground">Agency Partner Retention Rate</div>
             </div>
           </div>
 
