@@ -1,8 +1,12 @@
 /*
-Design: Corporate Minimalism with Data Visualization Focus
+Design: Corporate Minimalism with Data Visualization Focus + UX Improvements
 - Split-screen layout: inputs left, live calculations right
 - BCS brand colors with animated counters
-- Progressive disclosure for cost factors
+- Progressive disclosure with collapsible sections (P2)
+- Accessibility improvements: hybrid slider+input controls (P0)
+- Save/resume functionality (P1)
+- Calculation transparency (P1)
+- Trust signals and social proof (P1)
 */
 
 import { useState, useEffect } from "react";
@@ -10,11 +14,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { Calculator, TrendingUp, Users, AlertCircle, DollarSign, Clock, FileText, Building2, Target } from "lucide-react";
+import { Calculator, TrendingUp, Users, AlertCircle, DollarSign, Clock, FileText, Building2, Target, Save, RefreshCw } from "lucide-react";
 import CostSummary from "@/components/CostSummary";
 import PotentialROI from "@/components/PotentialROI";
 import ROIComparison from "@/components/ROIComparison";
+import SliderWithInput from "@/components/SliderWithInput";
+import PrivacyPolicy from "@/components/PrivacyPolicy";
+import TrustSignals from "@/components/TrustSignals";
+import ResumeCalculationBanner from "@/components/ResumeCalculationBanner";
+import { validateAgencyName } from "@/lib/validation";
+import { saveCalculatorData, loadCalculatorData, clearCalculatorData, getLastSavedTimestamp } from "@/lib/storage";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 
 interface CostInputs {
   // Company basics
@@ -45,6 +61,7 @@ interface CostInputs {
 }
 
 export default function Home() {
+  // Using sonner for toast notifications
   const [inputs, setInputs] = useState<CostInputs>({
     agencyName: "",
     numberOfEmployees: 50,
@@ -62,10 +79,120 @@ export default function Home() {
     productivityLossPercentage: 15,
   });
 
-  // Results are always visible - no toggle needed
+  // P0: Input validation state
+  const [agencyNameError, setAgencyNameError] = useState<string>("");
+  const [touched, setTouched] = useState(false);
+
+  // P1: Save/resume state
+  const [showResumeBanner, setShowResumeBanner] = useState(false);
+  const [lastSavedDate, setLastSavedDate] = useState<Date | null>(null);
+
+  // P2: Progressive disclosure state
+  const [sectionsOpen, setSectionsOpen] = useState({
+    basics: true,
+    staffTime: true,
+    clientChurn: true,
+    lostOpportunities: true,
+    productivity: true,
+  });
+
+  // Check for saved data on mount (P1)
+  useEffect(() => {
+    const savedData = loadCalculatorData();
+    if (savedData) {
+      const lastSaved = getLastSavedTimestamp();
+      if (lastSaved) {
+        setLastSavedDate(lastSaved);
+        setShowResumeBanner(true);
+      }
+    }
+  }, []);
+
+  // Auto-save on input change (P1) - debounced
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputs.agencyName) {
+        saveCalculatorData(inputs);
+      }
+    }, 1000); // 1 second debounce
+
+    return () => clearTimeout(timer);
+  }, [inputs]);
 
   const updateInput = (field: keyof CostInputs, value: number | string) => {
     setInputs(prev => ({ ...prev, [field]: value }));
+    
+    // P0: Validate agency name on change
+    if (field === 'agencyName' && touched) {
+      const validation = validateAgencyName(value as string);
+      setAgencyNameError(validation.isValid ? "" : validation.error || "");
+    }
+  };
+
+  const handleAgencyNameBlur = () => {
+    setTouched(true);
+    const validation = validateAgencyName(inputs.agencyName);
+    setAgencyNameError(validation.isValid ? "" : validation.error || "");
+  };
+
+  const handleResume = () => {
+    const savedData = loadCalculatorData();
+    if (savedData) {
+      setInputs(savedData.inputs);
+      setShowResumeBanner(false);
+      toast.success("Calculation Resumed", {
+        description: "Your previous inputs have been restored.",
+      });
+    }
+  };
+
+  const handleStartFresh = () => {
+    clearCalculatorData();
+    setShowResumeBanner(false);
+    toast.info("Starting Fresh", {
+      description: "Previous calculation cleared.",
+    });
+  };
+
+  const handleClearCalculation = () => {
+    clearCalculatorData();
+    setInputs({
+      agencyName: "",
+      numberOfEmployees: 50,
+      averageHourlyRate: 75,
+      totalClients: 200,
+      hoursPerComplianceIssue: 3,
+      complianceIssuesPerMonth: 8,
+      clientsLostPerYear: 2,
+      averageClientValue: 50000,
+      largeClientsLost: 1,
+      averageLargeClientValue: 150000,
+      newClientsWonPerYear: 5,
+      averageNewClientValue: 20000,
+      employeesAffectedByCompliance: 3,
+      productivityLossPercentage: 15,
+    });
+    setAgencyNameError("");
+    setTouched(false);
+    toast.info("Calculation Cleared", {
+      description: "All inputs have been reset to defaults.",
+    });
+  };
+
+  const toggleSection = (section: keyof typeof sectionsOpen) => {
+    setSectionsOpen(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const toggleAllSections = () => {
+    const allOpen = Object.values(sectionsOpen).every(v => v);
+    const newState = !allOpen;
+    setSectionsOpen({
+      basics: newState,
+      staffTime: newState,
+      clientChurn: newState,
+      lostOpportunities: newState,
+      productivity: newState,
+    });
   };
 
   const calculateCosts = () => {
@@ -93,9 +220,9 @@ export default function Home() {
     const totalOperationalCost = staffTimeCost + clientChurnCost + opportunityCost + productivityCost;
     
     // LIABILITY EXPOSURE (Potential penalties for entire book of business)
+    // P1 Fix: Reframed to show per-employer average instead of scary total
     
     // Calculate penalty risk based on client portfolio
-    // Count clients by size (assuming average employer size distribution)
     const smallClients = Math.floor(inputs.totalClients * 0.7); // 70% under 50 employees
     const largeClients = inputs.totalClients - smallClients; // 30% over 50 employees
     
@@ -103,13 +230,11 @@ export default function Home() {
     const smallClientRisk = smallClients * 110000; // midpoint of $70K-$150K
     const largeClientRisk = largeClients * 350000;
     const totalLiabilityExposure = smallClientRisk + largeClientRisk;
+    const averageLiabilityPerEmployer = totalLiabilityExposure / inputs.totalClients;
     
-    // Revenue growth from lost opportunities (what they could have won)
+    // Revenue growth from lost opportunities
     const revenueGrowth = inputs.largeClientsLost * inputs.averageLargeClientValue;
     const lifetimeValueGrowth = revenueGrowth * 6; // 6-year industry standard
-    
-    // Combined total for benchmark comparison
-    const totalCost = totalOperationalCost + totalLiabilityExposure;
     
     return {
       // Operational costs breakdown
@@ -121,6 +246,7 @@ export default function Home() {
       
       // Liability exposure
       totalLiabilityExposure,
+      averageLiabilityPerEmployer,
       
       // Revenue growth
       revenueGrowth,
@@ -128,7 +254,7 @@ export default function Home() {
       
       // Legacy fields for compatibility
       penaltyRisk: totalLiabilityExposure,
-      totalCost,
+      totalCost: totalOperationalCost + totalLiabilityExposure,
     };
   };
 
@@ -137,7 +263,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       {/* Header */}
-       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
@@ -153,6 +279,15 @@ export default function Home() {
       </header>
 
       <main className="container py-8 lg:py-12">
+        {/* P1: Resume Calculation Banner */}
+        {showResumeBanner && lastSavedDate && (
+          <ResumeCalculationBanner
+            lastSaved={lastSavedDate}
+            onResume={handleResume}
+            onDismiss={handleStartFresh}
+          />
+        )}
+
         {/* Hero Section */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight">
@@ -167,300 +302,347 @@ export default function Home() {
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* Left Column: Inputs */}
           <div className="space-y-6">
-            {/* Company Basics */}
-            <Card className="gradient-border-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-primary" />
-                  Company Basics
-                </CardTitle>
-                <CardDescription>Tell us about your agency</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="agencyName">Agency Name</Label>
-                  <Input
-                    id="agencyName"
-                    type="text"
-                    placeholder="Enter your agency name"
-                    value={inputs.agencyName}
-                    onChange={(e) => updateInput('agencyName', e.target.value)}
-                    className="text-base relative z-10"
-                    style={{ pointerEvents: 'auto' }}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="employees">Number of Employee Benefits Staff Members</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+            {/* P2: Section Controls */}
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-sm font-semibold text-muted-foreground">Input Sections</h3>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={toggleAllSections}
+                  className="text-xs focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  {Object.values(sectionsOpen).every(v => v) ? "Collapse All" : "Expand All"}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleClearCalculation}
+                  className="text-xs focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  <RefreshCw className="w-3 h-3 mr-1" />
+                  Clear
+                </Button>
+              </div>
+            </div>
+
+            {/* Company Basics - Collapsible (P2) */}
+            <Collapsible open={sectionsOpen.basics} onOpenChange={() => toggleSection('basics')}>
+              <Card className="gradient-border-card">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Users className="w-5 h-5 text-primary" />
+                        Company Basics
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.basics ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">Tell us about your agency</CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    {/* P0: Agency Name with validation */}
+                    <div className="space-y-2">
+                      <Label htmlFor="agencyName">
+                        Agency Name
+                        <span className="text-destructive ml-1">*</span>
+                      </Label>
+                      <Input
+                        id="agencyName"
+                        type="text"
+                        placeholder="Enter your agency name"
+                        value={inputs.agencyName}
+                        onChange={(e) => updateInput('agencyName', e.target.value)}
+                        onBlur={handleAgencyNameBlur}
+                        className={`text-base focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                          agencyNameError ? 'border-destructive focus:ring-destructive' : ''
+                        }`}
+                        aria-invalid={!!agencyNameError}
+                        aria-describedby={agencyNameError ? "agencyName-error" : undefined}
+                      />
+                      {agencyNameError && (
+                        <p id="agencyName-error" className="text-sm text-destructive" role="alert">
+                          {agencyNameError}
+                        </p>
+                      )}
+                      {!agencyNameError && inputs.agencyName && touched && (
+                        <p className="text-sm text-green-600 flex items-center gap-1">
+                          <span className="text-green-600">✓</span> Valid
+                        </p>
+                      )}
+                    </div>
+
+                    {/* P0 + P2: Hybrid Slider+Input Controls */}
+                    <SliderWithInput
                       id="employees"
-                      value={[inputs.numberOfEmployees]}
-                      onValueChange={([value]) => updateInput('numberOfEmployees', value)}
+                      label="Number of Employee Benefits Staff Members"
+                      value={inputs.numberOfEmployees}
+                      onChange={(value) => updateInput('numberOfEmployees', value)}
                       min={1}
                       max={500}
                       step={1}
-                      className="flex-1"
+                      tooltip="The number of full-time staff members who work on employee benefits and compliance matters. This helps calculate labor costs."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.numberOfEmployees}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="hourlyRate">Average Hourly Rate ($)</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+
+                    <SliderWithInput
                       id="hourlyRate"
-                      value={[inputs.averageHourlyRate]}
-                      onValueChange={([value]) => updateInput('averageHourlyRate', value)}
+                      label="Average Hourly Rate"
+                      value={inputs.averageHourlyRate}
+                      onChange={(value) => updateInput('averageHourlyRate', value)}
                       min={25}
                       max={200}
                       step={5}
-                      className="flex-1"
+                      unit="$"
+                      tooltip="The average fully-loaded hourly cost (salary + benefits + overhead) for your benefits staff. Industry average is $60-$90/hour."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">${inputs.averageHourlyRate}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="totalClients">Total Number of Employers in Your Book of Business</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+
+                    <SliderWithInput
                       id="totalClients"
-                      value={[inputs.totalClients]}
-                      onValueChange={([value]) => updateInput('totalClients', value)}
+                      label="Total Number of Employers in Your Book of Business"
+                      value={inputs.totalClients}
+                      onChange={(value) => updateInput('totalClients', value)}
                       min={50}
                       max={1000}
                       step={10}
-                      className="flex-1"
+                      tooltip="The total number of employer clients you serve. This affects liability exposure calculations."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.totalClients}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
 
-            {/* Staff Time Costs */}
-            <Card className="gradient-border-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-primary" />
-                  Staff Time on Compliance "Fires"
-                </CardTitle>
-                <CardDescription>How much time does your team spend putting out compliance emergencies?</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="hoursPerIssue">Hours per Compliance Issue</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+            {/* Staff Time Costs - Collapsible (P2) */}
+            <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => toggleSection('staffTime')}>
+              <Card className="gradient-border-card">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-primary" />
+                        Staff Time on Compliance "Fires"
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.staffTime ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">
+                      How much time does your team spend putting out compliance emergencies?
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    <SliderWithInput
                       id="hoursPerIssue"
-                      value={[inputs.hoursPerComplianceIssue]}
-                      onValueChange={([value]) => updateInput('hoursPerComplianceIssue', value)}
+                      label="Hours per Compliance Issue"
+                      value={inputs.hoursPerComplianceIssue}
+                      onChange={(value) => updateInput('hoursPerComplianceIssue', value)}
                       min={0.5}
                       max={8}
                       step={0.5}
-                      className="flex-1"
+                      unit="h"
+                      helpText="Industry average: 2-4 hours per issue"
+                      tooltip="Time spent researching, resolving, and documenting each compliance issue or question from clients."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.hoursPerComplianceIssue}h</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Industry average: 2-4 hours per issue</p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="issuesPerMonth">Compliance Issues per Month</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+
+                    <SliderWithInput
                       id="issuesPerMonth"
-                      value={[inputs.complianceIssuesPerMonth]}
-                      onValueChange={([value]) => updateInput('complianceIssuesPerMonth', value)}
+                      label="Compliance Issues per Month"
+                      value={inputs.complianceIssuesPerMonth}
+                      onChange={(value) => updateInput('complianceIssuesPerMonth', value)}
                       min={0}
                       max={30}
                       step={1}
-                      className="flex-1"
+                      tooltip="Average number of compliance emergencies, questions, or issues your team handles each month."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.complianceIssuesPerMonth}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
 
-            {/* Client Churn */}
-            <Card className="gradient-border-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-primary" />
-                  Client Churn Due to Compliance Gaps
-                </CardTitle>
-                <CardDescription>Clients lost when you can't meet compliance expectations</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="clientsLost">Clients Lost per Year</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+            {/* Client Churn - Collapsible (P2) */}
+            <Collapsible open={sectionsOpen.clientChurn} onOpenChange={() => toggleSection('clientChurn')}>
+              <Card className="gradient-border-card">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                        Client Churn Due to Compliance Gaps
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.clientChurn ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">
+                      Clients lost when you can't meet compliance expectations
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    <SliderWithInput
                       id="clientsLost"
-                      value={[inputs.clientsLostPerYear]}
-                      onValueChange={([value]) => updateInput('clientsLostPerYear', value)}
+                      label="Clients Lost per Year"
+                      value={inputs.clientsLostPerYear}
+                      onChange={(value) => updateInput('clientsLostPerYear', value)}
                       min={0}
                       max={20}
                       step={1}
-                      className="flex-1"
+                      tooltip="Number of clients who leave annually due to compliance concerns, lack of expertise, or inability to handle complex requirements."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.clientsLostPerYear}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="clientValue">Average Annual Client Value ($)</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
-                      id="clientValue"
-                      value={[inputs.averageClientValue]}
-                      onValueChange={([value]) => updateInput('averageClientValue', value)}
-                      min={50000}
-                      max={700000}
-                      step={10000}
-                      className="flex-1"
-                    />
-                    <span className="text-sm font-semibold w-20 text-right">${(inputs.averageClientValue / 1000).toFixed(0)}K</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            {/* Lost Opportunities (Combined with Revenue Growth) */}
-            <Card className="gradient-border-card border-accent/50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-accent" />
-                  Lost Opportunities (Mid to Large Group Employers)
-                </CardTitle>
-                <CardDescription>Large clients you couldn't pursue due to compliance limitations</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="largeClientsLost">Large Clients Lost per Year</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+                    <SliderWithInput
+                      id="clientValue"
+                      label="Average Annual Client Value"
+                      value={inputs.averageClientValue}
+                      onChange={(value) => updateInput('averageClientValue', value)}
+                      min={10000}
+                      max={200000}
+                      step={5000}
+                      unit="$"
+                      tooltip="Average annual revenue (commissions + fees) from a typical client."
+                    />
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Lost Opportunities - Collapsible (P2) */}
+            <Collapsible open={sectionsOpen.lostOpportunities} onOpenChange={() => toggleSection('lostOpportunities')}>
+              <Card className="gradient-border-card">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Target className="w-5 h-5 text-primary" />
+                        Lost Opportunities (Mid to Large Group Employers)
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.lostOpportunities ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">
+                      Large clients you couldn't pursue due to compliance limitations
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    <SliderWithInput
                       id="largeClientsLost"
-                      value={[inputs.largeClientsLost]}
-                      onValueChange={([value]) => updateInput('largeClientsLost', value)}
+                      label="Large Clients Lost per Year"
+                      value={inputs.largeClientsLost}
+                      onChange={(value) => updateInput('largeClientsLost', value)}
                       min={0}
                       max={10}
                       step={1}
-                      className="flex-1"
+                      tooltip="Number of larger, more profitable opportunities you passed on or lost because you lacked the compliance capabilities to serve them confidently."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.largeClientsLost}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="largeClientValue">Average Large Client Value ($)</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
+
+                    <SliderWithInput
                       id="largeClientValue"
-                      value={[inputs.averageLargeClientValue]}
-                      onValueChange={([value]) => updateInput('averageLargeClientValue', value)}
+                      label="Average Large Client Value"
+                      value={inputs.averageLargeClientValue}
+                      onChange={(value) => updateInput('averageLargeClientValue', value)}
                       min={50000}
                       max={500000}
                       step={10000}
-                      className="flex-1"
+                      unit="$"
+                      tooltip="Average annual revenue potential from a large employer client (typically 100+ employees)."
                     />
-                    <span className="text-sm font-semibold w-20 text-right">${(inputs.averageLargeClientValue / 1000).toFixed(0)}K</span>
-                  </div>
-                </div>
-                <div className="bg-accent/10 border border-accent/30 rounded-lg p-3 mt-4">
-                  <p className="text-sm font-semibold text-accent-foreground">
-                    Potential Annual Revenue Growth: ${costs.revenueGrowth.toLocaleString()}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
 
-            {/* Lost Productivity */}
-            <Card className="gradient-border-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calculator className="w-5 h-5 text-primary" />
-                  Lost Productivity
-                </CardTitle>
-                <CardDescription>Employee benefits team members distracted by compliance concerns</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="affectedEmployees">Employees Affected by Compliance Work</Label>
-                  <div className="flex items-center gap-4">
-                    <Slider
-                      id="affectedEmployees"
-                      value={[inputs.employeesAffectedByCompliance]}
-                      onValueChange={([value]) => updateInput('employeesAffectedByCompliance', value)}
-                      min={0}
-                      max={20}
+                    {costs.revenueGrowth > 0 && (
+                      <div className="mt-4 p-3 bg-accent/10 border border-accent rounded-lg">
+                        <p className="text-sm font-semibold text-accent-foreground">
+                          Potential Annual Revenue Growth: ${costs.revenueGrowth.toLocaleString()}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Lost Productivity - Collapsible (P2) */}
+            <Collapsible open={sectionsOpen.productivity} onOpenChange={() => toggleSection('productivity')}>
+              <Card className="gradient-border-card">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-5 h-5 text-primary" />
+                        Lost Productivity
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.productivity ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">
+                      Employee benefits team members distracted by compliance concerns
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    <SliderWithInput
+                      id="employeesAffected"
+                      label="Employees Affected by Compliance Work"
+                      value={inputs.employeesAffectedByCompliance}
+                      onChange={(value) => updateInput('employeesAffectedByCompliance', value)}
+                      min={1}
+                      max={50}
                       step={1}
-                      className="flex-1"
+                      tooltip="Number of staff whose productivity is reduced by ongoing compliance distractions and concerns."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.employeesAffectedByCompliance}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="productivityLoss">Productivity Loss Percentage</Label>
-                  <p className="text-xs text-muted-foreground">Industry average: 10-20% of affected staff time lost to compliance distractions</p>
-                  <div className="flex items-center gap-4">
-                    <Slider
+
+                    <SliderWithInput
                       id="productivityLoss"
-                      value={[inputs.productivityLossPercentage]}
-                      onValueChange={([value]) => updateInput('productivityLossPercentage', value)}
+                      label="Productivity Loss Percentage"
+                      value={inputs.productivityLossPercentage}
+                      onChange={(value) => updateInput('productivityLossPercentage', value)}
                       min={0}
                       max={50}
-                      step={5}
-                      className="flex-1"
+                      step={1}
+                      unit="%"
+                      helpText="Industry average: 10-20% of affected staff time lost to compliance distractions"
+                      tooltip="Percentage of work time lost due to compliance stress, context switching, and reactive problem-solving instead of proactive client service."
                     />
-                    <span className="text-sm font-semibold w-16 text-right">{inputs.productivityLossPercentage}%</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
           </div>
 
           {/* Right Column: Results */}
           <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <CostSummary costs={costs} />
-            <PotentialROI 
-              costs={{
-                clientChurnCost: costs.clientChurnCost,
-                staffTimeCost: costs.staffTimeCost,
-                productivityCost: costs.productivityCost,
-              }}
-              revenueGrowth={costs.revenueGrowth}
-            />
+            <PotentialROI costs={costs} revenueGrowth={costs.revenueGrowth} />
           </div>
+        </div>
+
+        {/* P1: Trust Signals Section */}
+        <div className="mb-12">
+          <TrustSignals />
         </div>
 
         {/* ROI Comparison Section */}
-        {
-          <div className="mt-12">
-            <ROIComparison 
-              totalCost={costs.totalCost} 
-              costs={costs}
-              inputs={{
-                agencyName: inputs.agencyName,
-                numberOfEmployees: inputs.numberOfEmployees,
-                averageHourlyRate: inputs.averageHourlyRate,
-                hoursPerComplianceIssue: inputs.hoursPerComplianceIssue,
-                complianceIssuesPerMonth: inputs.complianceIssuesPerMonth,
-                totalClients: inputs.totalClients,
-                newClientsWonPerYear: inputs.newClientsWonPerYear,
-                averageNewClientValue: inputs.averageNewClientValue,
-              }}
-            />
-          </div>
-        }
-      </main>
+        <ROIComparison totalCost={costs.totalCost} costs={costs} inputs={inputs} />
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 bg-card/30 backdrop-blur-sm mt-20">
-        <div className="container py-8">
-          <div className="text-center text-sm text-muted-foreground">
-            <p>© 2026 Benefits Compliance Solutions. All rights reserved.</p>
-            <p className="mt-2">These estimates are based on typical results from BCS partnerships. Actual savings may vary based on your specific situation.</p>
+        {/* Footer with Privacy Policy (P0) */}
+        <footer className="mt-16 pt-8 border-t text-center text-sm text-muted-foreground">
+          <p>© 2026 Benefits Compliance Solutions. All rights reserved.</p>
+          <div className="mt-2 flex justify-center gap-4">
+            <PrivacyPolicy asLink />
+            <span>•</span>
+            <a 
+              href="https://www.benefitscompliancesolutions.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+            >
+              About BCS
+            </a>
           </div>
-        </div>
-      </footer>
+          <p className="mt-4 text-xs">
+            These estimates are based on typical results from BCS partnerships. Actual savings may vary based on your specific situation.
+          </p>
+        </footer>
+      </main>
     </div>
   );
 }

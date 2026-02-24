@@ -1,0 +1,126 @@
+/**
+ * SliderWithInput - Accessible hybrid control combining slider and numeric input
+ * Addresses P0 accessibility issue: provides keyboard-accessible alternative to slider-only controls
+ */
+
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+interface SliderWithInputProps {
+  id: string;
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  min: number;
+  max: number;
+  step: number;
+  unit?: string;
+  helpText?: string;
+  tooltip?: string;
+  required?: boolean;
+}
+
+export default function SliderWithInput({
+  id,
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  unit = "",
+  helpText,
+  tooltip,
+  required = false,
+}: SliderWithInputProps) {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseFloat(e.target.value);
+    if (!isNaN(newValue) && newValue >= min && newValue <= max) {
+      onChange(newValue);
+    }
+  };
+
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    let newValue = parseFloat(e.target.value);
+    if (isNaN(newValue)) {
+      newValue = min;
+    } else if (newValue < min) {
+      newValue = min;
+    } else if (newValue > max) {
+      newValue = max;
+    }
+    onChange(newValue);
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <Label htmlFor={id} className="flex-1">
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </Label>
+        {tooltip && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className="text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                  aria-label={`Help: ${label}`}
+                >
+                  <HelpCircle className="w-4 h-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <p className="text-sm">{tooltip}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
+      
+      <div className="flex items-center gap-4">
+        <Slider
+          id={id}
+          value={[value]}
+          onValueChange={([newValue]) => onChange(newValue)}
+          min={min}
+          max={max}
+          step={step}
+          className="flex-1"
+          aria-label={label}
+        />
+        <div className="relative w-24">
+          <Input
+            type="number"
+            value={value}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            min={min}
+            max={max}
+            step={step}
+            className="text-right pr-8 focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            aria-label={`${label} value`}
+          />
+          {unit && (
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">
+              {unit}
+            </span>
+          )}
+        </div>
+      </div>
+      
+      {helpText && (
+        <p className="text-xs text-muted-foreground">{helpText}</p>
+      )}
+    </div>
+  );
+}

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { DollarSign, AlertTriangle, TrendingDown, Users, Clock } from "lucide-react";
+import CalculationMethodology from "@/components/CalculationMethodology";
 
 interface CostSummaryProps {
   costs: {
@@ -83,6 +84,13 @@ export default function CostSummary({ costs }: CostSummaryProps) {
           </div>
           <p className="text-sm text-muted-foreground mb-6">Annual cost from compliance inefficiencies</p>
           
+          <CalculationMethodology
+            title="Operational Cost Calculation"
+            formula="Staff Time Cost + Client Churn Cost + Lost Opportunities + Productivity Loss"
+            explanation="This calculation combines four key cost drivers: (1) Direct labor costs from staff time spent on compliance issues, (2) Revenue lost from clients who leave due to compliance gaps, (3) Opportunity costs from large clients you couldn't pursue, and (4) Productivity losses from compliance distractions."
+            example="If your team spends 3 hours per issue × 8 issues/month × 12 months × $75/hour = $21,600 in staff time alone. Add churn and lost opportunities for total operational impact."
+          />
+          
           {/* Cost Breakdown */}
           <div className="space-y-4">
             <h4 className="text-sm font-semibold flex items-center gap-2 text-muted-foreground">
@@ -135,6 +143,13 @@ export default function CostSummary({ costs }: CostSummaryProps) {
           <p className="text-sm text-muted-foreground mb-4">
             Compliance penalty risk across all clients
           </p>
+          
+          <CalculationMethodology
+            title="Liability Exposure Calculation"
+            formula="(Small Clients × $110K avg) + (Large Clients × $350K avg)"
+            explanation="This estimates the total potential penalty exposure across your entire book of business. We assume 70% of your clients are smaller employers (under 50 employees) with average penalty risk of $70K-$150K, and 30% are larger employers with higher risk ($350K+). This is a theoretical maximum exposure, not a prediction of actual penalties."
+            example="For 200 clients: 140 small clients × $110K + 60 large clients × $350K = $36.4M total exposure. This shows the scale of risk you're managing, not what will definitely occur."
+          />
           
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
             <p className="text-sm text-foreground">

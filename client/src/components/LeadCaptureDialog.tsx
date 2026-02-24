@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PrivacyPolicy from "@/components/PrivacyPolicy";
 
 interface LeadCaptureDialogProps {
   open: boolean;
@@ -94,9 +95,11 @@ export default function LeadCaptureDialog({
           <DialogTitle className="text-2xl font-bold text-primary">
             Download Your Compliance Cost Report
           </DialogTitle>
-          <DialogDescription className="text-base">
-            Enter your information below to receive your personalized compliance
-            cost analysis report.
+          <DialogDescription className="text-base space-y-2">
+            <p>Enter your information below to receive your personalized compliance cost analysis report.</p>
+            <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg border">
+              <strong>Privacy Notice:</strong> We'll use your information to send your report and follow up within 1 business day to discuss your results. View our <PrivacyPolicy asLink /> for details.
+            </p>
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
