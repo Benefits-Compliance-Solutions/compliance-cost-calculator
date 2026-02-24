@@ -529,7 +529,8 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text('Schedule your consultation: benefitscompliancesolutions.com', pageWidth / 2, yPos + 15, { align: 'center' });
+  doc.text('Schedule your consultation:', pageWidth / 2, yPos + 13, { align: 'center' });
+  doc.text('calendly.com/benefitscompliancesolutions/bcs-strategy-session', pageWidth / 2, yPos + 17, { align: 'center' });
   
   // Footer for Page 2
   try {
