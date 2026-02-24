@@ -302,7 +302,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="fluid-text-hero font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight">
-            How Much Revenue Is Compliance Costing You?
+            How Much is Compliance Actually Costing Your Benefits Practice?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Agency principals lose millions in revenue every year—from client churn, missed opportunities, and deals they can't pursue. Calculate your revenue at risk and discover how to turn compliance into a competitive advantage.
