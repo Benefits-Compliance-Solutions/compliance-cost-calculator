@@ -1,10 +1,11 @@
 /**
  * Trust Signals - Company credibility and social proof
  * Addresses P1 issue: insufficient trust signals
+ * Updated with authentic testimonials from BCS website
  */
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Building2, Users, TrendingUp } from "lucide-react";
+import { Award, Building2, Users } from "lucide-react";
 
 export default function TrustSignals() {
   return (
@@ -20,7 +21,7 @@ export default function TrustSignals() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
               <div className="flex justify-center mb-2">
                 <Building2 className="w-6 h-6 text-primary" />
@@ -37,42 +38,35 @@ export default function TrustSignals() {
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-2">
-                <TrendingUp className="w-6 h-6 text-primary" />
-              </div>
-              <div className="text-2xl font-bold">70%</div>
-              <div className="text-xs text-muted-foreground">Avg Cost Reduction</div>
-            </div>
-            <div className="text-center">
-              <div className="flex justify-center mb-2">
                 <Award className="w-6 h-6 text-primary" />
               </div>
-              <div className="text-2xl font-bold">9+ Years</div>
-              <div className="text-xs text-muted-foreground">Industry Experience</div>
+              <div className="text-2xl font-bold">80+ Years</div>
+              <div className="text-xs text-muted-foreground">Collective Compliance Experience</div>
             </div>
           </div>
 
-          {/* Testimonials */}
+          {/* Authentic Testimonials from BCS Website */}
           <div className="space-y-4 pt-4 border-t">
             <div className="bg-background/50 p-4 rounded-lg">
               <p className="text-sm italic text-muted-foreground mb-2">
-                "BCS transformed our compliance approach. We went from reactive firefighting to proactive strategy, and our client retention improved by 40%."
+                "We've been working in the benefits compliance arena for decades now and can honestly say that BCS makes this complicated stuff really easy."
               </p>
-              <p className="text-xs font-semibold">— Sarah Mitchell, Principal</p>
-              <p className="text-xs text-muted-foreground">Cornerstone Benefits Group</p>
+              <p className="text-xs font-semibold">— Heather Garcia, Partner</p>
+              <p className="text-xs text-muted-foreground">Eligibility Tracking Calculators (ETC)</p>
             </div>
             <div className="bg-background/50 p-4 rounded-lg">
               <p className="text-sm italic text-muted-foreground mb-2">
-                "We finally have the confidence to pursue 6-figure clients. BCS handles the compliance complexity so we can focus on growth."
+                "We used to spend days solving problems that takes BCS a matter of hours. They're a partner to us just like we're a partner to our employer clients. They make us shine brighter!"
               </p>
-              <p className="text-xs font-semibold">— Michael Chen, CEO</p>
-              <p className="text-xs text-muted-foreground">Pacific Northwest Benefits</p>
+              <p className="text-xs font-semibold">— Edwige Ligonde</p>
+              <p className="text-xs text-muted-foreground">2021 Benefits Pro Broker of the Year | Partner, Market Director</p>
             </div>
             <div className="bg-background/50 p-4 rounded-lg">
               <p className="text-sm italic text-muted-foreground mb-2">
-                "The ROI was clear within 6 months. We saved over $200K in operational costs and won 3 major clients we would have passed on before."
+                "BCS is such an excellent resource! And, so much more flexible and fun during complicated conversation and compliance issues than anyone I have worked with."
               </p>
-              <p className="text-xs font-semibold">— Jennifer Rodriguez, Partner</p>
-              <p className="text-xs text-muted-foreground">Summit Employee Benefits</p>
+              <p className="text-xs font-semibold">— Kalyn Stelwagen, Director of HR</p>
+              <p className="text-xs text-muted-foreground">Bluebonnet Haven</p>
             </div>
           </div>
 
@@ -82,11 +76,7 @@ export default function TrustSignals() {
             <div className="flex flex-wrap justify-center gap-4 text-xs font-semibold text-muted-foreground">
               <span>SHRM Partner</span>
               <span>•</span>
-              <span>NAHU Member</span>
-              <span>•</span>
-              <span>SOC 2 Certified</span>
-              <span>•</span>
-              <span>HIPAA Compliant</span>
+              <span>NABIP Member</span>
             </div>
           </div>
         </div>

@@ -66,8 +66,8 @@ export default function Home() {
   // Using sonner for toast notifications
   const [inputs, setInputs] = useState<CostInputs>({
     agencyName: "",
-    numberOfEmployees: 50,
-    averageHourlyRate: 75,
+    numberOfEmployees: 10,
+    averageHourlyRate: 50,
     totalClients: 200,
     hoursPerComplianceIssue: 3,
     complianceIssuesPerMonth: 8,
@@ -392,11 +392,11 @@ export default function Home() {
                     {/* P0 + P2: Hybrid Slider+Input Controls */}
                     <SliderWithInput
                       id="employees"
-                      label="Number of Employee Benefits Staff Members"
+                      label="Number of Employee Benefits Operational Staff"
                       value={inputs.numberOfEmployees}
                       onChange={(value) => updateInput('numberOfEmployees', value)}
                       min={1}
-                      max={500}
+                      max={75}
                       step={1}
                       tooltip="The number of full-time staff members who work on employee benefits and compliance matters. This helps calculate labor costs."
                     />
@@ -428,7 +428,70 @@ export default function Home() {
               </Card>
             </Collapsible>
 
-            {/* Client Churn - Collapsible (P2) - REVENUE PRIORITY #1 */}
+            {/* Lost Opportunities - Collapsible (P2) - REVENUE PRIORITY #1 */}
+            <Collapsible open={sectionsOpen.lostOpportunities} onOpenChange={() => toggleSection('lostOpportunities')}>
+              <Card className="gradient-border-card">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Target className="w-5 h-5 text-amber-600" />
+                        Revenue You're Leaving on the Table
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.lostOpportunities ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">
+                      High-value opportunities you can't pursue without stronger compliance capabilities
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    <SliderWithInput
+                      id="largeClientsLost"
+                      label="Mid-Market Deals Lost per Year"
+                      value={inputs.largeClientsLost}
+                      onChange={(value) => updateInput('largeClientsLost', value)}
+                      min={0}
+                      max={10}
+                      step={1}
+                      tooltip="Number of mid-market opportunities you passed on or lost because you lacked the compliance capabilities to serve them confidently."
+                    />
+
+                    <SliderWithInput
+                      id="largeClientValue"
+                      label="Average Mid-Market Deal Value to Agency"
+                      value={inputs.averageLargeClientValue}
+                      onChange={(value) => updateInput('averageLargeClientValue', value)}
+                      min={50000}
+                      max={500000}
+                      step={10000}
+                      unit="$"
+                      tooltip="Average annual revenue potential to your agency from a mid-market employer client (typically 100+ employees)."
+                    />
+
+                    {costs.revenueGrowth > 0 && (
+                      <div className="mt-4 p-4 bg-amber-50 border-l-4 border-amber-600 rounded-lg">
+                        <p className="text-sm font-semibold text-amber-900 mb-1">
+                          📈 Missed Annual Revenue: ${costs.revenueGrowth.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          <strong>Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</strong>
+                        </p>
+                        <p className="text-xs text-amber-800 mt-1">
+                          At 93% top-performer retention, each large client = ${calculateLTV(inputs.averageLargeClientValue, RETENTION_RATES.TOP_PERFORMER, LTV_YEARS).toLocaleString()} in lifetime value
+                        </p>
+                        <p className="text-xs text-amber-800 mt-1">
+                          These are deals you're walking away from because you lack compliance confidence.
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Client Churn - Collapsible (P2) - REVENUE PRIORITY #2 */}
             <Collapsible open={sectionsOpen.clientChurn} onOpenChange={() => toggleSection('clientChurn')}>
               <Card className="gradient-border-card">
                 <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
@@ -449,7 +512,7 @@ export default function Home() {
                   <CardContent className="space-y-4 pt-0">
                     <SliderWithInput
                       id="clientsLost"
-                      label="Clients Lost per Year"
+                      label="Mid-Market Clients Lost per Year"
                       value={inputs.clientsLostPerYear}
                       onChange={(value) => updateInput('clientsLostPerYear', value)}
                       min={0}
@@ -480,69 +543,6 @@ export default function Home() {
                         </p>
                         <p className="text-xs text-destructive/80 mt-1">
                           At 84% industry average retention, each lost client = ${calculateLTV(inputs.averageClientValue, RETENTION_RATES.INDUSTRY_AVERAGE, LTV_YEARS).toLocaleString()} in lifetime value
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </CollapsibleContent>
-              </Card>
-            </Collapsible>
-
-            {/* Lost Opportunities - Collapsible (P2) - REVENUE PRIORITY #2 */}
-            <Collapsible open={sectionsOpen.lostOpportunities} onOpenChange={() => toggleSection('lostOpportunities')}>
-              <Card className="gradient-border-card">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
-                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                    <CardTitle className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <Target className="w-5 h-5 text-amber-600" />
-                        Revenue You're Leaving on the Table
-                      </div>
-                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.lostOpportunities ? 'rotate-180' : ''}`} />
-                    </CardTitle>
-                    <CardDescription className="text-left">
-                      High-value opportunities you can't pursue without stronger compliance capabilities
-                    </CardDescription>
-                  </CardHeader>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <CardContent className="space-y-4 pt-0">
-                    <SliderWithInput
-                      id="largeClientsLost"
-                      label="Large Clients Lost per Year"
-                      value={inputs.largeClientsLost}
-                      onChange={(value) => updateInput('largeClientsLost', value)}
-                      min={0}
-                      max={10}
-                      step={1}
-                      tooltip="Number of larger, more profitable opportunities you passed on or lost because you lacked the compliance capabilities to serve them confidently."
-                    />
-
-                    <SliderWithInput
-                      id="largeClientValue"
-                      label="Average Large Client Value"
-                      value={inputs.averageLargeClientValue}
-                      onChange={(value) => updateInput('averageLargeClientValue', value)}
-                      min={50000}
-                      max={500000}
-                      step={10000}
-                      unit="$"
-                      tooltip="Average annual revenue potential from a large employer client (typically 100+ employees)."
-                    />
-
-                    {costs.revenueGrowth > 0 && (
-                      <div className="mt-4 p-4 bg-amber-50 border-l-4 border-amber-600 rounded-lg">
-                        <p className="text-sm font-semibold text-amber-900 mb-1">
-                          📈 Missed Annual Revenue: ${costs.revenueGrowth.toLocaleString()}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          <strong>Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</strong>
-                        </p>
-                        <p className="text-xs text-amber-800 mt-1">
-                          At 93% top-performer retention, each large client = ${calculateLTV(inputs.averageLargeClientValue, RETENTION_RATES.TOP_PERFORMER, LTV_YEARS).toLocaleString()} in lifetime value
-                        </p>
-                        <p className="text-xs text-amber-800 mt-1">
-                          These are deals you're walking away from because you lack compliance confidence.
                         </p>
                       </div>
                     )}
