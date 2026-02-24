@@ -41,6 +41,16 @@ export default function SliderWithInput({
   tooltip,
   required = false,
 }: SliderWithInputProps) {
+  // Calculate input width based on max value digits
+  const getInputWidth = () => {
+    const maxDigits = max.toString().length;
+    const unitWidth = unit ? 2 : 0; // Extra space for unit symbol
+    if (maxDigits >= 6) return 'w-36'; // 144px for 6+ digits
+    if (maxDigits >= 5) return 'w-32'; // 128px for 5 digits
+    if (maxDigits >= 4) return 'w-28'; // 112px for 4 digits
+    return 'w-24'; // 96px for 3 or fewer digits
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseFloat(e.target.value);
     if (!isNaN(newValue) && newValue >= min && newValue <= max) {
@@ -98,7 +108,7 @@ export default function SliderWithInput({
           className="flex-1"
           aria-label={label}
         />
-        <div className="relative w-24">
+        <div className={`relative ${getInputWidth()}`}>
           <Input
             type="number"
             value={value}
