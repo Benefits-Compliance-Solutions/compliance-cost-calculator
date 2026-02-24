@@ -87,13 +87,13 @@ export default function Home() {
   const [showResumeBanner, setShowResumeBanner] = useState(false);
   const [lastSavedDate, setLastSavedDate] = useState<Date | null>(null);
 
-  // P2: Progressive disclosure state
+  // P2: Progressive disclosure state - Revenue-focused defaults
   const [sectionsOpen, setSectionsOpen] = useState({
     basics: true,
-    staffTime: true,
-    clientChurn: true,
-    lostOpportunities: true,
-    productivity: true,
+    clientChurn: true,  // Revenue priority #1
+    lostOpportunities: true,  // Revenue priority #2
+    staffTime: false,  // Supporting detail - collapsed by default
+    productivity: false,  // Supporting detail - collapsed by default
   });
 
   // Check for saved data on mount (P1)
@@ -291,10 +291,10 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight">
-            What Is Compliance Costing Your Agency?
+            How Much Revenue Is Compliance Costing You?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Employee benefits agencies lose thousands every year to compliance challenges. Calculate your hidden costs and discover the ROI of partnering with compliance experts.
+            Agency principals lose millions in revenue every year—from client churn, missed opportunities, and deals they can't pursue. Calculate your revenue at risk and discover how to turn compliance into a competitive advantage.
           </p>
         </div>
 
@@ -413,20 +413,137 @@ export default function Home() {
               </Card>
             </Collapsible>
 
-            {/* Staff Time Costs - Collapsible (P2) */}
-            <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => toggleSection('staffTime')}>
+            {/* Client Churn - Collapsible (P2) - REVENUE PRIORITY #1 */}
+            <Collapsible open={sectionsOpen.clientChurn} onOpenChange={() => toggleSection('clientChurn')}>
               <Card className="gradient-border-card">
                 <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <Clock className="w-5 h-5 text-primary" />
-                        Staff Time on Compliance "Fires"
+                        <DollarSign className="w-5 h-5 text-destructive" />
+                        Revenue Lost to Client Churn
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.clientChurn ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">
+                      Recurring revenue you're losing when clients leave due to compliance gaps
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    <SliderWithInput
+                      id="clientsLost"
+                      label="Clients Lost per Year"
+                      value={inputs.clientsLostPerYear}
+                      onChange={(value) => updateInput('clientsLostPerYear', value)}
+                      min={0}
+                      max={20}
+                      step={1}
+                      tooltip="Number of clients who leave annually due to compliance concerns, lack of expertise, or inability to handle complex requirements."
+                    />
+
+                    <SliderWithInput
+                      id="clientValue"
+                      label="Average Annual Client Value"
+                      value={inputs.averageClientValue}
+                      onChange={(value) => updateInput('averageClientValue', value)}
+                      min={10000}
+                      max={200000}
+                      step={5000}
+                      unit="$"
+                      tooltip="Average annual revenue (commissions + fees) from a typical client."
+                    />
+
+                    {costs.clientChurnCost > 0 && (
+                      <div className="mt-4 p-4 bg-destructive/10 border-l-4 border-destructive rounded-lg">
+                        <p className="text-sm font-semibold text-destructive mb-1">
+                          💸 Annual Revenue Loss: ${costs.clientChurnCost.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Lifetime Value (6 years): ${(costs.clientChurnCost * 6).toLocaleString()}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Lost Opportunities - Collapsible (P2) - REVENUE PRIORITY #2 */}
+            <Collapsible open={sectionsOpen.lostOpportunities} onOpenChange={() => toggleSection('lostOpportunities')}>
+              <Card className="gradient-border-card">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Target className="w-5 h-5 text-amber-600" />
+                        Revenue You're Leaving on the Table
+                      </div>
+                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.lostOpportunities ? 'rotate-180' : ''}`} />
+                    </CardTitle>
+                    <CardDescription className="text-left">
+                      High-value opportunities you can't pursue without stronger compliance capabilities
+                    </CardDescription>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
+                    <SliderWithInput
+                      id="largeClientsLost"
+                      label="Large Clients Lost per Year"
+                      value={inputs.largeClientsLost}
+                      onChange={(value) => updateInput('largeClientsLost', value)}
+                      min={0}
+                      max={10}
+                      step={1}
+                      tooltip="Number of larger, more profitable opportunities you passed on or lost because you lacked the compliance capabilities to serve them confidently."
+                    />
+
+                    <SliderWithInput
+                      id="largeClientValue"
+                      label="Average Large Client Value"
+                      value={inputs.averageLargeClientValue}
+                      onChange={(value) => updateInput('averageLargeClientValue', value)}
+                      min={50000}
+                      max={500000}
+                      step={10000}
+                      unit="$"
+                      tooltip="Average annual revenue potential from a large employer client (typically 100+ employees)."
+                    />
+
+                    {costs.revenueGrowth > 0 && (
+                      <div className="mt-4 p-4 bg-amber-50 border-l-4 border-amber-600 rounded-lg">
+                        <p className="text-sm font-semibold text-amber-900 mb-1">
+                          📈 Missed Annual Revenue: ${costs.revenueGrowth.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-amber-800 mt-2">
+                          These are deals you're walking away from because you lack compliance confidence.
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Staff Time Costs - Collapsible (P2) - Supporting Detail */}
+            <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => toggleSection('staffTime')}>
+              <Card className="gradient-border-card opacity-90">
+                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-base">Staff Time on Compliance (Optional Detail)</span>
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.staffTime ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                    <CardDescription className="text-left">
-                      How much time does your team spend putting out compliance emergencies?
+                    <CardDescription className="text-left text-xs">
+                      How much time your team spends on compliance emergencies
                     </CardDescription>
                   </CardHeader>
                 </CollapsibleTrigger>
@@ -460,120 +577,20 @@ export default function Home() {
               </Card>
             </Collapsible>
 
-            {/* Client Churn - Collapsible (P2) */}
-            <Collapsible open={sectionsOpen.clientChurn} onOpenChange={() => toggleSection('clientChurn')}>
-              <Card className="gradient-border-card">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
-                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                    <CardTitle className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-primary" />
-                        Client Churn Due to Compliance Gaps
-                      </div>
-                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.clientChurn ? 'rotate-180' : ''}`} />
-                    </CardTitle>
-                    <CardDescription className="text-left">
-                      Clients lost when you can't meet compliance expectations
-                    </CardDescription>
-                  </CardHeader>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <CardContent className="space-y-4 pt-0">
-                    <SliderWithInput
-                      id="clientsLost"
-                      label="Clients Lost per Year"
-                      value={inputs.clientsLostPerYear}
-                      onChange={(value) => updateInput('clientsLostPerYear', value)}
-                      min={0}
-                      max={20}
-                      step={1}
-                      tooltip="Number of clients who leave annually due to compliance concerns, lack of expertise, or inability to handle complex requirements."
-                    />
-
-                    <SliderWithInput
-                      id="clientValue"
-                      label="Average Annual Client Value"
-                      value={inputs.averageClientValue}
-                      onChange={(value) => updateInput('averageClientValue', value)}
-                      min={10000}
-                      max={200000}
-                      step={5000}
-                      unit="$"
-                      tooltip="Average annual revenue (commissions + fees) from a typical client."
-                    />
-                  </CardContent>
-                </CollapsibleContent>
-              </Card>
-            </Collapsible>
-
-            {/* Lost Opportunities - Collapsible (P2) */}
-            <Collapsible open={sectionsOpen.lostOpportunities} onOpenChange={() => toggleSection('lostOpportunities')}>
-              <Card className="gradient-border-card">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
-                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                    <CardTitle className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <Target className="w-5 h-5 text-primary" />
-                        Lost Opportunities (Mid to Large Group Employers)
-                      </div>
-                      <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.lostOpportunities ? 'rotate-180' : ''}`} />
-                    </CardTitle>
-                    <CardDescription className="text-left">
-                      Large clients you couldn't pursue due to compliance limitations
-                    </CardDescription>
-                  </CardHeader>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <CardContent className="space-y-4 pt-0">
-                    <SliderWithInput
-                      id="largeClientsLost"
-                      label="Large Clients Lost per Year"
-                      value={inputs.largeClientsLost}
-                      onChange={(value) => updateInput('largeClientsLost', value)}
-                      min={0}
-                      max={10}
-                      step={1}
-                      tooltip="Number of larger, more profitable opportunities you passed on or lost because you lacked the compliance capabilities to serve them confidently."
-                    />
-
-                    <SliderWithInput
-                      id="largeClientValue"
-                      label="Average Large Client Value"
-                      value={inputs.averageLargeClientValue}
-                      onChange={(value) => updateInput('averageLargeClientValue', value)}
-                      min={50000}
-                      max={500000}
-                      step={10000}
-                      unit="$"
-                      tooltip="Average annual revenue potential from a large employer client (typically 100+ employees)."
-                    />
-
-                    {costs.revenueGrowth > 0 && (
-                      <div className="mt-4 p-3 bg-accent/10 border border-accent rounded-lg">
-                        <p className="text-sm font-semibold text-accent-foreground">
-                          Potential Annual Revenue Growth: ${costs.revenueGrowth.toLocaleString()}
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </CollapsibleContent>
-              </Card>
-            </Collapsible>
-
-            {/* Lost Productivity - Collapsible (P2) */}
+            {/* Lost Productivity - Collapsible (P2) - Supporting Detail */}
             <Collapsible open={sectionsOpen.productivity} onOpenChange={() => toggleSection('productivity')}>
-              <Card className="gradient-border-card">
+              <Card className="gradient-border-card opacity-90">
                 <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5 text-primary" />
-                        Lost Productivity
+                        <AlertCircle className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-base">Team Productivity Impact (Optional Detail)</span>
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.productivity ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                    <CardDescription className="text-left">
-                      Employee benefits team members distracted by compliance concerns
+                    <CardDescription className="text-left text-xs">
+                      Staff distracted by compliance concerns
                     </CardDescription>
                   </CardHeader>
                 </CollapsibleTrigger>

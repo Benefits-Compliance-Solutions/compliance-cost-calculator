@@ -60,35 +60,49 @@ function AnimatedCounter({ value, duration = 1000 }: { value: number; duration?:
 }
 
 export default function CostSummary({ costs }: CostSummaryProps) {
-  const operationalBreakdown = [
-    { label: "Staff Time on Compliance Issues", value: costs.staffTimeCost, icon: Clock },
-    { label: "Client Churn", value: costs.clientChurnCost, icon: TrendingDown },
-    { label: "Lost Large Client Opportunities", value: costs.opportunityCost, icon: DollarSign },
-    { label: "Lost Productivity", value: costs.productivityCost, icon: Users },
+  // Revenue-focused breakdown - prioritize revenue loss over operational costs
+  const revenueImpact = costs.clientChurnCost + costs.opportunityCost;
+  const operationalCosts = costs.staffTimeCost + costs.productivityCost;
+  
+  const costBreakdown = [
+    { label: "Client Churn (Lost Revenue)", value: costs.clientChurnCost, icon: TrendingDown, isRevenue: true },
+    { label: "Missed Large Client Opportunities", value: costs.opportunityCost, icon: DollarSign, isRevenue: true },
+    { label: "Staff Time on Compliance", value: costs.staffTimeCost, icon: Clock, isRevenue: false },
+    { label: "Lost Team Productivity", value: costs.productivityCost, icon: Users, isRevenue: false },
   ];
 
   return (
     <div className="space-y-6">
-      {/* Operational Costs Card */}
-      <Card className="gradient-border-card bg-gradient-to-br from-card to-card/50 shadow-lg border-primary/30">
+      {/* Revenue Impact Card - Lead with what matters to principals */}
+      <Card className="gradient-border-card bg-gradient-to-br from-destructive/5 to-destructive/10 shadow-lg border-destructive/30">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-primary">
+          <CardTitle className="flex items-center gap-2 text-destructive">
             <DollarSign className="w-5 h-5" />
-            Your Agency's Operational Costs
+            Revenue at Risk from Compliance Gaps
           </CardTitle>
-          <CardDescription>Labor, lost deals, and client churn</CardDescription>
+          <CardDescription>Direct revenue loss + missed opportunities</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-5xl font-bold text-primary mb-4">
+          <div className="text-5xl font-bold text-destructive mb-2">
             <AnimatedCounter value={costs.totalOperationalCost} />
           </div>
-          <p className="text-sm text-muted-foreground mb-6">Annual cost from compliance inefficiencies</p>
+          <p className="text-sm text-muted-foreground mb-1">Total annual impact</p>
+          <div className="flex gap-4 text-sm mb-6">
+            <div>
+              <span className="font-semibold text-destructive">${revenueImpact.toLocaleString()}</span>
+              <span className="text-muted-foreground"> revenue loss</span>
+            </div>
+            <div>
+              <span className="font-semibold text-muted-foreground">${operationalCosts.toLocaleString()}</span>
+              <span className="text-muted-foreground"> operational costs</span>
+            </div>
+          </div>
           
           <CalculationMethodology
-            title="Operational Cost Calculation"
-            formula="Staff Time Cost + Client Churn Cost + Lost Opportunities + Productivity Loss"
-            explanation="This calculation combines four key cost drivers: (1) Direct labor costs from staff time spent on compliance issues, (2) Revenue lost from clients who leave due to compliance gaps, (3) Opportunity costs from large clients you couldn't pursue, and (4) Productivity losses from compliance distractions."
-            example="If your team spends 3 hours per issue × 8 issues/month × 12 months × $75/hour = $21,600 in staff time alone. Add churn and lost opportunities for total operational impact."
+            title="Revenue Impact Calculation"
+            formula="Client Churn Revenue + Missed Opportunities + Staff Time + Productivity Loss"
+            explanation="This calculation prioritizes revenue impact: (1) Direct revenue lost from client churn, (2) Revenue you're missing from opportunities you can't pursue, (3) Labor costs from compliance firefighting, and (4) Productivity losses. The first two are pure revenue loss—money that should be hitting your bottom line."
+            example="Losing 2 clients at $50K each = $100K annual revenue loss. Missing 1 large client at $150K = another $150K. That's $250K in revenue you're walking away from, plus operational drag from compliance issues."
           />
           
           {/* Cost Breakdown */}
@@ -97,7 +111,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
               <TrendingDown className="w-4 h-4" />
               Cost Breakdown
             </h4>
-            {operationalBreakdown.map((item, index) => {
+            {costBreakdown.map((item, index) => {
               const percentage = costs.totalOperationalCost > 0 
                 ? (item.value / costs.totalOperationalCost) * 100 
                 : 0;
@@ -110,7 +124,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
                       <Icon className="w-3 h-3" />
                       {item.label}
                     </span>
-                    <span className="font-semibold text-primary">
+                    <span className={`font-semibold ${item.isRevenue ? 'text-destructive' : 'text-muted-foreground'}`}>
                       ${item.value.toLocaleString()}
                     </span>
                   </div>

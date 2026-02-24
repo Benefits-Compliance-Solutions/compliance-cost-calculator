@@ -26,22 +26,25 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
 
   const roiBreakdown = [
     { 
-      label: "Client Retention Value", 
-      value: clientRetentionValue, 
-      icon: Users,
-      description: "Keep your best clients with confidence"
-    },
-    { 
-      label: "Labor Cost Savings", 
-      value: laborSavings, 
-      icon: TrendingUp,
-      description: "Reduce time spent on compliance fires"
-    },
-    { 
       label: "New Business Revenue", 
       value: newBusinessRevenue, 
       icon: DollarSign,
-      description: "Win deals by leading with compliance"
+      description: "Win high-value clients you can't pursue today",
+      isRevenue: true
+    },
+    { 
+      label: "Client Retention Value", 
+      value: clientRetentionValue, 
+      icon: Users,
+      description: "Stop losing clients to compliance gaps",
+      isRevenue: true
+    },
+    { 
+      label: "Operational Efficiency Gains", 
+      value: laborSavings, 
+      icon: TrendingUp,
+      description: "Free your team from compliance firefighting",
+      isRevenue: false
     },
   ];
 
@@ -50,16 +53,20 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-accent">
           <Target className="w-5 h-5" />
-          What You're Leaving on the Table
+          Revenue Growth Opportunity
         </CardTitle>
-        <CardDescription>Revenue and opportunities you could have captured with stronger compliance capabilities</CardDescription>
+        <CardDescription>New revenue you could capture with compliance as a competitive advantage</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-5xl font-bold text-accent mb-6">
+        <div className="text-5xl font-bold text-accent mb-2">
           ${newBusinessRevenue.toLocaleString()}
         </div>
-        <p className="text-sm text-muted-foreground mb-6">
-          Annual revenue from large clients you couldn't pursue due to compliance limitations
+        <p className="text-sm font-semibold text-accent mb-1">
+          Annual new business revenue potential
+        </p>
+        <p className="text-xs text-muted-foreground mb-6">
+          From large clients you can confidently pursue with compliance capabilities<br/>
+          <span className="font-medium">6-Year Lifetime Value: ${(newBusinessRevenue * 6).toLocaleString()}</span>
         </p>
         
         {/* ROI Breakdown */}
@@ -77,7 +84,7 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
                     <Icon className="w-4 h-4 text-accent" />
                     {item.label}
                   </span>
-                  <span className="font-semibold text-accent">${item.value.toLocaleString()}</span>
+                  <span className={`font-semibold ${item.isRevenue ? 'text-accent' : 'text-muted-foreground'}`}>${item.value.toLocaleString()}</span>
                 </div>
                 <p className="text-xs text-muted-foreground ml-6">{item.description}</p>
                 <div className="relative h-2 bg-muted rounded-full overflow-hidden">
@@ -91,11 +98,11 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
           })}
         </div>
 
-        <div className="mt-6 p-4 bg-accent/5 border border-accent/20 rounded-lg">
+        <div className="mt-6 p-4 bg-gradient-to-r from-accent/10 to-accent/5 border-l-4 border-accent rounded-lg">
           <p className="text-sm text-foreground">
-            <strong>Growth Impact:</strong> By solving compliance challenges, you can retain more clients, 
-            free up your team to focus on revenue-generating activities, and confidently win new business 
-            by leading with compliance expertise in your sales process.
+            <strong className="text-accent">Why This Matters:</strong> Agency principals don't just want to reduce costs—they want to grow revenue. 
+            With compliance capabilities, you can pursue 6-figure clients, retain your best accounts, and position compliance 
+            as a competitive differentiator in your sales process. This is about <strong>revenue growth</strong>, not just cost reduction.
           </p>
         </div>
       </CardContent>
