@@ -242,4 +242,58 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .gradient-border-card:hover::before {
     opacity: 1;
   }
+  
+  /* CSS-only tooltips */
+  .tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltip-wrapper button[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.75rem 1rem;
+    background: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    white-space: normal;
+    width: 16rem;
+    max-width: 90vw;
+    text-align: left;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  .tooltip-wrapper button[data-tooltip]::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--border);
+    z-index: 51;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  .tooltip-wrapper button[data-tooltip]:hover::before,
+  .tooltip-wrapper button[data-tooltip]:focus::before,
+  .tooltip-wrapper button[data-tooltip]:hover::after,
+  .tooltip-wrapper button[data-tooltip]:focus::after {
+    opacity: 1;
+  }
 }

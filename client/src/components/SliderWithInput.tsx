@@ -7,12 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { HelpCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { SimpleTooltip } from "@/components/SimpleTooltip";
 
 interface SliderWithInputProps {
   id: string;
@@ -25,7 +20,7 @@ interface SliderWithInputProps {
   unit?: string;
   helpText?: string;
   tooltip?: string;
-  required?: boolean;
+  required?: false;
 }
 
 export default function SliderWithInput({
@@ -77,24 +72,7 @@ export default function SliderWithInput({
           {label}
           {required && <span className="text-destructive ml-1">*</span>}
         </Label>
-        {tooltip && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                className="p-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded -m-2"
-                aria-label={`Help: ${label}`}
-                title={tooltip}
-                style={{ minWidth: '44px', minHeight: '44px' }}
-              >
-                <HelpCircle className="w-4 h-4" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
-              <p className="text-sm">{tooltip}</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
+        {tooltip && <SimpleTooltip content={tooltip} />}
       </div>
       
       <div className="flex items-center gap-4">
