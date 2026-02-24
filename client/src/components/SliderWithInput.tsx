@@ -84,6 +84,7 @@ export default function SliderWithInput({
                 type="button"
                 className="p-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded -m-2"
                 aria-label={`Help: ${label}`}
+                title={tooltip}
                 style={{ minWidth: '44px', minHeight: '44px' }}
               >
                 <HelpCircle className="w-4 h-4" />
