@@ -22,8 +22,10 @@ import SliderWithInput from "@/components/SliderWithInput";
 import PrivacyPolicy from "@/components/PrivacyPolicy";
 import TrustSignals from "@/components/TrustSignals";
 import ResumeCalculationBanner from "@/components/ResumeCalculationBanner";
+import LTVEducation from "@/components/LTVEducation";
 import { validateAgencyName } from "@/lib/validation";
 import { saveCalculatorData, loadCalculatorData, clearCalculatorData, getLastSavedTimestamp } from "@/lib/storage";
+import { calculateLTV, RETENTION_RATES, LTV_YEARS, getLTVInsights, LTV_CITATIONS } from "@/lib/ltvCalculations";
 import {
   Collapsible,
   CollapsibleContent,
@@ -234,7 +236,15 @@ export default function Home() {
     
     // Revenue growth from lost opportunities
     const revenueGrowth = inputs.largeClientsLost * inputs.averageLargeClientValue;
-    const lifetimeValueGrowth = revenueGrowth * 6; // 6-year industry standard
+    
+    // LTV calculations using industry retention rates
+    // Industry average: 84% retention = 4.06x multiplier over 6 years
+    // Top performers: 93% retention = 5.04x multiplier over 6 years
+    const clientChurnLTV = calculateLTV(inputs.averageClientValue, RETENTION_RATES.INDUSTRY_AVERAGE, LTV_YEARS);
+    const clientChurnLTVTotal = inputs.clientsLostPerYear * clientChurnLTV;
+    
+    const revenueGrowthLTV = calculateLTV(inputs.averageLargeClientValue, RETENTION_RATES.TOP_PERFORMER, LTV_YEARS);
+    const lifetimeValueGrowth = inputs.largeClientsLost * revenueGrowthLTV;
     
     return {
       // Operational costs breakdown
@@ -252,9 +262,14 @@ export default function Home() {
       revenueGrowth,
       lifetimeValueGrowth,
       
+      // LTV calculations
+      clientChurnLTV,
+      clientChurnLTVTotal,
+      revenueGrowthLTV,
+      
       // Legacy fields for compatibility
       penaltyRisk: totalLiabilityExposure,
-      totalCost: totalOperationalCost + totalLiabilityExposure,
+      totalCost: totalOperationalCost,
     };
   };
 
@@ -461,7 +476,10 @@ export default function Home() {
                           💸 Annual Revenue Loss: ${costs.clientChurnCost.toLocaleString()}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Lifetime Value (6 years): ${(costs.clientChurnCost * 6).toLocaleString()}
+                          <strong>Lifetime Value (6 years): ${costs.clientChurnLTVTotal.toLocaleString()}</strong>
+                        </p>
+                        <p className="text-xs text-destructive/80 mt-1">
+                          At 84% industry average retention, each lost client = ${calculateLTV(inputs.averageClientValue, RETENTION_RATES.INDUSTRY_AVERAGE, LTV_YEARS).toLocaleString()} in lifetime value
                         </p>
                       </div>
                     )}
@@ -518,9 +536,12 @@ export default function Home() {
                           📈 Missed Annual Revenue: ${costs.revenueGrowth.toLocaleString()}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}
+                          <strong>Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</strong>
                         </p>
-                        <p className="text-xs text-amber-800 mt-2">
+                        <p className="text-xs text-amber-800 mt-1">
+                          At 93% top-performer retention, each large client = ${calculateLTV(inputs.averageLargeClientValue, RETENTION_RATES.TOP_PERFORMER, LTV_YEARS).toLocaleString()} in lifetime value
+                        </p>
+                        <p className="text-xs text-amber-800 mt-1">
                           These are deals you're walking away from because you lack compliance confidence.
                         </p>
                       </div>
@@ -632,15 +653,25 @@ export default function Home() {
           </div>
         </div>
 
-        {/* P1: Trust Signals Section */}
-        <div className="mb-12">
+        {/* LTV Education Section */}
+        <div className="mt-12">
+          <LTVEducation 
+            averageClientValue={inputs.averageClientValue}
+            totalClients={inputs.totalClients}
+          />
+        </div>
+
+        {/* Trust Signals */}
+        <div className="mt-12">
           <TrustSignals />
         </div>
 
-        {/* ROI Comparison Section */}
-        <ROIComparison totalCost={costs.totalCost} costs={costs} inputs={inputs} />
+        {/* ROI Comparison */}
+        <div className="mt-12">
+          <ROIComparison totalCost={costs.totalCost} costs={costs} inputs={inputs} />
+        </div>
 
-        {/* Footer with Privacy Policy (P0) */}
+        {/* Footer with Privacy Policy */}
         <footer className="mt-16 pt-8 border-t text-center text-sm text-muted-foreground">
           <p>© 2026 Benefits Compliance Solutions. All rights reserved.</p>
           <div className="mt-2 flex justify-center gap-4">

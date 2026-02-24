@@ -26,6 +26,9 @@ interface ROIComparisonProps {
     lifetimeValueGrowth: number;
     penaltyRisk: number;
     totalCost: number;
+    clientChurnLTV?: number;
+    clientChurnLTVTotal?: number;
+    revenueGrowthLTV?: number;
   };
   inputs: {
     agencyName?: string;

@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-
+import { RETENTION_RATES, LTV_CITATIONS } from './ltvCalculations';
 
 interface CostData {
   staffTimeCost: number;
@@ -12,6 +12,9 @@ interface CostData {
   revenueGrowth: number;
   lifetimeValueGrowth: number;
   totalCost: number;
+  clientChurnLTV?: number;
+  clientChurnLTVTotal?: number;
+  revenueGrowthLTV?: number;
 }
 
 interface LeadData {
@@ -138,10 +141,30 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   yPos += 8;
   
   const costItems = [
-    { label: 'Staff Time on Compliance Issues', value: costs.staffTimeCost, percentage: (costs.staffTimeCost / costs.totalOperationalCost) * 100 },
-    { label: 'Client Churn', value: costs.clientChurnCost, percentage: (costs.clientChurnCost / costs.totalOperationalCost) * 100 },
-    { label: 'Lost Large Client Opportunities', value: costs.opportunityCost, percentage: (costs.opportunityCost / costs.totalOperationalCost) * 100 },
-    { label: 'Lost Productivity', value: costs.productivityCost, percentage: (costs.productivityCost / costs.totalOperationalCost) * 100 },
+    { 
+      label: 'Client Churn (Lost Revenue)', 
+      value: costs.clientChurnCost, 
+      percentage: (costs.clientChurnCost / costs.totalOperationalCost) * 100,
+      ltv: costs.clientChurnLTVTotal,
+      showLTV: true
+    },
+    { 
+      label: 'Missed Large Client Opportunities', 
+      value: costs.opportunityCost, 
+      percentage: (costs.opportunityCost / costs.totalOperationalCost) * 100,
+      ltv: costs.lifetimeValueGrowth,
+      showLTV: true
+    },
+    { 
+      label: 'Staff Time on Compliance Issues', 
+      value: costs.staffTimeCost, 
+      percentage: (costs.staffTimeCost / costs.totalOperationalCost) * 100 
+    },
+    { 
+      label: 'Lost Productivity', 
+      value: costs.productivityCost, 
+      percentage: (costs.productivityCost / costs.totalOperationalCost) * 100 
+    },
   ];
   
   costItems.forEach((item) => {
@@ -168,6 +191,15 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
     doc.roundedRect(margin + 2, yPos + 6, fillWidth, barHeight, 1, 1, 'F');
     
     yPos += 12;
+    
+    // Add LTV for revenue items
+    if (item.showLTV && item.ltv) {
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'italic');
+      doc.setTextColor(red[0], red[1], red[2]);
+      doc.text(`6-Year Lifetime Value: $${item.ltv.toLocaleString()}`, margin + 4, yPos);
+      yPos += 6;
+    }
   });
   
   yPos += 5;
@@ -463,6 +495,28 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   });
   
   yPos += 5;
+  
+  // LTV Methodology Citation
+  doc.setFillColor(lightTeal[0], lightTeal[1], lightTeal[2]);
+  doc.setDrawColor(teal[0], teal[1], teal[2]);
+  doc.roundedRect(margin, yPos, contentWidth, 18, 2, 2, 'FD');
+  
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(navyBlue[0], navyBlue[1], navyBlue[2]);
+  doc.text('Lifetime Value Methodology:', margin + 3, yPos + 5);
+  
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(gray[0], gray[1], gray[2]);
+  const ltvText = `LTV calculations based on industry retention rates from ${LTV_CITATIONS.PRIMARY.source} (${LTV_CITATIONS.PRIMARY.year}): Industry average ${LTV_CITATIONS.PRIMARY.stats.industryAverage} retention, top performers ${LTV_CITATIONS.PRIMARY.stats.topPerformers}. At ${(RETENTION_RATES.INDUSTRY_AVERAGE * 100).toFixed(0)}% retention, clients have a 4.06x lifetime value multiplier over 6 years. At ${(RETENTION_RATES.TOP_PERFORMER * 100).toFixed(0)}% retention (achievable with BCS partnership), the multiplier increases to 5.04x - a 24% improvement in client lifetime value.`;
+  const ltvLines = doc.splitTextToSize(ltvText, contentWidth - 6);
+  let ltvY = yPos + 9;
+  ltvLines.forEach((line: string) => {
+    doc.text(line, margin + 3, ltvY);
+    ltvY += 3.5;
+  });
+  
+  yPos = ltvY + 3;
   
   // Footer CTA
   doc.setFillColor(navyBlue[0], navyBlue[1], navyBlue[2]);
