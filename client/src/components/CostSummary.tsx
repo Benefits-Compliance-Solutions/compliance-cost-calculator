@@ -77,7 +77,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
       <Card className="gradient-border-card bg-gradient-to-br from-destructive/5 to-destructive/10 shadow-lg border-destructive/30">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
-            <DollarSign className="w-5 h-5" />
+            <span className="text-destructive" aria-label="Risk">⚠️</span>
             Revenue at Risk from Compliance Gaps
           </CardTitle>
           <CardDescription>Direct revenue loss + missed opportunities</CardDescription>
@@ -130,7 +130,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <Progress value={percentage} className="h-2 flex-1" />
-                    <span className="text-xs text-muted-foreground w-12 text-right">
+                    <span className="text-sm text-muted-foreground w-12 text-right">
                       {percentage.toFixed(1)}%
                     </span>
                   </div>

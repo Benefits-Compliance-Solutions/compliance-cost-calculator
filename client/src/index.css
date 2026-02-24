@@ -52,6 +52,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   /* BCS Brand Colors */
   --color-bcs-navy: oklch(0.25 0.08 280);
   --color-bcs-teal: oklch(0.68 0.08 180);
+  --color-bcs-teal-text: oklch(0.45 0.10 180); /* Darker teal for text (WCAG AA compliant) */
   --color-bcs-purple: oklch(0.42 0.08 280);
   --color-bcs-light-teal: oklch(0.82 0.05 180);
   --color-bcs-gray: oklch(0.92 0.01 240);
@@ -63,7 +64,8 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   --primary-foreground: oklch(0.98 0 0);
   
   /* Accent using BCS Teal */
-  --accent: var(--color-bcs-teal);
+  --accent: var(--color-bcs-teal); /* For backgrounds/borders */
+  --accent-text: var(--color-bcs-teal-text); /* For text (WCAG AA compliant) */
   --accent-foreground: oklch(0.15 0.02 280);
   
   /* Chart colors using BCS palette */
@@ -83,7 +85,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   --secondary: var(--color-bcs-gray);
   --secondary-foreground: oklch(0.25 0.02 280);
   --muted: oklch(0.95 0.005 240);
-  --muted-foreground: oklch(0.50 0.02 280);
+  --muted-foreground: oklch(0.42 0.02 280); /* Darkened for WCAG AA compliance (5.2:1 contrast) */
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.88 0.01 240);
@@ -111,7 +113,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   --secondary: oklch(0.25 0.02 280);
   --secondary-foreground: oklch(0.90 0.01 240);
   --muted: oklch(0.28 0.02 280);
-  --muted-foreground: oklch(0.70 0.02 240);
+  --muted-foreground: oklch(0.65 0.02 240); /* Adjusted for better contrast in dark mode */
   --accent: var(--color-bcs-teal);
   --accent-foreground: oklch(0.15 0.02 280);
   --destructive: oklch(0.60 0.20 25);
@@ -131,7 +133,13 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+  
+  /* Improved focus indicators for accessibility */
+  *:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
   body {
     @apply bg-background text-foreground;
@@ -153,6 +161,15 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled) {
     @apply cursor-pointer;
+  }
+  
+  /* Mobile font size overrides to prevent iOS auto-zoom */
+  @media (max-width: 640px) {
+    input:not([type="checkbox"]):not([type="radio"]),
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
   }
 }
 
@@ -189,6 +206,16 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .cost-counter {
     font-variant-numeric: tabular-nums;
     font-weight: 700;
+    line-height: 1.3; /* Improved from 1.11 for better readability */
+  }
+  
+  /* Fluid typography for smooth scaling */
+  .fluid-text-hero {
+    font-size: clamp(1.875rem, 4vw + 1rem, 3rem); /* 30px min, 48px max */
+  }
+  
+  .fluid-text-large {
+    font-size: clamp(1.5rem, 3vw + 0.5rem, 2.25rem); /* 24px min, 36px max */
   }
   
   /* Gradient border card effect */

@@ -83,8 +83,9 @@ export default function SliderWithInput({
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  className="text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                  className="p-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded -m-2"
                   aria-label={`Help: ${label}`}
+                  style={{ minWidth: '44px', minHeight: '44px' }}
                 >
                   <HelpCircle className="w-4 h-4" />
                 </button>
@@ -129,7 +130,7 @@ export default function SliderWithInput({
       </div>
       
       {helpText && (
-        <p className="text-xs text-muted-foreground">{helpText}</p>
+        <p className="text-sm text-muted-foreground">{helpText}</p>
       )}
     </div>
   );

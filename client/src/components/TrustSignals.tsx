@@ -27,21 +27,21 @@ export default function TrustSignals() {
                 <Building2 className="w-6 h-6 text-primary" />
               </div>
               <div className="text-2xl font-bold">150+</div>
-              <div className="text-xs text-muted-foreground">Agency Partners</div>
+              <div className="text-sm text-muted-foreground">Agency Partners</div>
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-2">
                 <Users className="w-6 h-6 text-primary" />
               </div>
               <div className="text-2xl font-bold">10,000+</div>
-              <div className="text-xs text-muted-foreground">Employers Served</div>
+              <div className="text-sm text-muted-foreground">Employers Served</div>
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-2">
                 <Award className="w-6 h-6 text-primary" />
               </div>
               <div className="text-2xl font-bold">80+ Years</div>
-              <div className="text-xs text-muted-foreground">Collective Compliance Experience</div>
+              <div className="text-sm text-muted-foreground">Collective Compliance Experience</div>
             </div>
           </div>
 
@@ -51,29 +51,29 @@ export default function TrustSignals() {
               <p className="text-sm italic text-muted-foreground mb-2">
                 "We've been working in the benefits compliance arena for decades now and can honestly say that BCS makes this complicated stuff really easy."
               </p>
-              <p className="text-xs font-semibold">— Heather Garcia, Partner</p>
-              <p className="text-xs text-muted-foreground">Eligibility Tracking Calculators (ETC)</p>
+              <p className="text-sm font-semibold">— Heather Garcia, Partner</p>
+              <p className="text-sm text-muted-foreground">Eligibility Tracking Calculators (ETC)</p>
             </div>
             <div className="bg-background/50 p-4 rounded-lg">
               <p className="text-sm italic text-muted-foreground mb-2">
                 "We used to spend days solving problems that takes BCS a matter of hours. They're a partner to us just like we're a partner to our employer clients. They make us shine brighter!"
               </p>
-              <p className="text-xs font-semibold">— Edwige Ligonde</p>
-              <p className="text-xs text-muted-foreground">2021 Benefits Pro Broker of the Year | Partner, Market Director</p>
+              <p className="text-sm font-semibold">— Edwige Ligonde</p>
+              <p className="text-sm text-muted-foreground">2021 Benefits Pro Broker of the Year | Partner, Market Director</p>
             </div>
             <div className="bg-background/50 p-4 rounded-lg">
               <p className="text-sm italic text-muted-foreground mb-2">
                 "BCS is such an excellent resource! And, so much more flexible and fun during complicated conversation and compliance issues than anyone I have worked with."
               </p>
-              <p className="text-xs font-semibold">— Kalyn Stelwagen, Director of HR</p>
-              <p className="text-xs text-muted-foreground">Bluebonnet Haven</p>
+              <p className="text-sm font-semibold">— Kalyn Stelwagen, Director of HR</p>
+              <p className="text-sm text-muted-foreground">Bluebonnet Haven</p>
             </div>
           </div>
 
           {/* Certifications */}
           <div className="pt-4 border-t text-center">
-            <p className="text-xs text-muted-foreground mb-2">Trusted by industry leaders</p>
-            <div className="flex flex-wrap justify-center gap-4 text-xs font-semibold text-muted-foreground">
+            <p className="text-sm text-muted-foreground mb-2">Trusted by industry leaders</p>
+            <div className="flex flex-wrap justify-center gap-4 text-sm font-semibold text-muted-foreground">
               <span>SHRM Partner</span>
               <span>•</span>
               <span>NABIP Member</span>

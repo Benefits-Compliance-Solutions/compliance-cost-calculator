@@ -305,7 +305,7 @@ export default function Home() {
 
         {/* Hero Section */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight">
+          <h2 className="fluid-text-hero font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight">
             How Much Revenue Is Compliance Costing You?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
@@ -325,7 +325,7 @@ export default function Home() {
                   variant="outline"
                   size="sm"
                   onClick={toggleAllSections}
-                  className="text-xs focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  className="text-sm focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   {Object.values(sectionsOpen).every(v => v) ? "Collapse All" : "Expand All"}
                 </Button>
@@ -333,7 +333,7 @@ export default function Home() {
                   variant="outline"
                   size="sm"
                   onClick={handleClearCalculation}
-                  className="text-xs focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  className="text-sm focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   <RefreshCw className="w-3 h-3 mr-1" />
                   Clear
@@ -475,13 +475,13 @@ export default function Home() {
                         <p className="text-sm font-semibold text-amber-900 mb-1">
                           📈 Missed Annual Revenue: ${costs.revenueGrowth.toLocaleString()}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                           <strong>Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</strong>
                         </p>
-                        <p className="text-xs text-amber-800 mt-1">
+                        <p className="text-sm text-amber-800 mt-1">
                           At 93% top-performer retention, each large client = ${calculateLTV(inputs.averageLargeClientValue, RETENTION_RATES.TOP_PERFORMER, LTV_YEARS).toLocaleString()} in lifetime value
                         </p>
-                        <p className="text-xs text-amber-800 mt-1">
+                        <p className="text-sm text-amber-800 mt-1">
                           These are deals you're walking away from because you lack compliance confidence.
                         </p>
                       </div>
@@ -538,10 +538,10 @@ export default function Home() {
                         <p className="text-sm font-semibold text-destructive mb-1">
                           💸 Annual Revenue Loss: ${costs.clientChurnCost.toLocaleString()}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                           <strong>Lifetime Value (6 years): ${costs.clientChurnLTVTotal.toLocaleString()}</strong>
                         </p>
-                        <p className="text-xs text-destructive/80 mt-1">
+                        <p className="text-sm text-destructive/80 mt-1">
                           At 84% industry average retention, each lost client = ${calculateLTV(inputs.averageClientValue, RETENTION_RATES.INDUSTRY_AVERAGE, LTV_YEARS).toLocaleString()} in lifetime value
                         </p>
                       </div>
@@ -563,7 +563,7 @@ export default function Home() {
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.staffTime ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                    <CardDescription className="text-left text-xs">
+                    <CardDescription className="text-left text-sm">
                       How much time your team spends on compliance emergencies
                     </CardDescription>
                   </CardHeader>
@@ -610,7 +610,7 @@ export default function Home() {
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.productivity ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                    <CardDescription className="text-left text-xs">
+                    <CardDescription className="text-left text-sm">
                       Staff distracted by compliance concerns
                     </CardDescription>
                   </CardHeader>
@@ -686,7 +686,7 @@ export default function Home() {
               About BCS
             </a>
           </div>
-          <p className="mt-4 text-xs">
+          <p className="mt-4 text-sm">
             These estimates are based on typical results from BCS partnerships. Actual savings may vary based on your specific situation.
           </p>
         </footer>
