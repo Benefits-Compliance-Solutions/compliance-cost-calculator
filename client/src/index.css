@@ -237,6 +237,8 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     mask-composite: exclude;
     opacity: 0.5;
     transition: opacity 0.3s ease;
+    z-index: -1;
+    pointer-events: none;
   }
   
   .gradient-border-card:hover::before {

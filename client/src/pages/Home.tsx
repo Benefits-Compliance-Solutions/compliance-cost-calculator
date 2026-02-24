@@ -279,17 +279,13 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-96 md:h-96 items-center justify-between py-8">
-          <div className="flex items-center gap-3">
-            <img 
-              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/TTFgpudajkpyGyUN.png" 
-              alt="Benefits Compliance Solutions" 
-              className="h-80 md:h-96 w-auto object-contain"
-            />
-            <div className="border-l border-border pl-3 hidden sm:block">
-              <h1 className="text-xl md:text-lg font-bold">Compliance Cost Calculator</h1>
-            </div>
-          </div>
+        <div className="container flex items-center justify-between py-4">
+          <img 
+            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/mJbwJqTiEdXcqvhU.png" 
+            alt="Benefits Compliance Solutions" 
+            className="h-12 md:h-16 w-auto object-contain"
+          />
+          <h1 className="absolute left-1/2 -translate-x-1/2 text-lg md:text-xl font-bold">Compliance Cost Calculator</h1>
         </div>
       </header>
 
