@@ -98,8 +98,8 @@ export default function Home() {
     productivity: false,  // Supporting detail - collapsed by default
   });
 
-  // Track user engagement to show results panel
-  const [hasEngaged, setHasEngaged] = useState(false);
+  // Check if user has provided agency name (indicates engagement)
+  const hasProvidedData = inputs.agencyName.trim().length > 0;
 
   // Check for saved data on mount (P1)
   useEffect(() => {
@@ -127,10 +127,6 @@ export default function Home() {
   const updateInput = (field: keyof CostInputs, value: number | string) => {
     setInputs(prev => ({ ...prev, [field]: value }));
     
-    // Mark as engaged when user interacts with any input
-    if (!hasEngaged) {
-      setHasEngaged(true);
-    }
     
     // P0: Validate agency name on change
     if (field === 'agencyName' && touched) {
@@ -650,13 +646,48 @@ export default function Home() {
             </Collapsible>
           </div>
 
-          {/* Right Column: Results - Only show after user engagement */}
-          {hasEngaged && (
-            <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
-              <CostSummary costs={costs} />
-              <PotentialROI costs={costs} revenueGrowth={costs.revenueGrowth} />
-            </div>
-          )}
+          {/* Right Column: Results - Always visible with placeholder state */}
+          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+            {hasProvidedData ? (
+              <div className="animate-in fade-in duration-500">
+                <CostSummary costs={costs} />
+                <PotentialROI costs={costs} revenueGrowth={costs.revenueGrowth} />
+              </div>
+            ) : (
+              <Card className="border-2 border-dashed border-muted-foreground/20 bg-muted/5">
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <Calculator className="w-8 h-8 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">Your Results Will Appear Here</CardTitle>
+                  <CardDescription className="text-base mt-2">
+                    Enter your agency information in the form to see your personalized compliance cost analysis
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-center space-y-4 pb-6">
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p className="flex items-center justify-center gap-2">
+                      <TrendingUp className="w-4 h-4" />
+                      Revenue at risk from compliance gaps
+                    </p>
+                    <p className="flex items-center justify-center gap-2">
+                      <DollarSign className="w-4 h-4" />
+                      Operational cost breakdown
+                    </p>
+                    <p className="flex items-center justify-center gap-2">
+                      <Target className="w-4 h-4" />
+                      ROI from BCS partnership
+                    </p>
+                  </div>
+                  <div className="pt-4 border-t border-dashed">
+                    <p className="text-sm font-medium text-primary">
+                      👆 Start by entering your agency name above
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </div>
 
         {/* LTV Education Section */}
