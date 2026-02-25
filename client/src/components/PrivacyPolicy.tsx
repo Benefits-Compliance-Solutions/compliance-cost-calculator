@@ -110,8 +110,7 @@ export default function PrivacyPolicy({ trigger, asLink = false }: PrivacyPolicy
               </p>
               <p className="text-muted-foreground mt-2">
                 <strong>Benefits Compliance Solutions</strong><br />
-                Email: privacy@benefitscompliancesolutions.com<br />
-                Phone: (555) 123-4567
+                Email: info@benefitscompliancesolutions.com
               </p>
             </section>
 

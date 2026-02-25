@@ -98,6 +98,9 @@ export default function Home() {
     productivity: false,  // Supporting detail - collapsed by default
   });
 
+  // Track user engagement to show results panel
+  const [hasEngaged, setHasEngaged] = useState(false);
+
   // Check for saved data on mount (P1)
   useEffect(() => {
     const savedData = loadCalculatorData();
@@ -123,6 +126,11 @@ export default function Home() {
 
   const updateInput = (field: keyof CostInputs, value: number | string) => {
     setInputs(prev => ({ ...prev, [field]: value }));
+    
+    // Mark as engaged when user interacts with any input
+    if (!hasEngaged) {
+      setHasEngaged(true);
+    }
     
     // P0: Validate agency name on change
     if (field === 'agencyName' && touched) {
@@ -285,7 +293,7 @@ export default function Home() {
             alt="Benefits Compliance Solutions" 
             className="h-12 md:h-16 w-auto object-contain"
           />
-          <h1 className="absolute left-1/2 -translate-x-1/2 text-lg md:text-xl font-bold">Compliance Cost Calculator</h1>
+          <h1 className="text-lg md:text-xl font-bold md:absolute md:left-1/2 md:-translate-x-1/2">Compliance Cost Calculator</h1>
         </div>
       </header>
 
@@ -555,7 +563,7 @@ export default function Home() {
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-base">Staff Time on Compliance (Optional Detail)</span>
+                        <span className="text-base">Staff Time on Compliance</span>
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.staffTime ? 'rotate-180' : ''}`} />
                     </CardTitle>
@@ -602,7 +610,7 @@ export default function Home() {
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <AlertCircle className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-base">Team Productivity Impact (Optional Detail)</span>
+                        <span className="text-base">Team Productivity Impact</span>
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.productivity ? 'rotate-180' : ''}`} />
                     </CardTitle>
@@ -642,11 +650,13 @@ export default function Home() {
             </Collapsible>
           </div>
 
-          {/* Right Column: Results */}
-          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
-            <CostSummary costs={costs} />
-            <PotentialROI costs={costs} revenueGrowth={costs.revenueGrowth} />
-          </div>
+          {/* Right Column: Results - Only show after user engagement */}
+          {hasEngaged && (
+            <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+              <CostSummary costs={costs} />
+              <PotentialROI costs={costs} revenueGrowth={costs.revenueGrowth} />
+            </div>
+          )}
         </div>
 
         {/* LTV Education Section */}

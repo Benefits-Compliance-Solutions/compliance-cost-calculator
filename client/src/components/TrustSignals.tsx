@@ -5,7 +5,7 @@
  */
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Building2, Users } from "lucide-react";
+import { Award, Building2, Lightbulb } from "lucide-react";
 
 export default function TrustSignals() {
   return (
@@ -31,10 +31,10 @@ export default function TrustSignals() {
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-2">
-                <Users className="w-6 h-6 text-primary" />
+                <Lightbulb className="w-6 h-6 text-primary" />
               </div>
-              <div className="text-2xl font-bold">10,000+</div>
-              <div className="text-sm text-muted-foreground">Employers Served</div>
+              <div className="text-2xl font-bold">Strategy + Technology</div>
+              <div className="text-sm text-muted-foreground">Full-Scale Solution Provider</div>
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-2">
