@@ -103,11 +103,13 @@ export default function Home() {
   const hasProvidedData = inputs.agencyName.trim().length > 0;
 
   // Section completion tracking (Approach A: interaction-based)
+  // 5 independent sections, each contributing 20% to the confidence score
   const [sectionsReviewed, setSectionsReviewed] = useState({
-    basics: false,         // Company Basics
+    basics: false,            // Company Basics
     lostOpportunities: false, // Revenue You're Leaving on the Table
-    clientChurn: false,    // Revenue Lost to Client Churn
-    staffAndProductivity: false, // Staff Time + Productivity (combined)
+    clientChurn: false,       // Revenue Lost to Client Churn
+    staffTime: false,         // Staff Time on Compliance
+    productivity: false,      // Team Productivity Impact
   });
 
   const markSectionReviewed = (section: keyof typeof sectionsReviewed) => {
@@ -117,13 +119,13 @@ export default function Home() {
     });
   };
 
-  // Completion percentage (25% per section)
+  // Completion percentage (20% per section, 5 sections = 100%)
   const completedSections = Object.values(sectionsReviewed).filter(Boolean).length;
-  const completionPct = completedSections * 25;
+  const completionPct = completedSections * 20;
 
   // Reset section tracking when calculation is cleared
   const resetSectionsReviewed = () => {
-    setSectionsReviewed({ basics: false, lostOpportunities: false, clientChurn: false, staffAndProductivity: false });
+    setSectionsReviewed({ basics: false, lostOpportunities: false, clientChurn: false, staffTime: false, productivity: false });
   };
 
   // Check for saved data on mount (P1)
@@ -591,7 +593,7 @@ export default function Home() {
             </Collapsible>
 
             {/* Staff Time Costs - Collapsible (P2) - Supporting Detail */}
-            <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => { toggleSection('staffTime'); markSectionReviewed('staffAndProductivity'); }}>
+            <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => { toggleSection('staffTime'); markSectionReviewed('staffTime'); }}>
               <Card className="gradient-border-card opacity-90">
                 <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
@@ -620,7 +622,7 @@ export default function Home() {
                       unit="h"
                       helpText="Industry average: 2-4 hours per issue"
                       tooltip="Time spent researching, resolving, and documenting each compliance issue or question from clients."
-                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
+                      onFirstInteraction={() => markSectionReviewed('staffTime')}
                     />
 
                     <SliderWithInput
@@ -632,7 +634,7 @@ export default function Home() {
                       max={30}
                       step={1}
                       tooltip="Average number of compliance emergencies, questions, or issues your team handles each month."
-                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
+                      onFirstInteraction={() => markSectionReviewed('staffTime')}
                     />
                   </CardContent>
                 </CollapsibleContent>
@@ -640,7 +642,7 @@ export default function Home() {
             </Collapsible>
 
             {/* Lost Productivity - Collapsible (P2) - Supporting Detail */}
-            <Collapsible open={sectionsOpen.productivity} onOpenChange={() => { toggleSection('productivity'); markSectionReviewed('staffAndProductivity'); }}>
+            <Collapsible open={sectionsOpen.productivity} onOpenChange={() => { toggleSection('productivity'); markSectionReviewed('productivity'); }}>
               <Card className="gradient-border-card opacity-90">
                 <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
@@ -667,7 +669,7 @@ export default function Home() {
                       max={50}
                       step={1}
                       tooltip="Number of staff whose productivity is reduced by ongoing compliance distractions and concerns."
-                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
+                      onFirstInteraction={() => markSectionReviewed('productivity')}
                     />
 
                     <SliderWithInput
@@ -681,7 +683,7 @@ export default function Home() {
                       unit="%"
                       helpText="Industry average: 10-20% of affected staff time lost to compliance distractions"
                       tooltip="Percentage of work time lost due to compliance stress, context switching, and reactive problem-solving instead of proactive client service."
-                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
+                      onFirstInteraction={() => markSectionReviewed('productivity')}
                     />
                   </CardContent>
                 </CollapsibleContent>
