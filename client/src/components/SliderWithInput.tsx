@@ -21,6 +21,7 @@ interface SliderWithInputProps {
   helpText?: string;
   tooltip?: string;
   required?: false;
+  onFirstInteraction?: () => void;
 }
 
 export default function SliderWithInput({
@@ -35,7 +36,11 @@ export default function SliderWithInput({
   helpText,
   tooltip,
   required = false,
+  onFirstInteraction,
 }: SliderWithInputProps) {
+  const handleInteraction = () => {
+    if (onFirstInteraction) onFirstInteraction();
+  };
   // Calculate input width based on max value digits
   const getInputWidth = () => {
     const maxDigits = max.toString().length;
@@ -79,7 +84,8 @@ export default function SliderWithInput({
         <Slider
           id={id}
           value={[value]}
-          onValueChange={([newValue]) => onChange(newValue)}
+          onValueChange={([newValue]) => { handleInteraction(); onChange(newValue); }}
+          onFocus={handleInteraction}
           min={min}
           max={max}
           step={step}
@@ -92,6 +98,7 @@ export default function SliderWithInput({
             value={value}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
+            onFocus={handleInteraction}
             min={min}
             max={max}
             step={step}

@@ -23,6 +23,7 @@ import PrivacyPolicy from "@/components/PrivacyPolicy";
 import TrustSignals from "@/components/TrustSignals";
 import ResumeCalculationBanner from "@/components/ResumeCalculationBanner";
 import LTVEducation from "@/components/LTVEducation";
+import AnalysisAccuracy from "@/components/AnalysisAccuracy";
 import { validateAgencyName } from "@/lib/validation";
 import { saveCalculatorData, loadCalculatorData, clearCalculatorData, getLastSavedTimestamp } from "@/lib/storage";
 import { calculateLTV, RETENTION_RATES, LTV_YEARS, getLTVInsights, LTV_CITATIONS } from "@/lib/ltvCalculations";
@@ -101,6 +102,30 @@ export default function Home() {
   // Check if user has provided agency name (indicates engagement)
   const hasProvidedData = inputs.agencyName.trim().length > 0;
 
+  // Section completion tracking (Approach A: interaction-based)
+  const [sectionsReviewed, setSectionsReviewed] = useState({
+    basics: false,         // Company Basics
+    lostOpportunities: false, // Revenue You're Leaving on the Table
+    clientChurn: false,    // Revenue Lost to Client Churn
+    staffAndProductivity: false, // Staff Time + Productivity (combined)
+  });
+
+  const markSectionReviewed = (section: keyof typeof sectionsReviewed) => {
+    setSectionsReviewed(prev => {
+      if (prev[section]) return prev; // already marked, no re-render
+      return { ...prev, [section]: true };
+    });
+  };
+
+  // Completion percentage (25% per section)
+  const completedSections = Object.values(sectionsReviewed).filter(Boolean).length;
+  const completionPct = completedSections * 25;
+
+  // Reset section tracking when calculation is cleared
+  const resetSectionsReviewed = () => {
+    setSectionsReviewed({ basics: false, lostOpportunities: false, clientChurn: false, staffAndProductivity: false });
+  };
+
   // Check for saved data on mount (P1)
   useEffect(() => {
     const savedData = loadCalculatorData();
@@ -139,6 +164,11 @@ export default function Home() {
     setTouched(true);
     const validation = validateAgencyName(inputs.agencyName);
     setAgencyNameError(validation.isValid ? "" : validation.error || "");
+  };
+
+  // Mark basics reviewed when agency name field is focused
+  const handleAgencyNameFocus = () => {
+    markSectionReviewed('basics');
   };
 
   const handleResume = () => {
@@ -180,6 +210,7 @@ export default function Home() {
     });
     setAgencyNameError("");
     setTouched(false);
+    resetSectionsReviewed();
     toast.info("Calculation Cleared", {
       description: "All inputs have been reset to defaults.",
     });
@@ -370,6 +401,7 @@ export default function Home() {
                         placeholder="Enter your agency name"
                         value={inputs.agencyName}
                         onChange={(e) => updateInput('agencyName', e.target.value)}
+                        onFocus={handleAgencyNameFocus}
                         onBlur={handleAgencyNameBlur}
                         className={`text-base focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                           agencyNameError ? 'border-destructive focus:ring-destructive' : ''
@@ -399,6 +431,7 @@ export default function Home() {
                       max={75}
                       step={1}
                       tooltip="The number of full-time staff members who work on employee benefits and compliance matters. This helps calculate labor costs."
+                      onFirstInteraction={() => markSectionReviewed('basics')}
                     />
 
                     <SliderWithInput
@@ -411,6 +444,7 @@ export default function Home() {
                       step={5}
                       unit="$"
                       tooltip="The average fully-loaded hourly cost (salary + benefits + overhead) for your benefits staff. Industry average is $60-$90/hour."
+                      onFirstInteraction={() => markSectionReviewed('basics')}
                     />
 
                     <SliderWithInput
@@ -422,6 +456,7 @@ export default function Home() {
                       max={1000}
                       step={10}
                       tooltip="The total number of employer clients you serve. This affects liability exposure calculations."
+                      onFirstInteraction={() => markSectionReviewed('basics')}
                     />
                   </CardContent>
                 </CollapsibleContent>
@@ -456,6 +491,7 @@ export default function Home() {
                       max={10}
                       step={1}
                       tooltip="Number of mid-market opportunities you passed on or lost because you lacked the compliance capabilities to serve them confidently."
+                      onFirstInteraction={() => markSectionReviewed('lostOpportunities')}
                     />
 
                     <SliderWithInput
@@ -468,6 +504,7 @@ export default function Home() {
                       step={10000}
                       unit="$"
                       tooltip="Average annual revenue potential to your agency from a mid-market employer client (typically 100+ employees)."
+                      onFirstInteraction={() => markSectionReviewed('lostOpportunities')}
                     />
 
                     {costs.revenueGrowth > 0 && (
@@ -518,6 +555,7 @@ export default function Home() {
                       min={0}
                       max={20}
                       step={1}
+                      onFirstInteraction={() => markSectionReviewed('clientChurn')}
                       tooltip="Number of clients who leave annually due to compliance concerns, lack of expertise, or inability to handle complex requirements."
                     />
 
@@ -531,6 +569,7 @@ export default function Home() {
                       step={5000}
                       unit="$"
                       tooltip="Average annual revenue (commissions + fees) from a typical client."
+                      onFirstInteraction={() => markSectionReviewed('clientChurn')}
                     />
 
                     {costs.clientChurnCost > 0 && (
@@ -552,7 +591,7 @@ export default function Home() {
             </Collapsible>
 
             {/* Staff Time Costs - Collapsible (P2) - Supporting Detail */}
-            <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => toggleSection('staffTime')}>
+            <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => { toggleSection('staffTime'); markSectionReviewed('staffAndProductivity'); }}>
               <Card className="gradient-border-card opacity-90">
                 <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
@@ -581,6 +620,7 @@ export default function Home() {
                       unit="h"
                       helpText="Industry average: 2-4 hours per issue"
                       tooltip="Time spent researching, resolving, and documenting each compliance issue or question from clients."
+                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
                     />
 
                     <SliderWithInput
@@ -592,6 +632,7 @@ export default function Home() {
                       max={30}
                       step={1}
                       tooltip="Average number of compliance emergencies, questions, or issues your team handles each month."
+                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
                     />
                   </CardContent>
                 </CollapsibleContent>
@@ -599,7 +640,7 @@ export default function Home() {
             </Collapsible>
 
             {/* Lost Productivity - Collapsible (P2) - Supporting Detail */}
-            <Collapsible open={sectionsOpen.productivity} onOpenChange={() => toggleSection('productivity')}>
+            <Collapsible open={sectionsOpen.productivity} onOpenChange={() => { toggleSection('productivity'); markSectionReviewed('staffAndProductivity'); }}>
               <Card className="gradient-border-card opacity-90">
                 <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
@@ -626,6 +667,7 @@ export default function Home() {
                       max={50}
                       step={1}
                       tooltip="Number of staff whose productivity is reduced by ongoing compliance distractions and concerns."
+                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
                     />
 
                     <SliderWithInput
@@ -639,6 +681,7 @@ export default function Home() {
                       unit="%"
                       helpText="Industry average: 10-20% of affected staff time lost to compliance distractions"
                       tooltip="Percentage of work time lost due to compliance stress, context switching, and reactive problem-solving instead of proactive client service."
+                      onFirstInteraction={() => markSectionReviewed('staffAndProductivity')}
                     />
                   </CardContent>
                 </CollapsibleContent>
@@ -650,6 +693,10 @@ export default function Home() {
           <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             {hasProvidedData ? (
               <div className="animate-in fade-in duration-500">
+                <AnalysisAccuracy
+                  sectionsReviewed={sectionsReviewed}
+                  completionPct={completionPct}
+                />
                 <CostSummary costs={costs} />
                 <PotentialROI costs={costs} revenueGrowth={costs.revenueGrowth} />
               </div>
