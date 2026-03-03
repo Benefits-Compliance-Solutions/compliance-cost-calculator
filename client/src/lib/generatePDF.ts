@@ -497,8 +497,16 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   y += 4;
 
   // ── LTV Methodology box ───────────────────────────────────────────────────
+  // Pre-calculate content height so the box auto-sizes
   const ltvBg: [number,number,number] = [245, 245, 248];
-  fillRect(doc, ML, y, CW, 28, ltvBg, undefined, 0, 2);
+  doc.setFontSize(8.5);
+  const ltvText = `LTV calculations based on industry retention rates from ${LTV_CITATIONS.PRIMARY.source} (${LTV_CITATIONS.PRIMARY.year}): Industry average ${LTV_CITATIONS.PRIMARY.stats.industryAverage} retention, top performers ${LTV_CITATIONS.PRIMARY.stats.topPerformers}. At ${(RETENTION_RATES.INDUSTRY_AVERAGE * 100).toFixed(0)}% retention, clients have a 4.06x lifetime value multiplier over 6 years. At ${(RETENTION_RATES.TOP_PERFORMER * 100).toFixed(0)}% retention (achievable with BCS partnership), the multiplier increases to 5.04x — a 24% improvement in client lifetime value.`;
+  const ltvLines = doc.splitTextToSize(ltvText, CW - 6);
+  const retentionNote = 'Improving compliance capabilities is one of the most effective ways to improve retention rates. Strong compliance programs improve client perception of your value and capability, and defend against competing brokers who attempt to use compliance as a wedge against your accounts.';
+  const retLines = doc.splitTextToSize(retentionNote, CW - 6);
+  // Height: title row (6+5) + ltvLines + gap (3) + retLines + padding (6)
+  const ltvBoxH = 11 + (ltvLines.length * 3.8) + 3 + (retLines.length * 3.8) + 6;
+  fillRect(doc, ML, y, CW, ltvBoxH, ltvBg, undefined, 0, 2);
 
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
@@ -507,8 +515,6 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
 
   doc.setFont('helvetica', 'normal');
   setGray(doc);
-  const ltvText = `LTV calculations based on industry retention rates from ${LTV_CITATIONS.PRIMARY.source} (${LTV_CITATIONS.PRIMARY.year}): Industry average ${LTV_CITATIONS.PRIMARY.stats.industryAverage} retention, top performers ${LTV_CITATIONS.PRIMARY.stats.topPerformers}. At ${(RETENTION_RATES.INDUSTRY_AVERAGE * 100).toFixed(0)}% retention, clients have a 4.06x lifetime value multiplier over 6 years. At ${(RETENTION_RATES.TOP_PERFORMER * 100).toFixed(0)}% retention (achievable with BCS partnership), the multiplier increases to 5.04x — a 24% improvement in client lifetime value.`;
-  const ltvLines = doc.splitTextToSize(ltvText, CW - 6);
   let ly = y + 11;
   ltvLines.forEach((line: string) => { doc.text(line, ML + 3, ly); ly += 3.8; });
 
@@ -516,9 +522,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'italic');
   setTeal(doc);
-  const retentionNote = 'Improving compliance capabilities is one of the most effective ways to improve retention rates. Strong compliance programs improve client perception of your value and capability, and defend against competing brokers who attempt to use compliance as a wedge against your accounts.';
-  const retLines = doc.splitTextToSize(retentionNote, CW - 6);
-  let rn = ly + 2;
+  let rn = ly + 3;
   retLines.forEach((line: string) => { doc.text(line, ML + 3, rn); rn += 3.8; });
 
   y = rn + 6;
