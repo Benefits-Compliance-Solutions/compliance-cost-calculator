@@ -260,18 +260,22 @@ function drawAccentBullet(doc: jsPDF, y: number, text: string): number {
   doc.setFontSize(10);
   setColor(doc, GRAY_DARK);
   const lines = doc.splitTextToSize(text, CW - 5.5);
-  // Row height: 5.5pt per line, min 9pt
-  const rowH = Math.max(9, lines.length * 5.5 + 1.5);
-  // Teal accent bar: vertically centered against the full row height
+  // lineH in mm: 10pt font = 3.53mm per line, add 2mm leading
+  const lineH = 5.5; // mm per line
+  const textBlockH = lines.length * lineH; // total text block height
+  // Row height: text block + equal top/bottom padding (3mm each side), min 11mm
+  const rowH = Math.max(11, textBlockH + 6);
+  // Teal accent bar: 6mm tall, vertically centered in the row
   const barH = 6;
   setFill(doc, TEAL);
   doc.rect(ML, y + (rowH - barH) / 2, 1.1, barH, 'F');
-  // Text: first line vertically centered in the row
-  const textStartY = y + (rowH - (lines.length - 1) * 5.5) / 2 + 3.5;
-  let ly = textStartY;
+  // Text: jsPDF text y is the baseline. Center the text block vertically in the row.
+  // baseline of first line = top of row + (rowH - textBlockH)/2 + lineH * 0.75
+  const textTopY = y + (rowH - textBlockH) / 2;
+  let ly = textTopY + lineH * 0.78; // 0.78 ≈ cap-height fraction for baseline
   lines.forEach((line: string) => {
     doc.text(line, ML + 3.8, ly);
-    ly += 5.5;
+    ly += lineH;
   });
   return rowH;
 }
@@ -587,7 +591,8 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   // ══════════════════════════════════════════════════════════════════════════
   doc.addPage();
   drawHeader2(doc, 'ROI ANALYSIS', 'The Value of Partnership');
-  y = 30;
+  // Page 3 header is 25.4mm tall + 1.5mm teal rule = 26.9mm. Add 10mm top margin.
+  y = 37;
 
   // (Disclaimer moved to bottom of page 2, below Investment Summary cards)
 

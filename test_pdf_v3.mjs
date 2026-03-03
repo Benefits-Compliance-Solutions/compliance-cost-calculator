@@ -191,16 +191,20 @@ function drawBarRow(doc, y, label, subLabel, value, pct, maxVal) {
 }
 
 function drawAccentBullet(doc, y, text) {
-  setFill(doc, TEAL);
-  doc.rect(ML, y + 0.7, 1.06, 5.6, 'F');
-
   doc.setFont('Outfit', 'normal');
-  doc.setFontSize(9);
+  doc.setFontSize(10);
   setColor(doc, GRAY_DARK);
-  const lines = doc.splitTextToSize(text, CW - 5);
-  let ly = y + 4.9;
-  lines.forEach(line => { doc.text(line, ML + 3.5, ly); ly += 4.9; });
-  return Math.max(7.76, lines.length * 4.9 + 1);
+  const lines = doc.splitTextToSize(text, CW - 5.5);
+  const lineH = 5.5;
+  const textBlockH = lines.length * lineH;
+  const rowH = Math.max(11, textBlockH + 6);
+  const barH = 6;
+  setFill(doc, TEAL);
+  doc.rect(ML, y + (rowH - barH) / 2, 1.1, barH, 'F');
+  const textTopY = y + (rowH - textBlockH) / 2;
+  let ly = textTopY + lineH * 0.78;
+  lines.forEach(line => { doc.text(line, ML + 3.8, ly); ly += lineH; });
+  return rowH;
 }
 
 // ─── Build PDF ────────────────────────────────────────────────────────────────
@@ -451,10 +455,9 @@ drawFooter(doc, 2);
 // PAGE BREAK before Benefits (page 3)
 doc.addPage();
 drawHeader2(doc, 'ROI ANALYSIS', 'The Value of Partnership');
-y = 29.7;
-
-// BENEFITS OF BCS PARTNERSHIP
-y += 5.6;
+// Page 3 header is 25.4mm tall + 1.5mm teal rule = 26.9mm. Add 10mm top margin.
+y = 37;
+// BENEFITS OF BCS PARTNERSHIP;
 drawSectionHeading(doc, 'BENEFITS OF BCS PARTNERSHIP', y);
 y += 1.5 + 1.4;
 
