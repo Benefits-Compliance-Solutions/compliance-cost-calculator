@@ -227,48 +227,49 @@ drawHeader1(doc, agencyLabel, dateStr);
 let y = 43.8;
 
 // EXECUTIVE SUMMARY
-y += 2.8;  // sp(8) breathing room
+y += 4;
 drawSectionHeading(doc, 'EXECUTIVE SUMMARY', y);
-y += 1.5 + 4.2;
+y += 2 + 5;
 
-// Hero card
-const heroInnerW = CW - 11.3;
-const heroH = 40;  // taller to match prototype proportions
-const heroX = ML + (CW - heroInnerW) / 2;
-drawCard(doc, heroX, y, heroInnerW, heroH, NAVY, null, 2.1);
+// Hero card — ALL TEXT WHITE AND BOLD (high contrast per approved design)
+const heroH = 46;
+drawCard(doc, ML, y, CW, heroH, NAVY, null, 2.1);
 
-doc.setFont('Outfit', 'normal');
-doc.setFontSize(8);
-setColor(doc, GRAY_MID);
-doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 7.5, { align: 'center' });
-
+// Title — Bold 13pt WHITE
 doc.setFont('Outfit', 'bold');
-doc.setFontSize(26);
+doc.setFontSize(13);
 setColor(doc, WHITE);
-doc.text(fmt(costs.totalOperationalCost), PW / 2, y + 22, { align: 'center' });
+doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 11, { align: 'center' });
 
-doc.setFont('Outfit', 'normal');
-doc.setFontSize(8);
-setColor(doc, GRAY_MID);
-doc.text('Annual operational impact \u2014 labor, lost deals, and client churn', PW / 2, y + 35, { align: 'center' });
+// Big number — Bold 36pt WHITE
+doc.setFont('Outfit', 'bold');
+doc.setFontSize(36);
+setColor(doc, WHITE);
+doc.text(fmt(costs.totalOperationalCost), PW / 2, y + 28, { align: 'center' });
 
-y += heroH + 7;
+// Subtitle — Bold 11pt WHITE
+doc.setFont('Outfit', 'bold');
+doc.setFontSize(11);
+setColor(doc, WHITE);
+doc.text('Annual operational impact — labor, lost deals, and client churn', PW / 2, y + 40, { align: 'center' });
+
+y += heroH + 8;
 
 // Cost Breakdown
-y += 5.6;
+y += 4;
 drawSectionHeading(doc, 'Cost Breakdown', y);
-y += 1.5 + 3.5;
+y += 2 + 4;
 
-doc.setFont('OutfitSemiBold', 'normal');
-doc.setFontSize(7.5);
+doc.setFont('Outfit', 'normal');
+doc.setFontSize(8.5);
 setColor(doc, GRAY_MID);
 doc.text('Category', ML, y);
 doc.text('Proportion', ML + 70.6 + 2.8 + 10, y);
 doc.text('Annual Cost', ML + CW, y, { align: 'right' });
 setStroke(doc, RULE_COLOR);
 doc.setLineWidth(0.18);
-doc.line(ML, y + 2.1, ML + CW, y + 2.1);
-y += 2.1 + 1.4;
+doc.line(ML, y + 2.5, ML + CW, y + 2.5);
+y += 2.5 + 2;
 
 const costRows = [
   { label: 'Client Churn (Lost Revenue)',        sub: `6-Year Lifetime Value: ${fmt(costs.clientChurnLTVTotal)}`, value: costs.clientChurnCost,  pct: costs.clientChurnCost / costs.totalOperationalCost * 100 },
@@ -278,14 +279,14 @@ const costRows = [
 ];
 costRows.forEach(row => {
   const rh = drawBarRow(doc, y, row.label, row.sub, row.value, row.pct, maxCostVal);
-  y += rh + 2.8;
+  y += rh + 3;
 });
-y += 2.8;
+y += 3;
 
 // KEY INSIGHTS
-y += 5.6;
+y += 4;
 drawSectionHeading(doc, 'KEY INSIGHTS', y);
-y += 1.5 + 2.8;
+y += 2 + 3;
 
 const insights = [
   `Your team spends approximately ${monthlyHours} hours per month dealing with compliance emergencies`,
@@ -295,7 +296,7 @@ const insights = [
 ];
 insights.forEach(ins => {
   const bh = drawAccentBullet(doc, y, ins);
-  y += bh + 1.06;
+  y += bh + 1.5;
 });
 
 drawFooter(doc, 1);
