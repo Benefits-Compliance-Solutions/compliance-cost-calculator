@@ -224,33 +224,33 @@ const maxCostVal = Math.max(costs.clientChurnCost, costs.opportunityCost, costs.
 
 // ── PAGE 1 ──────────────────────────────────────────────────────────────────
 drawHeader1(doc, agencyLabel, dateStr);
-let y = 35.3;
+let y = 43.8;
 
 // EXECUTIVE SUMMARY
-y += 5.6;
+y += 2.8;  // sp(8) breathing room
 drawSectionHeading(doc, 'EXECUTIVE SUMMARY', y);
 y += 1.5 + 4.2;
 
 // Hero card
 const heroInnerW = CW - 11.3;
-const heroH = 32;
+const heroH = 40;  // taller to match prototype proportions
 const heroX = ML + (CW - heroInnerW) / 2;
 drawCard(doc, heroX, y, heroInnerW, heroH, NAVY, null, 2.1);
 
 doc.setFont('Outfit', 'normal');
 doc.setFontSize(8);
 setColor(doc, GRAY_MID);
-doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 7, { align: 'center' });
+doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 7.5, { align: 'center' });
 
 doc.setFont('Outfit', 'bold');
 doc.setFontSize(26);
 setColor(doc, WHITE);
-doc.text(fmt(costs.totalOperationalCost), PW / 2, y + 20, { align: 'center' });
+doc.text(fmt(costs.totalOperationalCost), PW / 2, y + 22, { align: 'center' });
 
 doc.setFont('Outfit', 'normal');
 doc.setFontSize(8);
 setColor(doc, GRAY_MID);
-doc.text('Annual operational impact \u2014 labor, lost deals, and client churn', PW / 2, y + 29, { align: 'center' });
+doc.text('Annual operational impact \u2014 labor, lost deals, and client churn', PW / 2, y + 35, { align: 'center' });
 
 y += heroH + 7;
 

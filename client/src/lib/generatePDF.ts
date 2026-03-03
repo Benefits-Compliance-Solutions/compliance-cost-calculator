@@ -370,40 +370,43 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   // ══════════════════════════════════════════════════════════════════════════
   drawHeader1(doc, agencyLabel, dateStr);
 
-  // Content starts after header (31mm) + teal bar (1.5mm) + 2.8mm breathing room
-  let y = 35.3;
+  // Content starts after header (31mm) + teal bar (1.5mm) + MARGIN_T (32pt=11.3mm) breathing room
+  // Prototype: header_h=88pt + teal_bar=4pt + MARGIN_T=32pt = 124pt from top = 43.8mm
+  let y = 43.8;
 
   // ── EXECUTIVE SUMMARY ────────────────────────────────────────────────────
-  // s_h2: space_before=16pt=5.6mm, space_after=4pt=1.4mm
-  y += 5.6;
+  // s_h2: space_before=16pt=5.6mm — but prototype also has sp(8)=2.8mm before heading
+  y += 2.8;  // sp(8) breathing room after header accent bar
   drawSectionHeading(doc, 'EXECUTIVE SUMMARY', y);
   y += 1.5 + 4.2;  // rule + 12pt spacer
 
   // ── Hero card ─────────────────────────────────────────────────────────────
-  // Inner table: 3 rows, CONTENT_W - 32pt padding = CW - 11.3mm
+  // Prototype: TOPPADDING=10 + row1(8pt leading=12) + TOPPADDING=10 + row2(26pt leading=32) + TOPPADDING=10 + row3(8pt leading=12) + BOTTOMPADDING=10
+  // Total ≈ 10+12+10+32+10+12+10 = 96pt = 33.9mm
   const heroInnerW = CW - 11.3;
-  const heroH = 32;  // approximate: 3 rows × ~10mm each with padding
+  const heroH = 40;  // 96pt ≈ 33.9mm, use 40mm to match prototype proportions
   const heroX = ML + (CW - heroInnerW) / 2;
 
   drawCard(doc, heroX, y, heroInnerW, heroH, NAVY, undefined, 2.1);
 
   // Row 1: "Your Agency's Total Compliance Cost" — s_center_muted (8pt gray-mid, centered)
+  // Positioned at top padding (10pt=3.5mm) + half leading (6pt=2.1mm) from card top
   doc.setFont('Outfit', 'normal');
   doc.setFontSize(8);
   setColor(doc, GRAY_MID);
-  doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 7, { align: 'center' });
+  doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 7.5, { align: 'center' });
 
-  // Row 2: big number — Outfit-Bold 26pt white
+  // Row 2: big number — Outfit-Bold 26pt white, centered vertically in card
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(26);
   setColor(doc, WHITE);
-  doc.text(fmt(costs.totalOperationalCost), PW / 2, y + 20, { align: 'center' });
+  doc.text(fmt(costs.totalOperationalCost), PW / 2, y + 22, { align: 'center' });
 
   // Row 3: subtitle — s_center_muted 8pt gray-mid
   doc.setFont('Outfit', 'normal');
   doc.setFontSize(8);
   setColor(doc, GRAY_MID);
-  doc.text('Annual operational impact \u2014 labor, lost deals, and client churn', PW / 2, y + 29, { align: 'center' });
+  doc.text('Annual operational impact \u2014 labor, lost deals, and client churn', PW / 2, y + 35, { align: 'center' });
 
   y += heroH + 7;  // 20pt spacer
 
@@ -555,9 +558,11 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   // Comparison card 1 — WITHOUT BCS
   drawCard(doc, compX1, y, compCardW, compCardH, NAVY_LIGHT, NAVY, 1.4);
   doc.setFont('OutfitSemiBold', 'normal');
-  doc.setFontSize(7);
+  doc.setFontSize(8);
   setColor(doc, GRAY_MID);
-  doc.text('WITHOUT BCS \u2014 Annual Operational Costs', compX1 + compCardW / 2, y + 6, { align: 'center' });
+  // Wrap label text manually to match prototype (font 8pt wraps at ~56mm card width)
+  doc.text('WITHOUT BCS \u2014 Annual', compX1 + compCardW / 2, y + 5, { align: 'center' });
+  doc.text('Operational Costs', compX1 + compCardW / 2, y + 9.5, { align: 'center' });
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(24);
   setColor(doc, NAVY);
@@ -570,9 +575,9 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   // Comparison card 2 — WITH BCS
   drawCard(doc, compX2, y, compCardW, compCardH, TEAL_LIGHT, TEAL, 1.4);
   doc.setFont('OutfitSemiBold', 'normal');
-  doc.setFontSize(7);
+  doc.setFontSize(8);
   setColor(doc, GRAY_MID);
-  doc.text('WITH BCS \u2014 Reduced Annual Costs', compX2 + compCardW / 2, y + 6, { align: 'center' });
+  doc.text('WITH BCS \u2014 Reduced Annual Costs', compX2 + compCardW / 2, y + 7, { align: 'center' });
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(24);
   setColor(doc, TEAL);
