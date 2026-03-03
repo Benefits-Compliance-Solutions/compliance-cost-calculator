@@ -163,6 +163,31 @@ export default function LTVEducation({ averageClientValue, totalClients }: LTVEd
           </div>
         </div>
 
+        {/* Compliance → Retention Connection */}
+        <div className="p-4 bg-gradient-to-r from-green-50 to-teal-50 rounded-lg border-2 border-green-300">
+          <h4 className="font-bold text-green-900 mb-3 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            How Compliance Capabilities Drive Retention
+          </h4>
+          <p className="text-sm text-green-900 mb-3">
+            Improving your compliance capabilities directly improves client retention rates — and the math is compelling. When clients see you proactively managing their compliance obligations, it reinforces your value and makes it significantly harder for competing brokers to displace you.
+          </p>
+          <div className="space-y-2">
+            <div className="flex items-start gap-2 text-sm text-green-800">
+              <span className="text-green-600 mt-0.5 flex-shrink-0">✓</span>
+              <span><strong>Perceived value:</strong> Clients who receive proactive compliance guidance view their broker as a strategic partner, not a commodity — increasing switching costs and loyalty.</span>
+            </div>
+            <div className="flex items-start gap-2 text-sm text-green-800">
+              <span className="text-green-600 mt-0.5 flex-shrink-0">✓</span>
+              <span><strong>Competitive defense:</strong> Strong compliance capabilities give you a clear, defensible differentiator when competing brokers come calling at renewal time.</span>
+            </div>
+            <div className="flex items-start gap-2 text-sm text-green-800">
+              <span className="text-green-600 mt-0.5 flex-shrink-0">✓</span>
+              <span><strong>The retention gap:</strong> The difference between 84% and 93% annual retention translates directly to the {improvementPercentage}% LTV improvement shown above — and compliance is one of the primary drivers of that gap.</span>
+            </div>
+          </div>
+        </div>
+
         {/* Citation */}
         <div className="p-3 bg-white rounded border border-blue-200">
           <p className="text-xs text-muted-foreground">

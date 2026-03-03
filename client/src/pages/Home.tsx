@@ -773,7 +773,7 @@ export default function Home() {
             </a>
           </div>
           <p className="mt-4 text-sm">
-            These estimates are based on typical results from BCS partnerships. Actual savings may vary based on your specific situation.
+            These estimates are based on typical results from BCS partnerships. Actual benefits may vary based on your specific situation.
           </p>
         </footer>
       </main>

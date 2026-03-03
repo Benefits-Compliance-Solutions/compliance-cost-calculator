@@ -148,14 +148,14 @@ export default function CostSummary({ costs }: CostSummaryProps) {
             <AlertTriangle className="w-5 h-5" />
             Liability Exposure
           </CardTitle>
-          <CardDescription>Potential penalties for entire book of business</CardDescription>
+          <CardDescription>Industry average non-compliance risk across your book of business</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-5xl font-bold text-destructive mb-4">
             <AnimatedCounter value={costs.totalLiabilityExposure} />
           </div>
           <p className="text-sm text-muted-foreground mb-4">
-            Compliance penalty risk across all clients
+            Non-compliance risk exposure across all clients
           </p>
           
           <CalculationMethodology
@@ -168,8 +168,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
             <p className="text-sm text-foreground">
               <strong>Risk Assessment:</strong> Based on your book of business, this represents the potential 
-              financial exposure from compliance violations across all client employers. Industry data shows 
-              average penalties of $70K-$150K for smaller employers and $350K+ for larger employers.
+              financial exposure from compliance violations across all client employers. Industry average risk for non-compliance within smaller employers is $70K–$150K, and $350K+ for larger employers.
             </p>
           </div>
         </CardContent>

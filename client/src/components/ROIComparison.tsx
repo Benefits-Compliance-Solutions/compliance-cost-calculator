@@ -265,7 +265,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
 
           <p className="text-center text-sm text-muted-foreground mt-6">
             These estimates are based on typical results from BCS partnerships. 
-            Actual savings may vary based on your specific situation.
+            Actual benefits may vary based on your specific situation.
           </p>
         </CardContent>
       </Card>
