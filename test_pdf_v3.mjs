@@ -6,7 +6,7 @@ import { jsPDF } from 'jspdf';
 import { readFileSync } from 'fs';
 
 // ─── Load assets ──────────────────────────────────────────────────────────────
-const logoB64 = 'data:image/png;base64,' + readFileSync('/home/ubuntu/upload/BCSFullLogoPurplePNGNarrowHeight.png').toString('base64');
+const logoB64 = 'data:image/png;base64,' + readFileSync('/home/ubuntu/upload/Untitled25.png').toString('base64');
 const outfitRegB64 = readFileSync('/home/ubuntu/pdf_assets/fonts/Outfit-Regular.ttf').toString('base64');
 const outfitBoldB64 = readFileSync('/home/ubuntu/pdf_assets/fonts/Outfit-Bold.ttf').toString('base64');
 const outfitSemiBoldB64 = readFileSync('/home/ubuntu/pdf_assets/fonts/Outfit-SemiBold.ttf').toString('base64');
