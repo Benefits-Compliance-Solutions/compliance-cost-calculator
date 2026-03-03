@@ -134,29 +134,27 @@ function drawHeader1(doc: jsPDF, agencyName: string, dateStr: string) {
   setFill(doc, TEAL);
   doc.rect(0, hH, PW, 1.5, 'F');
 
-  // White logo — left side
+  // White logo — left side. Actual PNG is 1566×608px → aspect ratio 2.5757
   const logoH = 18;
-  const logoW = logoH * (1588 / 560);
+  const logoW = logoH * (1566 / 608);
   try {
     doc.addImage(BCS_WHITE_LOGO_BASE64, 'PNG', ML, (hH - logoH) / 2, logoW, logoH);
   } catch (_) { /* skip */ }
 
-  // Title
+   // Title
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(18);
   setColor(doc, WHITE);
-  doc.text('COMPLIANCE COST ANALYSIS', PW - ML, 11, { align: 'right' });
-
-  // Prepared for
+  doc.text('COMPLIANCE COST ANALYSIS', PW - ML, 10, { align: 'right' });
+  // Prepared for — consistent 5.5pt line spacing below title
   doc.setFont('Outfit', 'normal');
   doc.setFontSize(9);
   setColor(doc, HEADER_MUTED);
-  doc.text(`Prepared for: ${agencyName}`, PW - ML, 19, { align: 'right' });
-
-  // Date
-  doc.setFontSize(8.5);
+  doc.text(`Prepared for: ${agencyName}`, PW - ML, 18, { align: 'right' });
+  // Date — same 5.5pt spacing below Prepared for
+  doc.setFontSize(9);
   setColor(doc, HEADER_DIM);
-  doc.text(`Report Generated: ${dateStr}`, PW - ML, 25.5, { align: 'right' });
+  doc.text(`Report Generated: ${dateStr}`, PW - ML, 24.5, { align: 'right' });;
 }
 
 // ─── Pages 2-3 header (25.4mm tall) ──────────────────────────────────────────
@@ -167,8 +165,9 @@ function drawHeader2(doc: jsPDF, title: string, subtitle: string) {
   setFill(doc, TEAL);
   doc.rect(0, hH, PW, 1.5, 'F');
 
+  // Actual PNG is 1566×608px → aspect ratio 2.5757
   const logoH = 14;
-  const logoW = logoH * (1588 / 560);
+  const logoW = logoH * (1566 / 608);
   try {
     doc.addImage(BCS_WHITE_LOGO_BASE64, 'PNG', ML, (hH - logoH) / 2, logoW, logoH);
   } catch (_) { /* skip */ }
@@ -257,24 +256,26 @@ function drawBarRow(
 
 // ─── Accent bullet ────────────────────────────────────────────────────────────
 function drawAccentBullet(doc: jsPDF, y: number, text: string): number {
-  // Teal accent bar: 3pt wide × 16pt tall
-  setFill(doc, TEAL);
-  doc.rect(ML, y + 0.5, 1.1, 6, 'F');
-
   doc.setFont('Outfit', 'normal');
-  doc.setFontSize(10);  // larger for readability per approved design
+  doc.setFontSize(10);
   setColor(doc, GRAY_DARK);
   const lines = doc.splitTextToSize(text, CW - 5.5);
-  let ly = y + 5.5;
+  // Row height: 5.5pt per line, min 9pt
+  const rowH = Math.max(9, lines.length * 5.5 + 1.5);
+  // Teal accent bar: vertically centered against the full row height
+  const barH = 6;
+  setFill(doc, TEAL);
+  doc.rect(ML, y + (rowH - barH) / 2, 1.1, barH, 'F');
+  // Text: first line vertically centered in the row
+  const textStartY = y + (rowH - (lines.length - 1) * 5.5) / 2 + 3.5;
+  let ly = textStartY;
   lines.forEach((line: string) => {
     doc.text(line, ML + 3.8, ly);
     ly += 5.5;
   });
-
-  return Math.max(8.5, lines.length * 5.5 + 1.5);
+  return rowH;
 }
-
-// ─── Rounded colored card ─────────────────────────────────────────────────────
+// ─── Rounded colored cardd ─────────────────────────────────────────────────────
 function drawCard(
   doc: jsPDF,
   x: number, y: number, w: number, h: number,
@@ -440,7 +441,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(12);
   setColor(doc, NAVY);
-  doc.text('Potential penalties for your entire book of business', PW / 2, y + 10, { align: 'center' });
+  doc.text('Average estimated compliance risk for your book of business', PW / 2, y + 10, { align: 'center' });
 
   // Big number — Outfit-Bold 32pt NAVY
   doc.setFont('Outfit', 'bold');
@@ -460,7 +461,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   y += liabH + 4;
 
   // Risk note box — GRAY_LIGHT bg, RULE_COLOR border, 10pt text
-  const riskText = `Risk Assessment: Based on your book of business, this represents potential financial exposure from compliance violations across all client employers. Industry data shows average penalties of $70K\u2013$150K for smaller employers and $350K+ for larger employers.`;
+  const riskText = `Risk Assessment: Based on your book of business, this represents potential financial exposure from compliance violations across all client employers. Industry average risk for non-compliance within smaller employers is $70K\u2013$150K, and $350K+ for larger employers.`;
   doc.setFont('Outfit', 'normal');
   doc.setFontSize(10);
   const riskLines = doc.splitTextToSize(riskText, CW - 10);
@@ -571,9 +572,15 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   setColor(doc, GRAY_MID);
   doc.text('From winning new clients', invX3 + invCardW / 2, y + 34, { align: 'center' });
 
-  y += invCardH;
-
-  drawFooter(doc, 2);
+  y += invCardH + 8;
+  // ── Disclaimer — below Investment Summary cards, with breathing room ────────
+  doc.setFont('Outfit', 'normal');
+  doc.setFontSize(9);
+  setColor(doc, GRAY_MID);
+  const disclaimerP2 = 'These estimates are based on typical results from BCS partnerships. Actual benefits may vary based on your specific situation.';
+  const disclaimerP2Lines = doc.splitTextToSize(disclaimerP2, CW);
+  disclaimerP2Lines.forEach((line: string) => { doc.text(line, ML, y); y += 5; });
+  drawFooter(doc, 2);;
 
   // ══════════════════════════════════════════════════════════════════════════
   // PAGE 3 — BENEFITS + CTA
@@ -582,14 +589,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   drawHeader2(doc, 'ROI ANALYSIS', 'The Value of Partnership');
   y = 30;
 
-  // ── Disclaimer at TOP of page 3 (per approved design) ────────────────────
-  doc.setFont('Outfit', 'normal');
-  doc.setFontSize(10);
-  setColor(doc, GRAY_MID);
-  const disclaimerText = 'These estimates are based on typical results from BCS partnerships. Actual benefits may vary based on your specific situation.';
-  const disclaimerLines = doc.splitTextToSize(disclaimerText, CW);
-  disclaimerLines.forEach((line: string) => { doc.text(line, ML, y); y += 5.5; });
-  y += 5;
+  // (Disclaimer moved to bottom of page 2, below Investment Summary cards)
 
   // ── BENEFITS OF BCS PARTNERSHIP ───────────────────────────────────────────
   drawSectionHeading(doc, 'BENEFITS OF BCS PARTNERSHIP', y);
