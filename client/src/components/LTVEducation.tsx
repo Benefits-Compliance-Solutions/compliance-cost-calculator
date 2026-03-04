@@ -35,10 +35,10 @@ export default function LTVEducation({ averageClientValue, totalClients }: LTVEd
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-blue-900">
           <Info className="w-5 h-5" />
-          Understanding Lifetime Value in Your Business
+          The Lifetime Value of Every Client Relationship
         </CardTitle>
         <CardDescription className="text-blue-700">
-          Most CFOs think in annual terms, but benefits agencies are recurring revenue businesses
+          Most agency principals think in annual revenue terms. But every client is worth multiples of their annual value — and compliance capabilities are one of the most powerful levers for capturing that value.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -179,7 +179,7 @@ export default function LTVEducation({ averageClientValue, totalClients }: LTVEd
             </div>
             <div className="flex items-start gap-2 text-sm text-green-800">
               <span className="text-green-600 mt-0.5 flex-shrink-0">✓</span>
-              <span><strong>Competitive defense:</strong> Strong compliance capabilities give you a clear, defensible differentiator when competing brokers come calling at renewal time.</span>
+              <span><strong>Competitive defense:</strong> Strong compliance capabilities give you a clear, defensible answer when a competing broker walks into your account at renewal and starts asking compliance questions your client can't answer. That's the moment BCS is built for.</span>
             </div>
             <div className="flex items-start gap-2 text-sm text-green-800">
               <span className="text-green-600 mt-0.5 flex-shrink-0">✓</span>

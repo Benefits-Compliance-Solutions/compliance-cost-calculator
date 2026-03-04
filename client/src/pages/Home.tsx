@@ -322,7 +322,7 @@ export default function Home() {
             alt="Benefits Compliance Solutions" 
             className="h-12 md:h-16 w-auto object-contain"
           />
-          <h1 className="text-lg md:text-xl font-bold md:absolute md:left-1/2 md:-translate-x-1/2">Compliance Cost Calculator</h1>
+          <h1 className="text-lg md:text-xl font-bold md:absolute md:left-1/2 md:-translate-x-1/2">The Hidden Cost of Compliance Gaps</h1>
         </div>
       </header>
 
@@ -342,7 +342,7 @@ export default function Home() {
             How Much is Compliance Actually Costing Your Benefits Practice?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Agency principals lose millions in revenue every year—from client churn, missed opportunities, and deals they can't pursue. Calculate your revenue at risk and discover how to turn compliance into a competitive advantage.
+            Your team is already paying the compliance tax — in lost deals, churned accounts, and hours spent firefighting instead of selling. See exactly what it's costing you, and what it's worth to fix it.
           </p>
         </div>
 
@@ -386,7 +386,7 @@ export default function Home() {
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.basics ? 'rotate-180' : ''}`} />
                     </CardTitle>
-                    <CardDescription className="text-left">Tell us about your agency</CardDescription>
+                    <CardDescription className="text-left">Tell us about your practice</CardDescription>
                   </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
@@ -600,7 +600,7 @@ export default function Home() {
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-base">Staff Time on Compliance</span>
+                        <span className="text-base">The Compliance Firefighting Tax</span>
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.staffTime ? 'rotate-180' : ''}`} />
                     </CardTitle>
@@ -649,7 +649,7 @@ export default function Home() {
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <AlertCircle className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-base">Team Productivity Impact</span>
+                        <span className="text-base">Growth Capacity Lost to Compliance Drag</span>
                       </div>
                       <ChevronDown className={`w-5 h-5 transition-transform ${sectionsOpen.productivity ? 'rotate-180' : ''}`} />
                     </CardTitle>

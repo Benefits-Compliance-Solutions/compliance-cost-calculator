@@ -93,12 +93,12 @@ export default function LeadCaptureDialog({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-primary">
-            Download Your Compliance Cost Report
+            Get Your Personalized Compliance Cost Analysis
           </DialogTitle>
           <DialogDescription className="text-base space-y-2">
-            <p>Enter your information below to receive your personalized compliance cost analysis report.</p>
+            <p>You've done the work. Now get your full analysis in a format you can share with your leadership team or use in client conversations.</p>
             <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg border">
-              <strong>Privacy Notice:</strong> We'll use your information to send your report and follow up within 1 business day to discuss your results. View our <PrivacyPolicy asLink /> for details.
+              <strong>Privacy Notice:</strong> A BCS strategist will follow up within 2 business days to walk through your results and answer any questions. View our <PrivacyPolicy asLink /> for details.
             </p>
           </DialogDescription>
         </DialogHeader>

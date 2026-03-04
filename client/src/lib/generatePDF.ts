@@ -334,7 +334,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(13);
   setColor(doc, WHITE);
-  doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 11, { align: 'center' });
+  doc.text("Your Annual Revenue at Risk from Compliance Gaps", PW / 2, y + 11, { align: 'center' });
 
   // Big number — Outfit-Bold 36pt WHITE
   doc.setFont('Outfit', 'bold');
@@ -414,7 +414,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
     `Your team spends approximately ${monthlyHours} hours per month dealing with compliance emergencies`,
     `Lost opportunities and client churn cost ${fmt(revenueImpact)} annually`,
     'Compliance limitations prevent pursuit of larger, more profitable clients',
-    'Current approach creates ongoing drain on resources and growth potential',
+    'Without compliance capabilities, your book is exposed at every renewal when competitors use compliance to displace you',
   ];
 
   insights.forEach((ins) => {
@@ -507,7 +507,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFont('OutfitSemiBold', 'normal');
   doc.setFontSize(9);
   setColor(doc, GRAY_MID);
-  doc.text('WITH BCS \u2014 Reduced Annual Costs', compX2 + compCardW / 2, y + 7, { align: 'center' });
+  doc.text('WITH BCS \u2014 Costs Reduced + Revenue Unlocked', compX2 + compCardW / 2, y + 7, { align: 'center' });
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(26);
   setColor(doc, TEAL);
@@ -566,7 +566,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
   doc.setFont('OutfitSemiBold', 'normal');
   doc.setFontSize(9);
   setColor(doc, GRAY_MID);
-  doc.text('Potential New Revenue', invX3 + invCardW / 2, y + 8, { align: 'center' });
+  doc.text('New Revenue from Mid-Market Clients', invX3 + invCardW / 2, y + 8, { align: 'center' });
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(22);
   setColor(doc, TEAL);
@@ -638,7 +638,7 @@ export function generateCompliancePDF(costs: CostData, inputs: CompanyInputs) {
 
   // ── CTA card ──────────────────────────────────────────────────────────────
   // Approved: tall card, large bold title (~16pt), body text ~11pt, URL bold teal ~11pt
-  const ctaTitle = 'Ready to transform your compliance burden into a competitive advantage?';
+  const ctaTitle = 'Ready to Turn These Numbers Into Action?';
   doc.setFont('Outfit', 'bold');
   doc.setFontSize(16);
   const ctaLines = doc.splitTextToSize(ctaTitle, CW - 20);

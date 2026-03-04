@@ -16,7 +16,7 @@ export default function TrustSignals() {
           <div className="text-center">
             <h3 className="text-lg font-semibold mb-2">About Benefits Compliance Solutions</h3>
             <p className="text-sm text-muted-foreground">
-              Since 2015, we've helped over 25+ employee benefits agencies transform compliance from a burden into a competitive advantage.
+              Since 2015, BCS has helped employee benefits agencies build the compliance capabilities that win larger accounts, reduce client churn, and defend against competing brokers.
             </p>
           </div>
 
@@ -27,21 +27,21 @@ export default function TrustSignals() {
                 <Building2 className="w-6 h-6 text-primary" />
               </div>
               <div className="text-2xl font-bold">25+</div>
-              <div className="text-sm text-muted-foreground">Agency Partners</div>
+              <div className="text-sm text-muted-foreground">Agency Partners Nationwide</div>
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-2">
                 <Lightbulb className="w-6 h-6 text-primary" />
               </div>
               <div className="text-2xl font-bold">Strategy + Technology</div>
-              <div className="text-sm text-muted-foreground">Full-Scale Solution Provider</div>
+              <div className="text-sm text-muted-foreground">Advisory + Platform, Not Just Software</div>
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-2">
                 <Award className="w-6 h-6 text-primary" />
               </div>
               <div className="text-2xl font-bold">99%+</div>
-              <div className="text-sm text-muted-foreground">Agency Partner Retention Rate</div>
+              <div className="text-sm text-muted-foreground">BCS Partner Retention Rate</div>
             </div>
           </div>
 

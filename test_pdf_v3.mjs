@@ -243,7 +243,7 @@ drawCard(doc, ML, y, CW, heroH, NAVY, null, 2.1);
 doc.setFont('Outfit', 'bold');
 doc.setFontSize(13);
 setColor(doc, WHITE);
-doc.text("Your Agency's Total Compliance Cost", PW / 2, y + 11, { align: 'center' });
+doc.text("Your Annual Revenue at Risk from Compliance Gaps", PW / 2, y + 11, { align: 'center' });
 
 // Big number — Bold 36pt WHITE
 doc.setFont('Outfit', 'bold');
@@ -296,7 +296,7 @@ const insights = [
   `Your team spends approximately ${monthlyHours} hours per month dealing with compliance emergencies`,
   `Lost opportunities and client churn cost ${fmt(revenueImpact)} annually`,
   'Compliance limitations prevent pursuit of larger, more profitable clients',
-  'Current approach creates ongoing drain on resources and growth potential',
+  'Without compliance capabilities, your book is exposed at every renewal when competitors use compliance to displace you',
 ];
 insights.forEach(ins => {
   const bh = drawAccentBullet(doc, y, ins);
@@ -323,7 +323,7 @@ drawCard(doc, liabX, y, liabInnerW, liabH, NAVY_LIGHT, NAVY, 2.1);
 doc.setFont('Outfit', 'normal');
 doc.setFontSize(8);
 setColor(doc, GRAY_MID);
-doc.text('Potential penalties for your entire book of business', PW / 2, y + 6, { align: 'center' });
+doc.text('Average estimated compliance risk for your book of business', PW / 2, y + 6, { align: 'center' });
 
 doc.setFont('Outfit', 'bold');
 doc.setFontSize(32);
@@ -377,7 +377,7 @@ drawCard(doc, compX2, y, compCardW, compCardH, TEAL_LIGHT, TEAL, 1.4);
 doc.setFont('OutfitSemiBold', 'normal');
 doc.setFontSize(7);
 setColor(doc, GRAY_MID);
-doc.text('WITH BCS \u2014 Reduced Annual Costs', compX2 + compCardW / 2, y + 6, { align: 'center' });
+doc.text('WITH BCS \u2014 Costs Reduced + Revenue Unlocked', compX2 + compCardW / 2, y + 6, { align: 'center' });
 doc.setFont('Outfit', 'bold');
 doc.setFontSize(24);
 setColor(doc, TEAL);
@@ -429,7 +429,7 @@ drawCard(doc, invX3, y, invCardW, invCardH, TEAL_LIGHT, TEAL, 1.4);
 doc.setFont('OutfitSemiBold', 'normal');
 doc.setFontSize(8);
 setColor(doc, GRAY_MID);
-doc.text('Potential New Revenue', invX3 + invCardW / 2, y + 6, { align: 'center' });
+doc.text('New Revenue from Mid-Market Clients', invX3 + invCardW / 2, y + 6, { align: 'center' });
 doc.setFont('Outfit', 'bold');
 doc.setFontSize(22);
 setColor(doc, TEAL);
@@ -496,7 +496,7 @@ retLines.forEach(line => { doc.text(line, ML + 4.2, ly); ly += 4.2; });
 y += ltvBoxH + 7;
 
 // CTA card
-const ctaTitle = 'Ready to transform your compliance burden into a competitive advantage?';
+const ctaTitle = 'Ready to Turn These Numbers Into Action?';
 doc.setFont('Outfit', 'bold');
 doc.setFontSize(13);
 const ctaLines = doc.splitTextToSize(ctaTitle, CW - 14.1);

@@ -65,10 +65,10 @@ export default function CostSummary({ costs }: CostSummaryProps) {
   const operationalCosts = costs.staffTimeCost + costs.productivityCost;
   
   const costBreakdown = [
-    { label: "Client Churn (Lost Revenue)", value: costs.clientChurnCost, icon: TrendingDown, isRevenue: true },
-    { label: "Missed Large Client Opportunities", value: costs.opportunityCost, icon: DollarSign, isRevenue: true },
-    { label: "Staff Time on Compliance", value: costs.staffTimeCost, icon: Clock, isRevenue: false },
-    { label: "Lost Team Productivity", value: costs.productivityCost, icon: Users, isRevenue: false },
+    { label: "Revenue Lost to Client Churn", value: costs.clientChurnCost, icon: TrendingDown, isRevenue: true },
+    { label: "Large Accounts You Can't Compete For", value: costs.opportunityCost, icon: DollarSign, isRevenue: true },
+    { label: "Hours Spent Firefighting Compliance", value: costs.staffTimeCost, icon: Clock, isRevenue: false },
+    { label: "Productivity Drained by Compliance Drag", value: costs.productivityCost, icon: Users, isRevenue: false },
   ];
 
   return (
@@ -78,9 +78,9 @@ export default function CostSummary({ costs }: CostSummaryProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <span className="text-destructive" aria-label="Risk">⚠️</span>
-            Revenue at Risk from Compliance Gaps
+            What Compliance Gaps Are Costing You
           </CardTitle>
-          <CardDescription>Direct revenue loss + missed opportunities</CardDescription>
+          <CardDescription>Revenue you're losing and opportunities you're missing — every year</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-5xl font-bold text-destructive mb-2">
@@ -146,16 +146,16 @@ export default function CostSummary({ costs }: CostSummaryProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <AlertTriangle className="w-5 h-5" />
-            Liability Exposure
+            Client Compliance Risk Exposure
           </CardTitle>
-          <CardDescription>Industry average non-compliance risk across your book of business</CardDescription>
+          <CardDescription>The aggregate compliance risk your clients carry — and that you're responsible for managing</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-5xl font-bold text-destructive mb-4">
             <AnimatedCounter value={costs.totalLiabilityExposure} />
           </div>
           <p className="text-sm text-muted-foreground mb-4">
-            Non-compliance risk exposure across all clients
+            Average estimated compliance risk across your book of business
           </p>
           
           <CalculationMethodology
@@ -180,19 +180,19 @@ export default function CostSummary({ costs }: CostSummaryProps) {
           <div className="space-y-3 text-sm">
             <div className="flex items-start gap-2">
               <span className="text-accent">●</span>
-              <p><strong>Time drain:</strong> Your team spends significant hours each month on compliance fires</p>
+              <p><strong>Time drain:</strong> Your team is spending hours every month on compliance fires instead of client growth</p>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-accent">●</span>
-              <p><strong>Revenue impact:</strong> Lost opportunities and churn cost ${(costs.clientChurnCost + costs.opportunityCost).toLocaleString()} annually</p>
+              <p><strong>Revenue impact:</strong> Compliance gaps are costing you ${(costs.clientChurnCost + costs.opportunityCost).toLocaleString()} annually in lost accounts and missed opportunities</p>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-accent">●</span>
-              <p><strong>Growth barrier:</strong> Compliance limitations prevent you from pursuing larger clients</p>
+              <p><strong>Growth barrier:</strong> You're walking away from larger, more profitable accounts because you can't confidently serve their compliance needs</p>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-destructive">●</span>
-              <p><strong>Exposure risk:</strong> Your book of business carries substantial compliance liability</p>
+              <p><strong>Competitive risk:</strong> Competing brokers are using compliance as a wedge to take your accounts — and winning</p>
             </div>
           </div>
         </CardContent>

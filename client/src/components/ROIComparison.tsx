@@ -72,10 +72,10 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto">
         <h3 className="text-3xl lg:text-4xl font-bold mb-4">
-          The ROI of Partnership
+          What Fixing Compliance Is Worth to Your Practice
         </h3>
         <p className="text-lg text-muted-foreground">
-          See how partnering with Benefits Compliance Solutions transforms your agency's compliance burden into a competitive advantage
+          Your compliance gaps have a price. So does fixing them. Here's what the math looks like for your practice.
         </p>
       </div>
 
@@ -86,9 +86,9 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
               <TrendingDown className="w-5 h-5" />
-              Your Current Compliance Burden
+              What You're Carrying Without BCS
             </CardTitle>
-            <CardDescription>Without BCS Partnership</CardDescription>
+            <CardDescription>The current state of your practice</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -110,19 +110,19 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="text-destructive mt-0.5">✗</span>
-                  <span>Team constantly fighting compliance fires</span>
+                  <span>Team spending hours every month on compliance emergencies instead of selling</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive mt-0.5">✗</span>
-                  <span>Unable to pursue larger, more profitable clients</span>
+                  <span>Walking away from 6-figure accounts you can't confidently serve</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive mt-0.5">✗</span>
-                  <span>Client churn from unmet compliance expectations</span>
+                  <span>Losing accounts to brokers with stronger compliance programs</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive mt-0.5">✗</span>
-                  <span>Exposure to penalties and regulatory risks</span>
+                  <span>Carrying compliance risk across your entire book of business</span>
                 </li>
               </ul>
             </div>
@@ -134,16 +134,16 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-accent">
               <span className="text-accent" aria-label="Opportunity">✅</span>
-              Transform Compliance Into An Advantage
+              What Your Practice Looks Like With BCS
             </CardTitle>
-            <CardDescription>With BCS Partnership</CardDescription>
+            <CardDescription>The opportunity in front of you</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="p-4 bg-gradient-to-br from-accent/20 to-accent/10 rounded-lg border-2 border-accent/50 shadow-md">
                 <p className="text-sm font-semibold mb-1" style={{color: 'var(--accent-text)'}}>NEW REVENUE OPPORTUNITY</p>
                 <p className="text-3xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
-                <p className="text-sm text-muted-foreground mt-1">Annual revenue from large clients you can now pursue</p>
+                <p className="text-sm text-muted-foreground mt-1">Annual revenue from 6-figure accounts you can now confidently pursue</p>
                 <p className="text-sm font-medium mt-1" style={{color: 'var(--accent-text)'}}>6-Year Lifetime Value: ${costs.lifetimeValueGrowth.toLocaleString()}</p>
               </div>
               <div className="p-3 bg-card rounded-lg border border-accent/20">
@@ -159,19 +159,19 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Scalable compliance processes that grow with you</span>
+                  <span>Scalable compliance programs that grow with your book</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Confidence to win and retain 6-figure clients</span>
+                  <span>The confidence to go after accounts your competitors can't match</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Expert support when compliance issues arise</span>
+                  <span>Expert backup when your clients have compliance questions</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                  <span>Team freed to focus on growth and client service</span>
+                  <span>Your team focused on selling and serving — not firefighting</span>
                 </li>
               </ul>
             </div>
@@ -182,13 +182,13 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
       {/* Investment Analysis */}
       <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20 shadow-xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Investment Analysis</CardTitle>
-          <CardDescription>Conservative estimate based on typical BCS partnerships</CardDescription>
+          <CardTitle className="text-2xl">The Business Case for BCS</CardTitle>
+          <CardDescription>Based on typical results from BCS agency partnerships</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
             <div className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg w-full sm:w-72">
-              <p className="text-sm font-semibold text-destructive mb-2">WITHOUT BCS Partnership</p>
+              <p className="text-sm font-semibold text-destructive mb-2">WITHOUT BCS</p>
               <p className="text-4xl font-bold text-destructive">${costs.totalOperationalCost.toLocaleString()}</p>
               <p className="text-sm text-destructive/80 mt-2">Annual operational costs</p>
             </div>
@@ -225,7 +225,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           
           {/* Revenue Impact Callout */}
           <div className="bg-gradient-to-r from-accent/10 to-accent/5 border-l-4 border-accent p-6 rounded-lg mb-6">
-            <h4 className="text-lg font-bold text-accent mb-2">Total Revenue Impact</h4>
+            <h4 className="text-lg font-bold text-accent mb-2">Your Total Annual Opportunity</h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Cost Savings</p>
@@ -241,14 +241,14 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               </div>
             </div>
             <p className="text-center text-sm text-muted-foreground mt-4">
-              This is money you're leaving on the table every year without compliance capabilities.
+              This is the combined value of what you're losing today and what you could be capturing with the right compliance capabilities.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="gap-2 text-lg px-8" asChild>
               <a href="https://calendly.com/benefitscompliancesolutions/bcs-strategy-session" target="_blank" rel="noopener noreferrer">
-                Schedule a Consultation
+                Talk to a BCS Strategist
                 <ArrowRight className="w-5 h-5" />
               </a>
             </Button>
@@ -264,8 +264,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           </div>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
-            These estimates are based on typical results from BCS partnerships. 
-            Actual benefits may vary based on your specific situation.
+            These estimates are based on typical results from BCS partnerships. Actual benefits may vary based on your specific situation.
           </p>
         </CardContent>
       </Card>
