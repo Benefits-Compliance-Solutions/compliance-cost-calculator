@@ -134,18 +134,18 @@ export default function BenchmarkComparison({ costs, numberOfEmployees }: Benchm
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Your Cost per Employee</p>
               <p className="text-3xl font-bold text-primary">
-                ${costPerEmployee.toLocaleString()}
+                ${Math.round(costPerEmployee).toLocaleString()}
               </p>
             </div>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Industry Average</p>
               <p className="text-3xl font-bold text-muted-foreground">
-                ${benchmark.totalCostPerEmployee.average.toLocaleString()}
+                ${Math.round(benchmark.totalCostPerEmployee.average).toLocaleString()}
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>Range: ${benchmark.totalCostPerEmployee.low.toLocaleString()}</span>
+                <span>Range: ${Math.round(benchmark.totalCostPerEmployee.low).toLocaleString()}</span>
                 <ArrowRight className="w-3 h-3" />
-                <span>${benchmark.totalCostPerEmployee.high.toLocaleString()}</span>
+                <span>${Math.round(benchmark.totalCostPerEmployee.high).toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -269,9 +269,9 @@ export default function BenchmarkComparison({ costs, numberOfEmployees }: Benchm
               <p>
                 <span className="font-semibold">High Priority:</span> Your operational compliance costs are {Math.abs(overallComparison.percentageDifference).toFixed(0)}% above industry average, 
                 representing approximately <span className="font-bold text-destructive">
-                  ${((costPerEmployee - benchmark.totalCostPerEmployee.average) * numberOfEmployees).toLocaleString()}
+                  ${Math.round((costPerEmployee - benchmark.totalCostPerEmployee.average) * numberOfEmployees).toLocaleString()}
                 </span> in excess annual operational costs. Additionally, your compliance liability exposure of <span className="font-bold text-destructive">
-                  ${costs.penaltyRisk.toLocaleString()}
+                  ${Math.round(costs.penaltyRisk).toLocaleString()}
                 </span> represents significant financial risk across your book of business.
               </p>
             </div>

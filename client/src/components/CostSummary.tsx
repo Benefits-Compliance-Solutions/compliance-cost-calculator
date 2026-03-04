@@ -89,11 +89,11 @@ export default function CostSummary({ costs }: CostSummaryProps) {
           <p className="text-sm text-muted-foreground mb-1">Total annual impact</p>
           <div className="flex gap-4 text-sm mb-6">
             <div>
-              <span className="font-semibold text-destructive">${revenueImpact.toLocaleString()}</span>
+              <span className="font-semibold text-destructive">${Math.round(revenueImpact).toLocaleString()}</span>
               <span className="text-muted-foreground"> revenue loss</span>
             </div>
             <div>
-              <span className="font-semibold text-muted-foreground">${operationalCosts.toLocaleString()}</span>
+              <span className="font-semibold text-muted-foreground">${Math.round(operationalCosts).toLocaleString()}</span>
               <span className="text-muted-foreground"> operational costs</span>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
                       {item.label}
                     </span>
                     <span className={`font-semibold ${item.isRevenue ? 'text-destructive' : 'text-muted-foreground'}`}>
-                      ${item.value.toLocaleString()}
+                      ${Math.round(item.value).toLocaleString()}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -184,7 +184,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
             </div>
             <div className="flex items-start gap-2">
               <span className="text-accent">●</span>
-              <p><strong>Revenue impact:</strong> Compliance gaps are costing you ${(costs.clientChurnCost + costs.opportunityCost).toLocaleString()} annually in lost accounts and missed opportunities</p>
+              <p><strong>Revenue impact:</strong> Compliance gaps are costing you ${Math.round(costs.clientChurnCost + costs.opportunityCost).toLocaleString()} annually in lost accounts and missed opportunities</p>
             </div>
             <div className="flex items-start gap-2">
               <span className="text-accent">●</span>

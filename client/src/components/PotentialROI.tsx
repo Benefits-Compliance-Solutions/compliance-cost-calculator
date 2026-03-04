@@ -59,14 +59,14 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
       </CardHeader>
       <CardContent>
         <div className="text-5xl font-bold text-accent mb-2">
-          ${newBusinessRevenue.toLocaleString()}
+          ${Math.round(newBusinessRevenue).toLocaleString()}
         </div>
         <p className="text-sm font-semibold text-accent mb-1">
           Annual new business revenue potential
         </p>
         <p className="text-xs text-muted-foreground mb-6">
           From large clients you can confidently pursue with compliance capabilities<br/>
-          <span className="font-medium">6-Year Lifetime Value: ${(newBusinessRevenue * 6).toLocaleString()}</span>
+          <span className="font-medium">6-Year Lifetime Value: ${Math.round(newBusinessRevenue * 6).toLocaleString()}</span>
         </p>
         
         {/* ROI Breakdown */}
@@ -84,7 +84,7 @@ export default function PotentialROI({ costs, revenueGrowth }: PotentialROIProps
                     <Icon className="w-4 h-4 text-accent" />
                     {item.label}
                   </span>
-                  <span className={`font-semibold ${item.isRevenue ? 'text-accent' : 'text-muted-foreground'}`}>${item.value.toLocaleString()}</span>
+                  <span className={`font-semibold ${item.isRevenue ? 'text-accent' : 'text-muted-foreground'}`}>${Math.round(item.value).toLocaleString()}</span>
                 </div>
                 <p className="text-xs text-muted-foreground ml-6">{item.description}</p>
                 <div className="relative h-2 bg-muted rounded-full overflow-hidden">

@@ -93,14 +93,14 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <CardContent className="space-y-4">
             <div>
               <div className="text-4xl font-bold text-destructive mb-2">
-                ${costs.totalOperationalCost.toLocaleString()}
+                ${Math.round(costs.totalOperationalCost).toLocaleString()}
               </div>
               <p className="text-sm text-muted-foreground">Annual operational costs</p>
             </div>
             
             <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/30">
               <div className="text-2xl font-bold text-destructive mb-1">
-                ${costs.totalLiabilityExposure.toLocaleString()}
+                ${Math.round(costs.totalLiabilityExposure).toLocaleString()}
               </div>
               <p className="text-sm text-muted-foreground">Liability exposure for entire book of business</p>
             </div>
@@ -142,13 +142,13 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
             <div className="space-y-3">
               <div className="p-4 bg-gradient-to-br from-accent/20 to-accent/10 rounded-lg border-2 border-accent/50 shadow-md">
                 <p className="text-sm font-semibold mb-1" style={{color: 'var(--accent-text)'}}>NEW REVENUE OPPORTUNITY</p>
-                <p className="text-3xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-accent">${Math.round(costs.revenueGrowth).toLocaleString()}</p>
                 <p className="text-sm text-muted-foreground mt-1">Annual revenue from 6-figure accounts you can now confidently pursue</p>
-                <p className="text-sm font-medium mt-1" style={{color: 'var(--accent-text)'}}>6-Year Lifetime Value: ${costs.lifetimeValueGrowth.toLocaleString()}</p>
+                <p className="text-sm font-medium mt-1" style={{color: 'var(--accent-text)'}}>6-Year Lifetime Value: ${Math.round(costs.lifetimeValueGrowth).toLocaleString()}</p>
               </div>
               <div className="p-3 bg-card rounded-lg border border-accent/20">
                 <p className="text-sm text-muted-foreground mb-1">Plus: Operational Cost Savings</p>
-                <p className="text-2xl font-bold text-primary">${estimatedSavings.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-primary">${Math.round(estimatedSavings).toLocaleString()}</p>
                 <Progress value={reductionPercentage} className="mt-2 h-2" />
                 <p className="text-sm text-muted-foreground mt-1">{reductionPercentage}% reduction in compliance costs</p>
               </div>
@@ -189,7 +189,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
             <div className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg w-full sm:w-72">
               <p className="text-sm font-semibold text-destructive mb-2">WITHOUT BCS</p>
-              <p className="text-4xl font-bold text-destructive">${costs.totalOperationalCost.toLocaleString()}</p>
+              <p className="text-4xl font-bold text-destructive">${Math.round(costs.totalOperationalCost).toLocaleString()}</p>
               <p className="text-sm text-destructive/80 mt-2">Annual operational costs</p>
             </div>
             
@@ -203,7 +203,7 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
             
             <div className="text-center p-6 rounded-lg bg-primary/10 border-2 border-primary/40 w-full sm:w-72">
               <p className="text-sm text-muted-foreground mb-2">Operational Cost Savings</p>
-              <p className="text-4xl font-bold text-primary">${estimatedSavings.toLocaleString()}</p>
+              <p className="text-4xl font-bold text-primary">${Math.round(estimatedSavings).toLocaleString()}</p>
               <p className="text-sm text-muted-foreground mt-2">Reduce costs by {reductionPercentage}%</p>
             </div>
             
@@ -217,9 +217,9 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
             
             <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/50 shadow-lg w-full sm:w-72">
               <p className="text-sm font-semibold text-accent mb-2">NEW REVENUE OPPORTUNITY</p>
-              <p className="text-4xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
+              <p className="text-4xl font-bold text-accent">${Math.round(costs.revenueGrowth).toLocaleString()}</p>
               <p className="text-sm font-medium mt-2" style={{color: 'var(--accent-text)'}}>Annual revenue from large clients</p>
-              <p className="text-sm text-muted-foreground mt-1">6-year LTV: ${costs.lifetimeValueGrowth.toLocaleString()}</p>
+              <p className="text-sm text-muted-foreground mt-1">6-year LTV: ${Math.round(costs.lifetimeValueGrowth).toLocaleString()}</p>
             </div>
           </div>
           
@@ -229,15 +229,15 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Cost Savings</p>
-                <p className="text-2xl font-bold text-primary">${estimatedSavings.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-primary">${Math.round(estimatedSavings).toLocaleString()}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">New Revenue</p>
-                <p className="text-2xl font-bold text-accent">${costs.revenueGrowth.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-accent">${Math.round(costs.revenueGrowth).toLocaleString()}</p>
               </div>
               <div className="border-l-2 border-accent/30">
                 <p className="text-sm font-semibold text-accent mb-1">Total Annual Benefit</p>
-                <p className="text-3xl font-bold text-accent">${(estimatedSavings + costs.revenueGrowth).toLocaleString()}</p>
+                <p className="text-3xl font-bold text-accent">${Math.round(estimatedSavings + costs.revenueGrowth).toLocaleString()}</p>
               </div>
             </div>
             <p className="text-center text-sm text-muted-foreground mt-4">

@@ -1,6 +1,6 @@
 /*
 Design: LTV Education Component
-- Helps CFOs understand lifetime value in recurring revenue business
+- Helps benefits practice leaders understand lifetime value in recurring revenue business
 - Shows industry retention rate data with citations
 - Visualizes the difference between annual value and lifetime value
 */
@@ -47,13 +47,13 @@ export default function LTVEducation({ averageClientValue, totalClients }: LTVEd
           <h4 className="font-bold text-blue-900 mb-3">The Recurring Revenue Reality</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <p className="text-sm text-muted-foreground mb-1">What CFOs See</p>
-              <p className="text-3xl font-bold text-blue-900">${averageClientValue.toLocaleString()}</p>
+              <p className="text-sm text-muted-foreground mb-1">What Benefits Practice Leaders See</p>
+              <p className="text-3xl font-bold text-blue-900">${Math.round(averageClientValue).toLocaleString()}</p>
               <p className="text-xs text-muted-foreground mt-1">Annual client value</p>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg border-2 border-blue-400">
               <p className="text-sm font-semibold text-blue-900 mb-1">What It's Really Worth</p>
-              <p className="text-3xl font-bold text-blue-900">${industryAvgLTV.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-blue-900">${Math.round(industryAvgLTV).toLocaleString()}</p>
               <p className="text-xs text-blue-700 mt-1 font-medium">6-year lifetime value (84% retention)</p>
             </div>
           </div>
@@ -117,15 +117,15 @@ export default function LTVEducation({ averageClientValue, totalClients }: LTVEd
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">LTV at 84% retention:</span>
-              <span className="text-lg font-bold text-amber-900">${industryAvgLTV.toLocaleString()}</span>
+              <span className="text-lg font-bold text-amber-900">${Math.round(industryAvgLTV).toLocaleString()}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">LTV at 93% retention:</span>
-              <span className="text-lg font-bold text-green-700">${topPerformerLTV.toLocaleString()}</span>
+              <span className="text-lg font-bold text-green-700">${Math.round(topPerformerLTV).toLocaleString()}</span>
             </div>
             <div className="border-t-2 border-amber-300 pt-3 flex items-center justify-between">
               <span className="text-sm font-semibold text-amber-900">LTV Improvement per Client:</span>
-              <span className="text-xl font-bold text-green-700">+${ltvImprovement.toLocaleString()}</span>
+              <span className="text-xl font-bold text-green-700">+${Math.round(ltvImprovement).toLocaleString()}</span>
             </div>
             <p className="text-xs text-center text-amber-800 font-medium">
               That's a <strong>{improvementPercentage}% increase</strong> in the value of every client relationship
@@ -139,7 +139,7 @@ export default function LTVEducation({ averageClientValue, totalClients }: LTVEd
           <div className="space-y-3">
             <div className="text-center p-4 bg-white rounded-lg">
               <p className="text-sm text-muted-foreground mb-1">Your {totalClients} Clients</p>
-              <p className="text-sm text-muted-foreground">at ${averageClientValue.toLocaleString()} average annual value</p>
+              <p className="text-sm text-muted-foreground">at ${Math.round(averageClientValue).toLocaleString()} average annual value</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="text-center p-4 bg-red-50 rounded-lg border border-red-200">

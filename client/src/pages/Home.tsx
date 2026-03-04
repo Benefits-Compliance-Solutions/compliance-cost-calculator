@@ -512,13 +512,13 @@ export default function Home() {
                     {costs.revenueGrowth > 0 && (
                       <div className="mt-4 p-4 bg-amber-50 border-l-4 border-amber-600 rounded-lg">
                         <p className="text-sm font-semibold text-amber-900 mb-1">
-                          📈 Missed Annual Revenue: ${costs.revenueGrowth.toLocaleString()}
+                          📈 Missed Annual Revenue: ${Math.round(costs.revenueGrowth).toLocaleString()}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          <strong>Lifetime Value (6 years): ${costs.lifetimeValueGrowth.toLocaleString()}</strong>
+                          <strong>Lifetime Value (6 years): ${Math.round(costs.lifetimeValueGrowth).toLocaleString()}</strong>
                         </p>
                         <p className="text-sm text-amber-800 mt-1">
-                          At 93% top-performer retention, each large client = ${calculateLTV(inputs.averageLargeClientValue, RETENTION_RATES.TOP_PERFORMER, LTV_YEARS).toLocaleString()} in lifetime value
+                          At 93% top-performer retention, each large client = ${Math.round(calculateLTV(inputs.averageLargeClientValue, RETENTION_RATES.TOP_PERFORMER, LTV_YEARS)).toLocaleString()} in lifetime value
                         </p>
                         <p className="text-sm text-amber-800 mt-1">
                           These are deals you're walking away from because you lack compliance confidence.
@@ -577,13 +577,13 @@ export default function Home() {
                     {costs.clientChurnCost > 0 && (
                       <div className="mt-4 p-4 bg-destructive/10 border-l-4 border-destructive rounded-lg">
                         <p className="text-sm font-semibold text-destructive mb-1">
-                          💸 Annual Revenue Loss: ${costs.clientChurnCost.toLocaleString()}
+                          💸 Annual Revenue Loss: ${Math.round(costs.clientChurnCost).toLocaleString()}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          <strong>Lifetime Value (6 years): ${costs.clientChurnLTVTotal.toLocaleString()}</strong>
+                          <strong>Lifetime Value (6 years): ${Math.round(costs.clientChurnLTVTotal).toLocaleString()}</strong>
                         </p>
                         <p className="text-sm text-destructive/80 mt-1">
-                          At 84% industry average retention, each lost client = ${calculateLTV(inputs.averageClientValue, RETENTION_RATES.INDUSTRY_AVERAGE, LTV_YEARS).toLocaleString()} in lifetime value
+                          At 84% industry average retention, each lost client = ${Math.round(calculateLTV(inputs.averageClientValue, RETENTION_RATES.INDUSTRY_AVERAGE, LTV_YEARS)).toLocaleString()} in lifetime value
                         </p>
                       </div>
                     )}
@@ -730,7 +730,7 @@ export default function Home() {
                   </div>
                   <div className="pt-4 border-t border-dashed">
                     <p className="text-sm font-medium text-primary">
-                      👆 Start by entering your agency name above
+                      To get started, enter your agency details in the <strong>Company Basics</strong> section above.
                     </p>
                   </div>
                 </CardContent>
