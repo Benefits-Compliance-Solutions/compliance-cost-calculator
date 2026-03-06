@@ -1,11 +1,42 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import { viteSingleFile } from "vite-plugin-singlefile";
 
+function cssToGlobalVariable(): Plugin {
+  return {
+    name: "css-to-global-variable",
+    enforce: "post",
+    generateBundle(_, bundle) {
+      let cssContent = "";
+
+      for (const [fileName, chunk] of Object.entries(bundle)) {
+        if (fileName.endsWith(".css") && chunk.type === "asset") {
+          cssContent += chunk.source;
+          delete bundle[fileName];
+        }
+      }
+
+      if (cssContent) {
+        for (const chunk of Object.values(bundle)) {
+          if (chunk.type === "chunk" && chunk.isEntry) {
+            const cssVar = `window.__COMPLIANCE_CALCULATOR_STYLES__=${JSON.stringify(cssContent)};`;
+            chunk.code = cssVar + chunk.code;
+          }
+        }
+      }
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), viteSingleFile()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    cssToGlobalVariable(),
+    viteSingleFile(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),

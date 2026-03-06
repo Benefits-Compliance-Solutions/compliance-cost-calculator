@@ -5,8 +5,13 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ShadowRootProvider } from "./contexts/ShadowRootContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-// @ts-expect-error - Vite's ?inline import for CSS as string
-import styles from "./index.css?inline";
+import "./index.css";
+
+declare global {
+  interface Window {
+    __COMPLIANCE_CALCULATOR_STYLES__?: string;
+  }
+}
 
 interface WebComponentAppProps {
   shadowRoot: ShadowRoot;
@@ -34,6 +39,10 @@ function processCSSForShadowDOM(css: string): string {
     .replace(/:root(?=[^{]*\{)/g, ":host");
 }
 
+function getStyles(): string {
+  return window.__COMPLIANCE_CALCULATOR_STYLES__ || "";
+}
+
 class ComplianceCalculator extends HTMLElement {
   private root: ReturnType<typeof createRoot> | null = null;
 
@@ -47,7 +56,8 @@ class ComplianceCalculator extends HTMLElement {
 
     const shadowRoot = this.shadowRoot;
 
-    // Process and inject styles into shadow DOM
+    // Get styles from the injected style element and process for Shadow DOM
+    const styles = getStyles();
     const processedStyles = processCSSForShadowDOM(styles);
     const styleSheet = document.createElement("style");
     styleSheet.textContent = processedStyles;
