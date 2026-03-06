@@ -1,0 +1,67 @@
+name: Build and Deploy to Netlify
+
+on:
+  push:
+    branches:
+      - develop # Change to 'main' when ready for production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Web Component
+        run: pnpm run build:webcomponent
+
+      - name: Create index.html for preview
+        run: |
+          cat > dist/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Compliance Cost Calculator</title>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+              }
+              compliance-calculator {
+                display: block;
+                width: 100%;
+                min-height: 100vh;
+              }
+            </style>
+            <script src="./compliance-calculator.js" defer></script>
+          </head>
+          <body>
+            <compliance-calculator></compliance-calculator>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to release-test branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: release-test # Change to 'release' when ready for production
+          force_orphan: true
