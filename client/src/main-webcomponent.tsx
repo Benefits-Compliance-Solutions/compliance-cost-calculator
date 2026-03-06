@@ -34,13 +34,38 @@ function WebComponentApp({ shadowRoot, container }: WebComponentAppProps) {
 }
 
 function processCSSForShadowDOM(css: string): string {
+  // Replace `:root` with `:host` for Tailwind variables.
+  // Tailwind v4 sometimes uses `:root` or minified `body,:host` or `body{`
   return css
-    .replace(/:root\s*\{/g, ":host {")
-    .replace(/:root(?=[^{]*\{)/g, ":host");
+    .replace(/:root/g, ":host")
+    .replace(/body\s*\{/g, "body, :host {")
+    .replace(/body\s*,/g, "body, :host,")
+    .replace(/body,:host\{/g, "body, :host {")
+    .replace(/body\{/g, "body, :host {")
+    .replace(/html,:host\{/g, "html, :host {")
+    .replace(/html\{/g, "html, :host {");
 }
 
 function getStyles(): string {
   return window.__COMPLIANCE_CALCULATOR_STYLES__ || "";
+}
+
+function applyStylesToShadowRoot(shadowRoot: ShadowRoot, css: string) {
+  const processedStyles = processCSSForShadowDOM(css);
+
+  if (
+    "adoptedStyleSheets" in shadowRoot &&
+    "replaceSync" in CSSStyleSheet.prototype
+  ) {
+    const styleSheet = new CSSStyleSheet();
+    styleSheet.replaceSync(processedStyles);
+    shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet];
+    return;
+  }
+
+  const styleElement = document.createElement("style");
+  styleElement.textContent = processedStyles;
+  shadowRoot.appendChild(styleElement);
 }
 
 class ComplianceCalculator extends HTMLElement {
@@ -55,29 +80,28 @@ class ComplianceCalculator extends HTMLElement {
     if (!this.shadowRoot) return;
 
     const shadowRoot = this.shadowRoot;
-
-    // Get styles from the injected style element and process for Shadow DOM
     const styles = getStyles();
-    const processedStyles = processCSSForShadowDOM(styles);
-    const styleSheet = document.createElement("style");
-    styleSheet.textContent = processedStyles;
-    shadowRoot.appendChild(styleSheet);
 
-    // Add Google Fonts link
+    if (styles) {
+      applyStylesToShadowRoot(shadowRoot, styles);
+    }
+
     const fontLink = document.createElement("link");
     fontLink.rel = "stylesheet";
     fontLink.href =
       "https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap";
     shadowRoot.appendChild(fontLink);
 
-    // Create mount point for React
     const mountPoint = document.createElement("div");
     mountPoint.id = "root";
     mountPoint.style.width = "100%";
     mountPoint.style.height = "100%";
+    mountPoint.style.minHeight = "100vh";
+    mountPoint.style.backgroundColor = "oklch(0.98 0.005 240)";
+    mountPoint.style.color = "oklch(0.20 0.02 280)";
+    mountPoint.style.fontFamily = "'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
     shadowRoot.appendChild(mountPoint);
 
-    // Render React app with shadow root context
     this.root = createRoot(mountPoint);
     this.root.render(
       <WebComponentApp shadowRoot={shadowRoot} container={mountPoint} />

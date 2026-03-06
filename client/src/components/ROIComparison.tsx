@@ -46,6 +46,35 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
   const [showLeadDialog, setShowLeadDialog] = useState(false);
   const [leadData, setLeadData] = useState<LeadData | null>(null);
 
+  const sectionCardStyle = {
+    borderColor: "rgba(43, 43, 104, 0.18)",
+    boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+  } as const;
+
+  const destructivePanelStyle = {
+    backgroundColor: "rgba(244, 63, 94, 0.08)",
+    borderColor: "rgba(244, 63, 94, 0.45)",
+    boxShadow: "0 10px 24px rgba(15, 23, 42, 0.06)",
+  } as const;
+
+  const primaryPanelStyle = {
+    backgroundColor: "rgba(43, 43, 104, 0.08)",
+    borderColor: "rgba(43, 43, 104, 0.35)",
+    boxShadow: "0 10px 24px rgba(15, 23, 42, 0.06)",
+  } as const;
+
+  const accentPanelStyle = {
+    background: "linear-gradient(135deg, rgba(116, 178, 175, 0.20), rgba(116, 178, 175, 0.08))",
+    borderColor: "rgba(116, 178, 175, 0.55)",
+    boxShadow: "0 10px 24px rgba(15, 23, 42, 0.08)",
+  } as const;
+
+  const opportunityCalloutStyle = {
+    background: "linear-gradient(135deg, rgba(116, 178, 175, 0.12), rgba(116, 178, 175, 0.05))",
+    borderColor: "rgba(116, 178, 175, 0.60)",
+    boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.4)",
+  } as const;
+
   // Conservative estimate: BCS partnership reduces operational costs by 60-75%
   const reductionPercentage = 70;
   const estimatedSavings = costs.totalOperationalCost * (reductionPercentage / 100);
@@ -180,14 +209,20 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
       </div>
 
       {/* Investment Analysis */}
-      <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20 shadow-xl">
+      <Card
+        className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20 shadow-xl"
+        style={sectionCardStyle}
+      >
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">The Business Case for BCS</CardTitle>
           <CardDescription>Based on typical results from BCS agency partnerships</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-            <div className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg w-full sm:w-72">
+            <div
+              className="text-center p-6 rounded-lg bg-destructive/10 border-2 border-destructive/50 shadow-lg w-full sm:w-72"
+              style={destructivePanelStyle}
+            >
               <p className="text-sm font-semibold text-destructive mb-2">WITHOUT BCS</p>
               <p className="text-4xl font-bold text-destructive">${Math.round(costs.totalOperationalCost).toLocaleString()}</p>
               <p className="text-sm text-destructive/80 mt-2">Annual operational costs</p>
@@ -201,7 +236,10 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               </div>
             </div>
             
-            <div className="text-center p-6 rounded-lg bg-primary/10 border-2 border-primary/40 w-full sm:w-72">
+            <div
+              className="text-center p-6 rounded-lg bg-primary/10 border-2 border-primary/40 w-full sm:w-72"
+              style={primaryPanelStyle}
+            >
               <p className="text-sm text-muted-foreground mb-2">Operational Cost Savings</p>
               <p className="text-4xl font-bold text-primary">${Math.round(estimatedSavings).toLocaleString()}</p>
               <p className="text-sm text-muted-foreground mt-2">Reduce costs by {reductionPercentage}%</p>
@@ -215,7 +253,10 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
               </div>
             </div>
             
-            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/50 shadow-lg w-full sm:w-72">
+            <div
+              className="text-center p-6 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border-2 border-accent/50 shadow-lg w-full sm:w-72"
+              style={accentPanelStyle}
+            >
               <p className="text-sm font-semibold text-accent mb-2">NEW REVENUE OPPORTUNITY</p>
               <p className="text-4xl font-bold text-accent">${Math.round(costs.revenueGrowth).toLocaleString()}</p>
               <p className="text-sm font-medium mt-2" style={{color: 'var(--accent-text)'}}>Annual revenue from large clients</p>
@@ -224,7 +265,10 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
           </div>
           
           {/* Revenue Impact Callout */}
-          <div className="bg-gradient-to-r from-accent/10 to-accent/5 border-l-4 border-accent p-6 rounded-lg mb-6">
+          <div
+            className="bg-gradient-to-r from-accent/10 to-accent/5 border-l-4 border-accent p-6 rounded-lg mb-6"
+            style={opportunityCalloutStyle}
+          >
             <h4 className="text-lg font-bold text-accent mb-2">Your Total Annual Opportunity</h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
@@ -235,7 +279,10 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
                 <p className="text-sm text-muted-foreground mb-1">New Revenue</p>
                 <p className="text-2xl font-bold text-accent">${Math.round(costs.revenueGrowth).toLocaleString()}</p>
               </div>
-              <div className="border-l-2 border-accent/30">
+              <div
+                className="border-l-2 border-accent/30"
+                style={{ borderLeftColor: "rgba(116, 178, 175, 0.35)" }}
+              >
                 <p className="text-sm font-semibold text-accent mb-1">Total Annual Benefit</p>
                 <p className="text-3xl font-bold text-accent">${Math.round(estimatedSavings + costs.revenueGrowth).toLocaleString()}</p>
               </div>
