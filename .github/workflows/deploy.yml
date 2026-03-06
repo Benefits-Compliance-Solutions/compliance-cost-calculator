@@ -42,12 +42,10 @@ jobs:
               body {
                 margin: 0;
                 padding: 0;
-                min-height: 100vh;
               }
               compliance-calculator {
                 display: block;
                 width: 100%;
-                min-height: 100vh;
               }
             </style>
             <script src="./compliance-calculator.js" defer></script>
