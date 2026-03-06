@@ -1,7 +1,26 @@
 import { createRoot } from "react-dom/client";
-import App from "./App";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import Home from "./pages/Home";
 // @ts-expect-error - Vite's ?inline import for CSS as string
 import styles from "./index.css?inline";
+
+// Standalone app without router - renders Home directly
+// This is used for the web component build where routing is not needed
+function WebComponentApp() {
+  return (
+    <ErrorBoundary>
+      <ThemeProvider defaultTheme="light">
+        <TooltipProvider delayDuration={200}>
+          <Toaster />
+          <Home />
+        </TooltipProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+}
 
 class ComplianceCalculator extends HTMLElement {
   private root: ReturnType<typeof createRoot> | null = null;
@@ -33,9 +52,9 @@ class ComplianceCalculator extends HTMLElement {
     mountPoint.style.height = "100%";
     this.shadowRoot.appendChild(mountPoint);
 
-    // Render React app
+    // Render React app without router
     this.root = createRoot(mountPoint);
-    this.root.render(<App />);
+    this.root.render(<WebComponentApp />);
   }
 
   disconnectedCallback() {
