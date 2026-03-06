@@ -1,8 +1,10 @@
-import { useTheme } from "next-themes";
+import { useShadowRoot } from "@/contexts/ShadowRootContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
+  const { theme } = useTheme();
+  const { container } = useShadowRoot();
 
   return (
     <Sonner
@@ -15,6 +17,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-border": "var(--border)",
         } as React.CSSProperties
       }
+      {...(container ? { container } : {})}
       {...props}
     />
   );
