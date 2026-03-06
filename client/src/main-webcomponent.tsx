@@ -95,8 +95,6 @@ class ComplianceCalculator extends HTMLElement {
     const mountPoint = document.createElement("div");
     mountPoint.id = "root";
     mountPoint.style.width = "100%";
-    mountPoint.style.height = "100%";
-    mountPoint.style.minHeight = "100vh";
     mountPoint.style.backgroundColor = "oklch(0.98 0.005 240)";
     mountPoint.style.color = "oklch(0.20 0.02 280)";
     mountPoint.style.fontFamily = "'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
