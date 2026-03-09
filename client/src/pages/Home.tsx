@@ -330,7 +330,7 @@ export default function Home() {
             How Much is Compliance Actually Costing Your Benefits Practice?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Your team is already paying the compliance tax — in lost deals, churned accounts, and hours spent firefighting instead of selling. See exactly what it's costing you, and what it's worth to fix it.
+            Your team is already paying the compliance tax — in lost deals churned accounts, and hours spent firefighting instead of selling. See exactly what it's costing you, and what it's worth to fix it.
           </p>
         </div>
 
