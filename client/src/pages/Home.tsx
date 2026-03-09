@@ -314,7 +314,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      Example
       <main className="container py-8 lg:py-12">
         {/* P1: Resume Calculation Banner */}
         {showResumeBanner && lastSavedDate && (
@@ -328,7 +327,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="fluid-text-hero hero-gradient-text font-bold mb-4 leading-tight">
-            How Much is Compliance Actually Costing Your Benefits Practice?
+            How Much is Compliance Actually Costing Your Benefits Practice it?
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Your team is already paying the compliance tax — in lost deals, churned accounts, and hours spent firefighting instead of selling. See exactly what it's costing you, and what it's worth to fix it.
