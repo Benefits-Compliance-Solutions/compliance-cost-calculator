@@ -314,6 +314,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      Example
       <main className="container py-8 lg:py-12">
         {/* P1: Resume Calculation Banner */}
         {showResumeBanner && lastSavedDate && (
