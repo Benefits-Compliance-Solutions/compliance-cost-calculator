@@ -313,19 +313,7 @@ export default function Home() {
   const costs = calculateCosts();
 
   return (
-    <div className="bg-gradient-to-br from-background via-background to-muted">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex items-center justify-between py-4">
-          <img 
-            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663305235730/mJbwJqTiEdXcqvhU.png" 
-            alt="Benefits Compliance Solutions" 
-            className="h-12 md:h-16 w-auto object-contain"
-          />
-          <h1 className="text-lg md:text-xl font-bold md:absolute md:left-1/2 md:-translate-x-1/2">The Hidden Cost of Compliance Gaps</h1>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
       <main className="container py-8 lg:py-12">
         {/* P1: Resume Calculation Banner */}
         {showResumeBanner && lastSavedDate && (
@@ -692,7 +680,7 @@ export default function Home() {
           </div>
 
           {/* Right Column: Results - Always visible with placeholder state */}
-          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="space-y-6 lg:sticky lg:top-4 lg:self-start">
             {hasProvidedData ? (
               <div className="animate-in fade-in duration-500">
                 <AnalysisAccuracy
