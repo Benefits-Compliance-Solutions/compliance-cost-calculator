@@ -6,6 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
+
 import PrivacyPolicy from "@/components/PrivacyPolicy";
 
 declare global {
@@ -45,6 +47,109 @@ export default function LeadCaptureDialog({
   const [formContainerElement, setFormContainerElement] = useState<HTMLDivElement | null>(null);
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [formLoadError, setFormLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.id = 'hubspot-form-custom-styles';
+    style.textContent = `
+      .hubspot-form-container .hs-form {
+        font-family: inherit !important;
+      }
+      
+      .hubspot-form-container .hs-form-field {
+        margin-bottom: 1rem !important;
+      }
+      
+      .hubspot-form-container .hs-form label {
+        display: block !important;
+        font-size: 0.875rem !important;
+        font-weight: 500 !important;
+        margin-bottom: 0.5rem !important;
+        color: hsl(var(--foreground)) !important;
+      }
+      
+      .hubspot-form-container .hs-input {
+        width: 100% !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.875rem !important;
+        line-height: 1.25rem !important;
+        border: 1px solid hsl(var(--input)) !important;
+        border-radius: 0.375rem !important;
+        background-color: hsl(var(--background)) !important;
+        color: hsl(var(--foreground)) !important;
+        transition: border-color 0.2s, box-shadow 0.2s !important;
+      }
+      
+      .hubspot-form-container .hs-input:focus {
+        outline: none !important;
+        border-color: hsl(var(--ring)) !important;
+        box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1) !important;
+      }
+      
+      .hubspot-form-container .hs-input::placeholder {
+        color: hsl(var(--muted-foreground)) !important;
+      }
+      
+      .hubspot-form-container .hs-error-msgs {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0.25rem 0 0 0 !important;
+      }
+      
+      .hubspot-form-container .hs-error-msg {
+        font-size: 0.75rem !important;
+        color: hsl(var(--destructive)) !important;
+      }
+      
+      .hubspot-form-container .hs-button {
+        width: 100% !important;
+        padding: 0.625rem 1rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 500 !important;
+        color: hsl(var(--primary-foreground)) !important;
+        background-color: hsl(var(--primary)) !important;
+        border: none !important;
+        border-radius: 0.375rem !important;
+        cursor: pointer !important;
+        transition: background-color 0.2s !important;
+      }
+      
+      .hubspot-form-container .hs-button:hover {
+        background-color: hsl(var(--primary) / 0.9) !important;
+      }
+      
+      .hubspot-form-container .hs-button:disabled {
+        opacity: 0.5 !important;
+        cursor: not-allowed !important;
+      }
+      
+      .hubspot-form-container .hs-form-required {
+        color: hsl(var(--destructive)) !important;
+      }
+      
+      .hubspot-form-container .hs-richtext {
+        font-size: 0.875rem !important;
+        color: hsl(var(--muted-foreground)) !important;
+        margin-top: 0.5rem !important;
+      }
+      
+      .hubspot-form-container .hs-richtext a {
+        color: hsl(var(--primary)) !important;
+        text-decoration: underline !important;
+      }
+    `;
+    
+    if (!document.getElementById('hubspot-form-custom-styles')) {
+      document.head.appendChild(style);
+    }
+    
+    return () => {
+      const existingStyle = document.getElementById('hubspot-form-custom-styles');
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!open || !formContainerElement) {
@@ -177,19 +282,22 @@ export default function LeadCaptureDialog({
             </div>
           </DialogDescription>
         </DialogHeader>
-        <div
-          id="hubspot-lead-form"
-          ref={(node) => {
-            formContainerRef.current = node;
-            setFormContainerElement(node);
-          }}
-          className="mt-4 min-h-[320px]"
-        />
-        {isFormLoading && (
-          <p className="mt-4 text-sm text-muted-foreground">
-            Loading form...
-          </p>
-        )}
+        <div className="relative">
+          <div
+            id="hubspot-lead-form"
+            ref={(node) => {
+              formContainerRef.current = node;
+              setFormContainerElement(node);
+            }}
+            className="mt-4 min-h-[320px] hubspot-form-container"
+          />
+          {isFormLoading && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/80 backdrop-blur-sm">
+              <Spinner className="size-8 text-primary" />
+              <p className="text-sm text-muted-foreground">Loading form...</p>
+            </div>
+          )}
+        </div>
         {formLoadError && (
           <p className="mt-4 text-sm text-destructive">
             {formLoadError}
