@@ -269,19 +269,6 @@ export default function LeadCaptureDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-primary">
-            Get Your Personalized Compliance Cost Analysis
-          </DialogTitle>
-          <DialogDescription asChild>
-            <div className="text-base space-y-2">
-              <p>You've done the work. Now get your full analysis in a format you can share with your leadership team or use in client conversations.</p>
-              <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg border">
-                <strong>Privacy Notice:</strong> A BCS strategist will follow up within 2 business days to walk through your results and answer any questions. View our <PrivacyPolicy asLink /> for details.
-              </div>
-            </div>
-          </DialogDescription>
-        </DialogHeader>
         <div className="relative">
           <div
             id="hubspot-lead-form"
