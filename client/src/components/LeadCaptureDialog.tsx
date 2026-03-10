@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +6,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import PrivacyPolicy from "@/components/PrivacyPolicy";
+
+declare global {
+  interface Window {
+    hbspt?: {
+      forms?: {
+        create: (options: {
+          region: string;
+          portalId: string;
+          formId: string;
+          target: string;
+        }) => void;
+      };
+    };
+  }
+}
 
 interface LeadCaptureDialogProps {
   open: boolean;
@@ -27,66 +39,127 @@ export interface LeadData {
 export default function LeadCaptureDialog({
   open,
   onOpenChange,
-  onSubmit,
+  onSubmit: _onSubmit,
 }: LeadCaptureDialogProps) {
-  const [formData, setFormData] = useState<LeadData>({
-    name: "",
-    email: "",
-    company: "",
-    phone: "",
-  });
+  const formContainerRef = useRef<HTMLDivElement | null>(null);
+  const [formContainerElement, setFormContainerElement] = useState<HTMLDivElement | null>(null);
+  const [isFormLoading, setIsFormLoading] = useState(false);
+  const [formLoadError, setFormLoadError] = useState<string | null>(null);
 
-  const [errors, setErrors] = useState<Partial<LeadData>>({});
-
-  const validateForm = (): boolean => {
-    const newErrors: Partial<LeadData> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+  useEffect(() => {
+    if (!open || !formContainerElement) {
+      return;
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
+    let isCancelled = false;
+    let retryTimeoutId: number | null = null;
+    let attempts = 0;
+
+    setIsFormLoading(true);
+    setFormLoadError(null);
+    formContainerElement.innerHTML = "";
+
+    const verifyFormRendered = () => {
+      if (isCancelled) {
+        return;
+      }
+
+      const hasRenderedForm = Boolean(
+        formContainerElement.querySelector("iframe, form, .hs-form")
+      );
+
+      setIsFormLoading(false);
+
+      if (!hasRenderedForm) {
+        setFormLoadError("The HubSpot form rendered empty.");
+      }
+    };
+
+    const createForm = () => {
+      if (isCancelled) {
+        return;
+      }
+
+      if (!window.hbspt?.forms?.create) {
+        attempts += 1;
+
+        if (attempts >= 20) {
+          setIsFormLoading(false);
+          setFormLoadError("The HubSpot form could not be initialized.");
+          return;
+        }
+
+        retryTimeoutId = window.setTimeout(createForm, 250);
+        return;
+      }
+
+      formContainerElement.innerHTML = "";
+
+      try {
+        window.hbspt.forms.create({
+          region: "na2",
+          portalId: "5861764",
+          formId: "4ff11aed-2ca9-4d59-89a1-40aa24204eb0",
+          target: "#hubspot-lead-form",
+        });
+      } catch (error) {
+        setIsFormLoading(false);
+        setFormLoadError(
+          error instanceof Error
+            ? `The HubSpot form could not be initialized: ${error.message}`
+            : "The HubSpot form could not be initialized."
+        );
+        return;
+      }
+
+      retryTimeoutId = window.setTimeout(verifyFormRendered, 1000);
+    };
+
+    const handleScriptReady = () => {
+      try {
+        createForm();
+      } catch (error) {
+        setIsFormLoading(false);
+        setFormLoadError(
+          error instanceof Error
+            ? `The HubSpot form could not be initialized: ${error.message}`
+            : "The HubSpot form could not be initialized."
+        );
+      }
+    };
+
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      'script[src="https://js-na2.hsforms.net/forms/v2.js"]'
+    );
+
+    if (existingScript) {
+      handleScriptReady();
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://js-na2.hsforms.net/forms/v2.js";
+      script.async = true;
+      script.defer = true;
+      script.onload = handleScriptReady;
+      script.onerror = () => {
+        setIsFormLoading(false);
+        setFormLoadError("The HubSpot form could not be loaded.");
+      };
+      document.body.appendChild(script);
     }
 
-    if (!formData.company.trim()) {
-      newErrors.company = "Company name is required";
-    }
+    return () => {
+      isCancelled = true;
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else if (!/^[\d\s\-\+\(\)]+$/.test(formData.phone)) {
-      newErrors.phone = "Please enter a valid phone number";
-    }
+      if (retryTimeoutId) {
+        window.clearTimeout(retryTimeoutId);
+      }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+      formContainerElement.innerHTML = "";
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      onSubmit(formData);
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        phone: "",
-      });
-      setErrors({});
-    }
-  };
-
-  const handleInputChange = (field: keyof LeadData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error for this field when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
-  };
+      setIsFormLoading(false);
+      setFormLoadError(null);
+    };
+  }, [open, formContainerElement]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -95,88 +168,33 @@ export default function LeadCaptureDialog({
           <DialogTitle className="text-2xl font-bold text-primary">
             Get Your Personalized Compliance Cost Analysis
           </DialogTitle>
-          <DialogDescription className="text-base space-y-2">
-            <p>You've done the work. Now get your full analysis in a format you can share with your leadership team or use in client conversations.</p>
-            <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg border">
-              <strong>Privacy Notice:</strong> A BCS strategist will follow up within 2 business days to walk through your results and answer any questions. View our <PrivacyPolicy asLink /> for details.
-            </p>
+          <DialogDescription asChild>
+            <div className="text-base space-y-2">
+              <p>You've done the work. Now get your full analysis in a format you can share with your leadership team or use in client conversations.</p>
+              <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg border">
+                <strong>Privacy Notice:</strong> A BCS strategist will follow up within 2 business days to walk through your results and answer any questions. View our <PrivacyPolicy asLink /> for details.
+              </div>
+            </div>
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <div className="space-y-2">
-            <Label htmlFor="lead-name">Full Name *</Label>
-            <Input
-              id="lead-name"
-              type="text"
-              placeholder="John Smith"
-              value={formData.name}
-              onChange={(e) => handleInputChange("name", e.target.value)}
-              className={errors.name ? "border-destructive" : ""}
-            />
-            {errors.name && (
-              <p className="text-sm text-destructive">{errors.name}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="lead-email">Email Address *</Label>
-            <Input
-              id="lead-email"
-              type="email"
-              placeholder="john@agency.com"
-              value={formData.email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
-              className={errors.email ? "border-destructive" : ""}
-            />
-            {errors.email && (
-              <p className="text-sm text-destructive">{errors.email}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="lead-company">Company Name *</Label>
-            <Input
-              id="lead-company"
-              type="text"
-              placeholder="ABC Benefits Agency"
-              value={formData.company}
-              onChange={(e) => handleInputChange("company", e.target.value)}
-              className={errors.company ? "border-destructive" : ""}
-            />
-            {errors.company && (
-              <p className="text-sm text-destructive">{errors.company}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="lead-phone">Phone Number *</Label>
-            <Input
-              id="lead-phone"
-              type="tel"
-              placeholder="(555) 123-4567"
-              value={formData.phone}
-              onChange={(e) => handleInputChange("phone", e.target.value)}
-              className={errors.phone ? "border-destructive" : ""}
-            />
-            {errors.phone && (
-              <p className="text-sm text-destructive">{errors.phone}</p>
-            )}
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button type="submit" className="flex-1">
-              Download Report
-            </Button>
-          </div>
-        </form>
+        <div
+          id="hubspot-lead-form"
+          ref={(node) => {
+            formContainerRef.current = node;
+            setFormContainerElement(node);
+          }}
+          className="mt-4 min-h-[320px]"
+        />
+        {isFormLoading && (
+          <p className="mt-4 text-sm text-muted-foreground">
+            Loading form...
+          </p>
+        )}
+        {formLoadError && (
+          <p className="mt-4 text-sm text-destructive">
+            {formLoadError}
+          </p>
+        )}
       </DialogContent>
     </Dialog>
   );
