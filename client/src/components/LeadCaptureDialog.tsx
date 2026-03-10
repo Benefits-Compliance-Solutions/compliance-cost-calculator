@@ -328,28 +328,15 @@ export default function LeadCaptureDialog({
     }
 
     let isCancelled = false;
-    let retryTimeoutId: number | null = null;
     let scriptLoadHandler: (() => void) | null = null;
     let scriptElementUsed: HTMLScriptElement | null = null;
-    let renderedFormElement: HTMLFormElement | null = null;
-    let renderedSubmitButtonElement: HTMLButtonElement | null = null;
-    let observer: MutationObserver | null = null;
-    let attempts = 0;
-    let hasLoggedV4SuccessEvent = false;
-    const logPrefix = "[LeadCaptureDialog]";
 
     const cleanupContainer = () => {
       formContainerElement.innerHTML = "";
     };
 
     const triggerDownload = (leadDataOverride?: LeadData) => {
-      console.log(`${logPrefix} triggerDownload:start`, {
-        hasTriggeredDownload: hasTriggeredDownloadRef.current,
-        hasPendingLeadData: Boolean(pendingLeadDataRef.current),
-      });
-
       if (hasTriggeredDownloadRef.current) {
-        console.log(`${logPrefix} triggerDownload:skipped-already-triggered`);
         return;
       }
 
@@ -358,17 +345,13 @@ export default function LeadCaptureDialog({
         pendingLeadDataRef.current ??
         readLeadDataFromForm(formContainerElement);
 
-      console.log(`${logPrefix} triggerDownload:leadData`, leadData);
-
       if (!leadData.email) {
-        console.log(`${logPrefix} triggerDownload:missing-email`);
         setFormLoadError("The report could not be generated because the submitted email was missing.");
         return;
       }
 
       pendingLeadDataRef.current = leadData;
       hasTriggeredDownloadRef.current = true;
-      console.log(`${logPrefix} triggerDownload:calling-onSubmit`);
       onSubmit(leadData);
       onOpenChange(false);
     };
@@ -377,18 +360,11 @@ export default function LeadCaptureDialog({
       const customEvent = event as CustomEvent<HubSpotFormEventDetail | undefined>;
       const detail = customEvent.detail ?? {};
 
-      if (!hasLoggedV4SuccessEvent) {
-        hasLoggedV4SuccessEvent = true;
-        console.log(`${logPrefix} v4:on-submission:success`, detail);
-      }
-
       let v4Form: HubSpotV4FormInstance | null = null;
 
       try {
         v4Form = window.HubSpotFormsV4?.getFormFromEvent?.(event) ?? null;
-      } catch (error) {
-        console.log(`${logPrefix} v4:getFormFromEvent:error`, error);
-      }
+      } catch {}
 
       const eventFormId =
         typeof detail.formId === "string"
@@ -399,20 +375,11 @@ export default function LeadCaptureDialog({
       const resolvedFormId = eventFormId ?? v4Form?.getFormId?.() ?? v4Form?.getInstanceId?.();
 
       if (resolvedFormId !== HUBSPOT_FORM_ID) {
-        console.log(`${logPrefix} v4:on-submission:success:ignored`, {
-          eventFormId,
-          resolvedFormId,
-        });
         return;
       }
 
       try {
         const submissionValues = await v4Form?.getFormFieldValues();
-
-        console.log(`${logPrefix} v4:getFormFieldValues`, {
-          hasValues: Boolean(submissionValues?.length),
-          count: submissionValues?.length ?? 0,
-        });
 
         if (submissionValues?.length) {
           const leadData = mapHubSpotSubmissionToLeadData(submissionValues);
@@ -420,9 +387,7 @@ export default function LeadCaptureDialog({
           triggerDownload(leadData);
           return;
         }
-      } catch (error) {
-        console.log(`${logPrefix} v4:getFormFieldValues:error`, error);
-      }
+      } catch {}
 
       triggerDownload();
     };
@@ -431,84 +396,6 @@ export default function LeadCaptureDialog({
       "hs-form-event:on-submission:success",
       handleV4SubmissionSuccess as EventListener
     );
-    console.log(`${logPrefix} effect:init`, {
-      open,
-      hasContainerElement: Boolean(formContainerElement),
-    });
-
-    const handleNativeSubmit = () => {
-      console.log(`${logPrefix} native-submit`);
-      triggerDownload();
-    };
-
-    const handleSubmitButtonClick = () => {
-      console.log(`${logPrefix} submit-button-click`);
-      triggerDownload();
-    };
-
-    const attachFormListeners = () => {
-      const nextRenderedFormElement = formContainerElement.querySelector("form");
-      const nextRenderedSubmitButtonElement =
-        formContainerElement.querySelector<HTMLButtonElement>('button[type="submit"], .hsfc-Button');
-
-      console.log(`${logPrefix} attachFormListeners`, {
-        hasFormElement: Boolean(nextRenderedFormElement),
-        hasSubmitButtonElement: Boolean(nextRenderedSubmitButtonElement),
-        hasIframe: Boolean(formContainerElement.querySelector("iframe")),
-      });
-
-      if (renderedFormElement !== nextRenderedFormElement) {
-        renderedFormElement?.removeEventListener("submit", handleNativeSubmit);
-        renderedFormElement = nextRenderedFormElement;
-        renderedFormElement?.addEventListener("submit", handleNativeSubmit);
-        console.log(`${logPrefix} attachFormListeners:form-listener-updated`, {
-          attached: Boolean(renderedFormElement),
-        });
-      }
-
-      if (renderedSubmitButtonElement !== nextRenderedSubmitButtonElement) {
-        renderedSubmitButtonElement?.removeEventListener("click", handleSubmitButtonClick);
-        renderedSubmitButtonElement = nextRenderedSubmitButtonElement;
-        renderedSubmitButtonElement?.addEventListener("click", handleSubmitButtonClick);
-        console.log(`${logPrefix} attachFormListeners:button-listener-updated`, {
-          attached: Boolean(renderedSubmitButtonElement),
-        });
-      }
-    };
-
-    const verifyFormRendered = () => {
-      if (isCancelled) {
-        return;
-      }
-
-      const hasRenderedForm = Boolean(
-        formContainerElement.querySelector("iframe, form, .hs-form")
-      );
-
-      setIsFormLoading(false);
-      console.log(`${logPrefix} verifyFormRendered`, {
-        hasRenderedForm,
-        hasIframe: Boolean(formContainerElement.querySelector("iframe")),
-        hasFormElement: Boolean(formContainerElement.querySelector("form")),
-        hasHsFormClass: Boolean(formContainerElement.querySelector(".hs-form")),
-      });
-
-      if (!hasRenderedForm) {
-        setFormLoadError("The HubSpot form rendered empty.");
-        return;
-      }
-
-      attachFormListeners();
-
-      observer = new MutationObserver(() => {
-        attachFormListeners();
-      });
-
-      observer.observe(formContainerElement, {
-        childList: true,
-        subtree: true,
-      });
-    };
 
     const createForm = () => {
       if (isCancelled) {
@@ -516,21 +403,10 @@ export default function LeadCaptureDialog({
       }
 
       const formsApi = window.hbspt?.forms?.create;
-      console.log(`${logPrefix} createForm`, {
-        hasFormsApi: Boolean(formsApi),
-        attempts,
-      });
 
       if (!formsApi) {
-        attempts += 1;
-
-        if (attempts >= 20) {
-          setIsFormLoading(false);
-          setFormLoadError("The HubSpot form could not be initialized.");
-          return;
-        }
-
-        retryTimeoutId = window.setTimeout(createForm, 250);
+        setIsFormLoading(false);
+        setFormLoadError("The HubSpot form could not be initialized.");
         return;
       }
 
@@ -542,25 +418,7 @@ export default function LeadCaptureDialog({
           portalId: HUBSPOT_PORTAL_ID,
           formId: HUBSPOT_FORM_ID,
           target: "#hubspot-lead-form",
-          onFormSubmit: () => {
-            console.log(`${logPrefix} hubspot:onFormSubmit`);
-            if (!pendingLeadDataRef.current) {
-              pendingLeadDataRef.current = readLeadDataFromForm(formContainerElement);
-              console.log(`${logPrefix} hubspot:onFormSubmit:set-pending-from-dom`, pendingLeadDataRef.current);
-            }
-          },
-          onBeforeFormSubmit: (_form, submissionValues) => {
-            console.log(`${logPrefix} hubspot:onBeforeFormSubmit`, submissionValues);
-            pendingLeadDataRef.current =
-              mapHubSpotSubmissionToLeadData(submissionValues);
-            console.log(`${logPrefix} hubspot:onBeforeFormSubmit:set-pending`, pendingLeadDataRef.current);
-          },
-          onFormSubmitted: () => {
-            console.log(`${logPrefix} hubspot:onFormSubmitted`);
-            triggerDownload();
-          },
         });
-        console.log(`${logPrefix} createForm:called`);
       } catch (error) {
         if (isCancelled) {
           return;
@@ -575,7 +433,7 @@ export default function LeadCaptureDialog({
         return;
       }
 
-      retryTimeoutId = window.setTimeout(verifyFormRendered, 1000);
+      setIsFormLoading(false);
     };
 
     const handleScriptReady = () => {
@@ -583,7 +441,6 @@ export default function LeadCaptureDialog({
         return;
       }
 
-      console.log(`${logPrefix} script:ready`);
       createForm();
     };
 
@@ -596,12 +453,10 @@ export default function LeadCaptureDialog({
     );
 
     if (window.hbspt?.forms?.create) {
-      console.log(`${logPrefix} script:using-existing-api`);
       handleScriptReady();
     } else if (existingScript) {
       scriptElementUsed = existingScript;
       scriptLoadHandler = () => {
-        console.log(`${logPrefix} script:loaded-existing-tag`);
         handleScriptReady();
       };
       existingScript.addEventListener("load", scriptLoadHandler, { once: true });
@@ -616,21 +471,15 @@ export default function LeadCaptureDialog({
           return;
         }
 
-        console.log(`${logPrefix} script:error`);
         setIsFormLoading(false);
         setFormLoadError("The HubSpot form could not be loaded.");
       };
       document.body.appendChild(script);
       scriptElementUsed = script;
-      console.log(`${logPrefix} script:appended`);
     }
 
     return () => {
       isCancelled = true;
-
-      if (retryTimeoutId) {
-        window.clearTimeout(retryTimeoutId);
-      }
 
       if (scriptLoadHandler && scriptElementUsed) {
         scriptElementUsed.removeEventListener("load", scriptLoadHandler);
@@ -644,9 +493,6 @@ export default function LeadCaptureDialog({
         "hs-form-event:on-submission:success",
         handleV4SubmissionSuccess as EventListener
       );
-      observer?.disconnect();
-      renderedFormElement?.removeEventListener("submit", handleNativeSubmit);
-      renderedSubmitButtonElement?.removeEventListener("click", handleSubmitButtonClick);
 
       cleanupContainer();
       setIsFormLoading(false);
