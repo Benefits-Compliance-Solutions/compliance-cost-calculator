@@ -365,7 +365,7 @@ export default function Home() {
             {/* Company Basics - Collapsible (P2) */}
             <Collapsible open={sectionsOpen.basics} onOpenChange={() => toggleSection('basics')}>
               <Card className="gradient-border-card">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                <CollapsibleTrigger className="w-full rounded-t-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -456,7 +456,7 @@ export default function Home() {
             {/* Lost Opportunities - Collapsible (P2) - REVENUE PRIORITY #1 */}
             <Collapsible open={sectionsOpen.lostOpportunities} onOpenChange={() => toggleSection('lostOpportunities')}>
               <Card className="gradient-border-card">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                <CollapsibleTrigger className="w-full rounded-t-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -521,7 +521,7 @@ export default function Home() {
             {/* Client Churn - Collapsible (P2) - REVENUE PRIORITY #2 */}
             <Collapsible open={sectionsOpen.clientChurn} onOpenChange={() => toggleSection('clientChurn')}>
               <Card className="gradient-border-card">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                <CollapsibleTrigger className="w-full rounded-t-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -583,7 +583,7 @@ export default function Home() {
             {/* Staff Time Costs - Collapsible (P2) - Supporting Detail */}
             <Collapsible open={sectionsOpen.staffTime} onOpenChange={() => { toggleSection('staffTime'); markSectionReviewed('staffTime'); }}>
               <Card className="gradient-border-card opacity-90">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                <CollapsibleTrigger className="w-full rounded-t-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -632,7 +632,7 @@ export default function Home() {
             {/* Lost Productivity - Collapsible (P2) - Supporting Detail */}
             <Collapsible open={sectionsOpen.productivity} onOpenChange={() => { toggleSection('productivity'); markSectionReviewed('productivity'); }}>
               <Card className="gradient-border-card opacity-90">
-                <CollapsibleTrigger className="w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-t-lg">
+                <CollapsibleTrigger className="w-full rounded-t-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
