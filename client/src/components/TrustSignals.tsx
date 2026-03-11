@@ -21,7 +21,7 @@ export default function TrustSignals() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="text-center">
               <div className="flex justify-center mb-2">
                 <Building2 className="w-6 h-6 text-primary" />
