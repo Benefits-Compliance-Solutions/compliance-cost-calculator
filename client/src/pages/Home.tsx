@@ -339,7 +339,7 @@ export default function Home() {
           {/* Left Column: Inputs */}
           <div className="space-y-6">
             {/* P2: Section Controls */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-muted-foreground">Input Sections</h3>
               <div className="flex gap-2">
                 <Button
