@@ -92,7 +92,6 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
   const handleLeadSubmit = useCallback(
     (data: LeadData) => {
       setLeadData(data);
-      setShowLeadDialog(false);
       generateCompliancePDF(costs, { ...inputs, leadData: data });
     },
     [costs, inputs]

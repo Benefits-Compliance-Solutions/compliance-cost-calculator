@@ -108,7 +108,6 @@ export default function LeadCaptureDialog({
       pendingLeadDataRef.current = leadData;
       hasTriggeredDownloadRef.current = true;
       onSubmit(leadData);
-      onOpenChange(false);
     };
 
     const handleV4SubmissionSuccess = async (event: Event) => {
