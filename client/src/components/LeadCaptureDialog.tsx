@@ -266,13 +266,15 @@ export default function LeadCaptureDialog({
         <DialogDescription className="sr-only">
           Complete the HubSpot form to download your personalized compliance cost report.
         </DialogDescription>
-        <div className="lead-capture-dialog__body flex flex-col gap-4 p-4 sm:gap-8 sm:p-10">
+        <div className="lead-capture-dialog__body flex flex-col gap-2 p-2 sm:gap-4 sm:p-6">
           <div className="lead-capture-dialog__form-shell relative">
-            <div
-              id="hubspot-lead-form"
-              ref={setFormContainerElement}
-              className="hubspot-form-container min-h-[280px] sm:min-h-[360px]"
-            />
+            <div className="lead-capture-dialog__form-viewport">
+              <div
+                id="hubspot-lead-form"
+                ref={setFormContainerElement}
+                className="hubspot-form-container min-h-[240px] sm:min-h-[320px]"
+              />
+            </div>
 
             {isFormLoading && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-[20px] bg-background/85 backdrop-blur-sm sm:gap-4 sm:rounded-[24px]">
@@ -286,7 +288,7 @@ export default function LeadCaptureDialog({
             <p className="text-sm text-destructive">{formLoadError}</p>
           )}
 
-          <p className="text-xs text-muted-foreground">
+          <p className="lead-capture-dialog__privacy text-xs text-muted-foreground">
             We respect your privacy and will never share your information with third parties.
           </p>
         </div>
