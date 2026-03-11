@@ -259,23 +259,23 @@ export default function LeadCaptureDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[540px] overflow-hidden rounded-[24px] border border-border/60 bg-background/95 p-0 shadow-2xl backdrop-blur">
+      <DialogContent className="lead-capture-dialog w-[calc(100%-1rem)] max-w-[calc(100%-1rem)] overflow-hidden rounded-[20px] border border-border/60 bg-background/95 p-0 shadow-2xl backdrop-blur sm:max-w-[540px] sm:rounded-[24px]">
         <DialogTitle className="sr-only">
           Download your personalized compliance cost report
         </DialogTitle>
         <DialogDescription className="sr-only">
           Complete the HubSpot form to download your personalized compliance cost report.
         </DialogDescription>
-        <div className="flex flex-col gap-8 p-8 sm:p-10">
-          <div className="relative">
+        <div className="lead-capture-dialog__body flex flex-col gap-4 p-4 sm:gap-8 sm:p-10">
+          <div className="lead-capture-dialog__form-shell relative">
             <div
               id="hubspot-lead-form"
               ref={setFormContainerElement}
-              className="hubspot-form-container min-h-[360px]"
+              className="hubspot-form-container min-h-[280px] sm:min-h-[360px]"
             />
 
             {isFormLoading && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-[24px] bg-background/85 backdrop-blur-sm">
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-[20px] bg-background/85 backdrop-blur-sm sm:gap-4 sm:rounded-[24px]">
                 <Spinner className="size-8 text-primary" />
                 <p className="text-sm text-muted-foreground">Loading form...</p>
               </div>
