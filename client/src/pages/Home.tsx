@@ -313,7 +313,7 @@ export default function Home() {
   const costs = calculateCosts();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+    <div className="home-layout-shell">
       <main className="container py-8 lg:py-12">
         {/* P1: Resume Calculation Banner */}
         {showResumeBanner && lastSavedDate && (

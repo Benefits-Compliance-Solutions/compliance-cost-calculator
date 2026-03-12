@@ -142,16 +142,16 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
-  body, :host {
+  body {
     @apply bg-background text-foreground;
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
     line-height: 1.5;
   }
 
-  :host {
-    display: block;
-    width: 100%;
+  html,
+  body {
+    min-height: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -270,6 +270,13 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .gradient-border-card:hover::before {
     opacity: 1;
   }
+
+  .home-layout-shell {
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    background-image: linear-gradient(135deg, var(--background), var(--background), var(--muted));
+  }
   
   /* CSS-only tooltips */
   .tooltip-wrapper {
@@ -323,6 +330,23 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .tooltip-wrapper button[data-tooltip]:hover::after,
   .tooltip-wrapper button[data-tooltip]:focus::after {
     opacity: 1;
+  }
+
+  @media (max-width: 640px) {
+    .tooltip-wrapper button[data-tooltip]::before,
+    .tooltip-wrapper button[data-tooltip]::after {
+      left: auto;
+      right: 0;
+      transform: none;
+    }
+
+    .tooltip-wrapper button[data-tooltip]::before {
+      max-width: min(18rem, calc(100vw - 2rem));
+    }
+
+    .tooltip-wrapper button[data-tooltip]::after {
+      right: 12px;
+    }
   }
 
   .lead-capture-dialog {
