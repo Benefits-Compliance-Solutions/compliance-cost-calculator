@@ -332,6 +332,23 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     opacity: 1;
   }
 
+  @media (max-width: 640px) {
+    .tooltip-wrapper button[data-tooltip]::before,
+    .tooltip-wrapper button[data-tooltip]::after {
+      left: auto;
+      right: 0;
+      transform: none;
+    }
+
+    .tooltip-wrapper button[data-tooltip]::before {
+      max-width: min(18rem, calc(100vw - 2rem));
+    }
+
+    .tooltip-wrapper button[data-tooltip]::after {
+      right: 12px;
+    }
+  }
+
   .lead-capture-dialog {
     max-height: 85dvh;
   }
