@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
@@ -61,6 +62,8 @@ export interface LeadData {
   phone: string;
 }
 
+const LEAD_CAPTURE_DIALOG_TITLE_ID = "lead-capture-dialog-title";
+const LEAD_CAPTURE_DIALOG_DESCRIPTION_ID = "lead-capture-dialog-description";
 const HUBSPOT_PORTAL_ID = "5861764";
 const HUBSPOT_FORM_ID = "4ff11aed-2ca9-4d59-89a1-40aa24204eb0";
 const HUBSPOT_REGION = "na2";
@@ -258,13 +261,20 @@ export default function LeadCaptureDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="lead-capture-dialog w-[calc(100%-1rem)] max-w-[calc(100%-1rem)] overflow-hidden rounded-[20px] border border-border/60 bg-background/95 p-0 shadow-2xl backdrop-blur sm:max-w-[540px] sm:rounded-[24px]">
-        <DialogTitle className="sr-only">
-          Download your personalized compliance cost report
-        </DialogTitle>
-        <DialogDescription className="sr-only">
-          Complete the HubSpot form to download your personalized compliance cost report.
-        </DialogDescription>
+      <DialogContent
+        aria-labelledby={LEAD_CAPTURE_DIALOG_TITLE_ID}
+        aria-describedby={LEAD_CAPTURE_DIALOG_DESCRIPTION_ID}
+        aria-label="Download your personalized compliance cost report"
+        className="lead-capture-dialog w-[calc(100%-1rem)] max-w-[calc(100%-1rem)] overflow-hidden rounded-[20px] border border-border/60 bg-background/95 p-0 shadow-2xl backdrop-blur sm:max-w-[540px] sm:rounded-[24px]"
+      >
+        <DialogHeader className="sr-only">
+          <DialogTitle id={LEAD_CAPTURE_DIALOG_TITLE_ID}>
+            Download your personalized compliance cost report
+          </DialogTitle>
+          <DialogDescription id={LEAD_CAPTURE_DIALOG_DESCRIPTION_ID}>
+            Complete the HubSpot form to download your personalized compliance cost report.
+          </DialogDescription>
+        </DialogHeader>
         <div className="lead-capture-dialog__body flex flex-col gap-2 p-2 sm:gap-4 sm:p-6">
           <div className="lead-capture-dialog__form-shell relative">
             <div className="lead-capture-dialog__form-viewport">

@@ -149,6 +149,11 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     line-height: 1.5;
   }
 
+  html,
+  body {
+    min-height: 100%;
+  }
+
   :host {
     display: block;
     width: 100%;
