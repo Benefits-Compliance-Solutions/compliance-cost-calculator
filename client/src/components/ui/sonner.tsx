@@ -1,11 +1,9 @@
-import { useShadowRoot } from "@/contexts/ShadowRootContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 import "sonner/dist/styles.css";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme } = useTheme();
-  const { container } = useShadowRoot();
 
   return (
     <Sonner
@@ -18,7 +16,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-border": "var(--border)",
         } as React.CSSProperties
       }
-      {...(container ? { container } : {})}
       toastOptions={{
         classNames: {
           toast:

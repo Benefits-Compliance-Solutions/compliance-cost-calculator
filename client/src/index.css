@@ -142,7 +142,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
-  body, :host {
+  body {
     @apply bg-background text-foreground;
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
@@ -151,12 +151,6 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
 
   html,
   body {
-    min-height: 100%;
-  }
-
-  :host {
-    display: block;
-    width: 100%;
     min-height: 100%;
   }
 
