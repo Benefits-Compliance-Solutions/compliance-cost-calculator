@@ -3,7 +3,7 @@ name: Build and Deploy to Netlify
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   build-and-deploy:
