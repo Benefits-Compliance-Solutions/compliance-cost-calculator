@@ -87,7 +87,7 @@ export default function CostSummary({ costs }: CostSummaryProps) {
             <AnimatedCounter value={costs.totalOperationalCost} />
           </div>
           <p className="text-sm text-muted-foreground mb-1">Total annual impact</p>
-          <div className="flex gap-4 text-sm mb-6">
+          <div className="mb-6 flex flex-col gap-2 text-sm sm:flex-row sm:gap-4">
             <div>
               <span className="font-semibold text-destructive">${Math.round(revenueImpact).toLocaleString()}</span>
               <span className="text-muted-foreground"> revenue loss</span>

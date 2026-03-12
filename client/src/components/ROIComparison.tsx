@@ -5,7 +5,7 @@ Design: ROI comparison showing savings with BCS partnership
 - Call-to-action for partnership
 */
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, TrendingDown, Download } from "lucide-react";
@@ -89,12 +89,13 @@ export default function ROIComparison({ totalCost, costs, inputs }: ROICompariso
     setShowLeadDialog(true);
   };
 
-  const handleLeadSubmit = (data: LeadData) => {
-    setLeadData(data);
-    setShowLeadDialog(false);
-    // Generate PDF with lead data
-    generateCompliancePDF(costs, { ...inputs, leadData: data });
-  };
+  const handleLeadSubmit = useCallback(
+    (data: LeadData) => {
+      setLeadData(data);
+      generateCompliancePDF(costs, { ...inputs, leadData: data });
+    },
+    [costs, inputs]
+  );
 
   return (
     <div className="space-y-8">

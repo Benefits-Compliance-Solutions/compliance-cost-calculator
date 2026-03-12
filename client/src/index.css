@@ -324,4 +324,127 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .tooltip-wrapper button[data-tooltip]:focus::after {
     opacity: 1;
   }
+
+  .lead-capture-dialog {
+    max-height: 85dvh;
+  }
+
+  .lead-capture-dialog__body {
+    max-height: 85dvh;
+    overflow: hidden;
+  }
+
+  .lead-capture-dialog__form-shell {
+    min-height: 0;
+  }
+
+  .lead-capture-dialog__form-viewport {
+    max-height: min(56dvh, 26rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 0.125rem;
+  }
+
+  .lead-capture-dialog__privacy {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .hubspot-form-container {
+    width: 100%;
+    min-height: 0;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .hs-form {
+    margin: 0;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .hs-form > fieldset,
+  .lead-capture-dialog .hubspot-form-container .hs-form fieldset {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .hs-form-field,
+  .lead-capture-dialog .hubspot-form-container .hs-richtext,
+  .lead-capture-dialog .hubspot-form-container .legal-consent-container,
+  .lead-capture-dialog .hubspot-form-container .hs-submit {
+    margin-bottom: 0.625rem;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .inputs-list {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .lead-capture-dialog .hubspot-form-container label {
+    display: inline-block;
+    margin-bottom: 0.25rem;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .hs-form-field > label,
+  .lead-capture-dialog .hubspot-form-container .hs-richtext p {
+    margin-bottom: 0.25rem;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .input,
+  .lead-capture-dialog .hubspot-form-container .hs-input {
+    margin: 0;
+  }
+
+  .lead-capture-dialog .hubspot-form-container input:not([type="checkbox"]):not([type="radio"]),
+  .lead-capture-dialog .hubspot-form-container select,
+  .lead-capture-dialog .hubspot-form-container textarea {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    color: var(--foreground);
+    box-sizing: border-box;
+  }
+
+  .lead-capture-dialog .hubspot-form-container textarea {
+    min-height: 5.5rem;
+    resize: vertical;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .actions {
+    margin: 0.75rem 0 0;
+    padding: 0;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .actions input[type="submit"] {
+    width: 100%;
+    min-height: 2.5rem;
+  }
+
+  .lead-capture-dialog .hubspot-form-container .submitted-message,
+  .lead-capture-dialog .hubspot-form-container .hs-richtext,
+  .lead-capture-dialog .hubspot-form-container .hs-error-msgs {
+    margin-top: 0;
+    margin-bottom: 0.625rem;
+  }
+
+  @media (min-width: 640px) {
+    .lead-capture-dialog__body {
+      max-height: min(85dvh, 38rem);
+    }
+
+    .lead-capture-dialog__form-viewport {
+      max-height: min(58dvh, 30rem);
+    }
+
+    .lead-capture-dialog .hubspot-form-container .hs-form-field,
+    .lead-capture-dialog .hubspot-form-container .hs-richtext,
+    .lead-capture-dialog .hubspot-form-container .legal-consent-container,
+    .lead-capture-dialog .hubspot-form-container .hs-submit {
+      margin-bottom: 0.75rem;
+    }
+  }
 }
