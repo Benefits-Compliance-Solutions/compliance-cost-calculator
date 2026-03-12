@@ -275,6 +275,11 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .gradient-border-card:hover::before {
     opacity: 1;
   }
+
+  .home-layout-shell {
+    min-height: min(100dvh, 100svh);
+    background-image: linear-gradient(135deg, var(--background), var(--background), var(--muted));
+  }
   
   /* CSS-only tooltips */
   .tooltip-wrapper {

@@ -61,5 +61,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          publish_branch: release
+          publish_branch: release-test
           force_orphan: true
