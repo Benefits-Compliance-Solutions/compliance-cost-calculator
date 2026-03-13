@@ -337,6 +337,8 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     gap: 1.5rem;
     flex: 1;
     min-width: 0;
+    margin-left: auto;
+    padding-left: 2.5rem;
   }
 
   .site-header__link,
@@ -426,74 +428,17 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     text-decoration-color: currentColor;
   }
 
-  .site-header__cta,
-  .site-header__mobile-cta {
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgb(255 255 255 / 0.22);
-    border-radius: 9999px;
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.02));
-    color: white;
-    isolation: isolate;
-    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-  }
-
-  .site-header__cta {
-    min-height: 2.75rem;
-    padding: 0 1.1rem;
-    margin-left: auto;
-  }
-
-  .site-header__mobile-cta {
-    width: 100%;
-    min-height: 3.5rem;
-    margin-top: 1rem;
-    padding: 0 1.5rem;
-  }
-
-  .site-header__cta::before,
-  .site-header__mobile-cta::before {
-    content: "";
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 0%;
-    background: linear-gradient(0deg, rgb(59 130 246), rgb(147 197 253));
-    transition: height 0.28s ease;
-    z-index: -1;
-  }
-
-  .site-header__cta:hover::before,
-  .site-header__cta:focus-visible::before,
-  .site-header__mobile-cta:hover::before,
-  .site-header__mobile-cta:focus-visible::before {
-    height: 62%;
-  }
-
-  .site-header__cta:hover,
-  .site-header__cta:focus-visible,
-  .site-header__mobile-cta:hover,
-  .site-header__mobile-cta:focus-visible {
-    border-color: rgb(191 219 254 / 0.9);
-    box-shadow: 0 14px 32px rgb(59 130 246 / 0.22);
-    transform: translateY(-1px);
-  }
-
-  .site-header__cta-label {
-    position: relative;
-    z-index: 1;
-    font-weight: 600;
-  }
-
   .site-header__menu-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 2.75rem;
     height: 2.75rem;
-    border: 1px solid rgb(255 255 255 / 0.18);
-    border-radius: 9999px;
-    background: rgb(255 255 255 / 0.08);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: white;
+    padding: 0;
   }
 
   .site-header__mobile-overlay {
@@ -514,7 +459,8 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     justify-content: space-between;
     gap: 1rem;
     padding: 1.5rem 1.5rem 1.25rem;
-    border-bottom: 1px solid rgb(203 213 225);
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+    background: linear-gradient(135deg, rgb(43 43 104 / 0.98), rgb(55 55 128 / 0.96));
   }
 
   .site-header__mobile-close {
@@ -525,7 +471,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     height: 3rem;
     border: 0;
     background: transparent;
-    color: rgb(15 23 42);
+    color: white;
   }
 
   .site-header__mobile-nav {
@@ -537,21 +483,30 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
 
   .site-header__mobile-link,
   .site-header__mobile-trigger {
-    display: flex;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) 3rem;
     align-items: center;
-    justify-content: center;
-    gap: 1rem;
     width: 100%;
-    min-height: 4.25rem;
+    min-height: 3.5rem;
     padding: 0.75rem 0;
     border: 0;
     background: transparent;
     color: rgb(43 43 104);
-    font-size: clamp(2rem, 5vw, 2.5rem);
-    font-weight: 400;
+    font-size: clamp(1.35rem, 4vw, 1.7rem);
+    font-weight: 500;
     line-height: 1.1;
     text-align: center;
     text-decoration: none;
+  }
+
+  .site-header__mobile-side {
+    width: 3rem;
+    height: 1px;
+  }
+
+  .site-header__mobile-label {
+    display: block;
+    text-align: center;
   }
 
   .site-header__mobile-group {
@@ -560,11 +515,11 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   }
 
   .site-header__mobile-trigger {
-    justify-content: space-between;
-    text-align: left;
+    cursor: pointer;
   }
 
   .site-header__mobile-chevron {
+    justify-self: end;
     width: 1.75rem;
     height: 1.75rem;
     flex-shrink: 0;
@@ -586,8 +541,9 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     display: block;
     padding: 0.75rem 0;
     color: rgb(71 85 105);
-    font-size: 1.1rem;
+    font-size: 0.98rem;
     font-weight: 500;
+    text-align: center;
     text-decoration: none;
   }
 

@@ -148,9 +148,6 @@ export default function SiteHeader() {
                 );
               })}
 
-              <button type="button" className="site-header__cta">
-                <span className="site-header__cta-label">Contact Us</span>
-              </button>
             </nav>
 
             <button
@@ -208,7 +205,9 @@ export default function SiteHeader() {
                       target="_top"
                       className="site-header__mobile-link"
                     >
-                      {item.label}
+                      <span className="site-header__mobile-side" aria-hidden="true" />
+                      <span className="site-header__mobile-label">{item.label}</span>
+                      <span className="site-header__mobile-side" aria-hidden="true" />
                     </a>
                   );
                 }
@@ -221,7 +220,8 @@ export default function SiteHeader() {
                       onClick={() => toggleMobileDropdown(item.label)}
                       aria-expanded={isOpen}
                     >
-                      <span>{item.label}</span>
+                      <span className="site-header__mobile-side" aria-hidden="true" />
+                      <span className="site-header__mobile-label">{item.label}</span>
                       <ChevronDown
                         className={`site-header__mobile-chevron ${isOpen ? "site-header__mobile-chevron--open" : ""}`}
                         aria-hidden="true"
@@ -245,10 +245,6 @@ export default function SiteHeader() {
                   </div>
                 );
               })}
-
-              <button type="button" className="site-header__mobile-cta">
-                <span className="site-header__cta-label">Contact Us</span>
-              </button>
             </div>
           </div>
         </div>
