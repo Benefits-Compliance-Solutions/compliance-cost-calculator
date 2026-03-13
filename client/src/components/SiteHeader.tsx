@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
     label: "About",
     children: [
       { label: "About BCS", href: `${SITE_ROOT}/about-bcs` },
-      { label: "Our Team", href: `${SITE_ROOT}/who-we/are` },
+      { label: "Our Team", href: `${SITE_ROOT}/who-we-are` },
     ],
   },
   {
@@ -127,7 +127,6 @@ export default function SiteHeader() {
                       aria-expanded={activeDesktopDropdown === item.label}
                     >
                       <span>{item.label}</span>
-                      <ChevronDown className="site-header__chevron" aria-hidden="true" />
                     </button>
 
                     <div
@@ -167,9 +166,7 @@ export default function SiteHeader() {
         <div className="site-header__mobile-overlay" role="dialog" aria-modal="true" aria-label="Mobile navigation menu">
           <div className="site-header__mobile-shell">
             <div className="site-header__mobile-topbar">
-              <a
-                href={SITE_ROOT}
-                target="_top"
+              <div
                 className="site-header__brand site-header__brand--mobile"
                 aria-label="Benefits Compliance Solutions home"
               >
@@ -180,7 +177,7 @@ export default function SiteHeader() {
                     className="site-header__logo site-header__logo--mobile"
                   />
                 </span>
-              </a>
+              </div>
 
               <button
                 type="button"
