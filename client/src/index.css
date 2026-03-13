@@ -286,7 +286,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    min-height: 5rem;
+    min-height: 4.5rem;
   }
 
   .site-header__brand {
@@ -295,7 +295,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     flex-shrink: 0;
     max-width: min(18rem, 62vw);
     text-decoration: none;
-    margin-left: 20px;
+    margin-left: 8px;
   }
 
   .site-header__brand--mobile {
@@ -324,7 +324,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     display: block;
     width: 100%;
     height: auto;
-    max-width: 8.9rem;
+    max-width: 7.5rem;
   }
 
   .site-header__logo--mobile {
@@ -334,13 +334,13 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .site-header__nav {
     display: none;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 1.5rem;
-    flex: 1;
+    flex: none;
     min-width: 0;
-    margin-left: auto;
+    margin-left: 0;
     padding-left: 0;
-    margin-right: 70px;
+    margin-right: 0;
   }
 
   .site-header__link,
@@ -353,7 +353,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     border: 0;
     background: transparent;
     color: white;
-    font-size: 0.975rem;
+    font-size: 0.775rem;
     font-weight: 500;
     text-decoration: none;
     text-decoration-color: transparent;
@@ -549,19 +549,91 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     text-decoration: none;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 500px) {
+    .site-header__bar {
+      justify-content: space-evenly;
+    }
+
     .site-header__nav {
       display: flex;
+      gap: 0.85rem;
+      margin-left: 0.5rem;
+      margin-right: 0;
     }
 
     .site-header__menu-toggle {
       display: none;
     }
+
+    .site-header__brand {
+      margin-left: 0;
+    }
+
+    .site-header__logo {
+      max-width: 6.5rem;
+    }
+
+    .site-header__link,
+    .site-header__link--button {
+      gap: 0.2rem;
+      min-height: 2.35rem;
+      font-size: 0.68rem;
+    }
+
+    .site-header__chevron {
+      width: 0.85rem;
+      height: 0.85rem;
+    }
   }
 
-  @media (max-width: 1023px) {
+  @media (max-width: 499px) {
     .site-header__bar {
-      min-height: 5.25rem;
+      min-height: 4.75rem;
+    }
+  }
+
+  @media (min-width: 700px) {
+    .site-header__logo {
+      max-width: 7.25rem;
+    }
+
+    .site-header__nav {
+      gap: 1.1rem;
+      margin-left: 0.75rem;
+      margin-right: 0;
+    }
+
+    .site-header__link,
+    .site-header__link--button {
+      font-size: 0.76rem;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .site-header__logo {
+      max-width: 7.9rem;
+    }
+
+    .site-header__nav {
+      gap: 1.5rem;
+      margin-left: 1rem;
+      margin-right: 0;
+    }
+
+    .site-header__link,
+    .site-header__link--button {
+      gap: 0.35rem;
+      min-height: 2.75rem;
+      font-size: 0.775rem;
+    }
+
+    .site-header__brand {
+      margin-left: 8px;
+    }
+
+    .site-header__chevron {
+      width: 1rem;
+      height: 1rem;
     }
   }
 
