@@ -680,7 +680,7 @@ export default function Home() {
           </div>
 
           {/* Right Column: Results - Always visible with placeholder state */}
-          <div className="space-y-6 lg:sticky lg:top-4 lg:self-start">
+          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             {hasProvidedData ? (
               <div className="animate-in fade-in duration-500">
                 <AnalysisAccuracy
