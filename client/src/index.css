@@ -299,7 +299,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   }
 
   .site-header__brand--mobile {
-    max-width: min(17rem, 72vw);
+    max-width: min(18rem, 62vw);
   }
 
   .site-header__logo-frame {
@@ -328,7 +328,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   }
 
   .site-header__logo--mobile {
-    max-width: 8.5rem;
+    max-width: 7.5rem;
   }
 
   .site-header__nav {
@@ -460,27 +460,29 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1.5rem 1.5rem 1.25rem;
+    min-height: 4.5rem;
+    padding: 0 1rem;
     border-bottom: 1px solid rgb(255 255 255 / 0.12);
-    background: #1A1D35;
+    background: rgba(38, 38, 100, 0.98);
   }
 
   .site-header__mobile-close {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border: 0;
     background: transparent;
     color: white;
+    padding: 0;
   }
 
   .site-header__mobile-nav {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    padding: 2rem 1.5rem 2.5rem;
+    padding: 1.5rem 1.5rem 2.5rem;
   }
 
   .site-header__mobile-link,
@@ -520,18 +522,6 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     cursor: pointer;
   }
 
-  .site-header__mobile-chevron {
-    justify-self: end;
-    width: 1.75rem;
-    height: 1.75rem;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-  }
-
-  .site-header__mobile-chevron--open {
-    transform: rotate(180deg);
-  }
-
   .site-header__mobile-submenu {
     display: flex;
     flex-direction: column;
@@ -542,9 +532,10 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   .site-header__mobile-sublink {
     display: block;
     padding: 0.75rem 0;
-    color: rgb(71 85 105);
-    font-size: 0.98rem;
+    color: rgb(43 43 104);
+    font-size: clamp(1.35rem, 4vw, 1.7rem);
     font-weight: 500;
+    line-height: 1.1;
     text-align: center;
     text-decoration: none;
   }
@@ -571,6 +562,10 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
       max-width: 6.5rem;
     }
 
+    .site-header__logo--mobile {
+      max-width: 6.5rem;
+    }
+
     .site-header__link,
     .site-header__link--button {
       gap: 0.2rem;
@@ -578,20 +573,29 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
       font-size: 0.68rem;
     }
 
-    .site-header__chevron {
-      width: 0.85rem;
-      height: 0.85rem;
-    }
   }
 
   @media (max-width: 499px) {
     .site-header__bar {
       min-height: 4.75rem;
     }
+
+    .site-header__brand {
+      margin-left: 0;
+    }
+
+    .site-header__mobile-topbar {
+      min-height: 4.75rem;
+      padding: 0 1rem;
+    }
   }
 
   @media (min-width: 700px) {
     .site-header__logo {
+      max-width: 7.25rem;
+    }
+
+    .site-header__logo--mobile {
       max-width: 7.25rem;
     }
 
@@ -612,6 +616,10 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
       max-width: 7.9rem;
     }
 
+    .site-header__logo--mobile {
+      max-width: 7.9rem;
+    }
+
     .site-header__nav {
       gap: 1.5rem;
       margin-left: 1rem;
@@ -629,10 +637,6 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
       margin-left: 80px;
     }
 
-    .site-header__chevron {
-      width: 1rem;
-      height: 1rem;
-    }
   }
 
   .home-layout-shell {
