@@ -295,7 +295,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     flex-shrink: 0;
     max-width: min(18rem, 62vw);
     text-decoration: none;
-    margin-left: 8px;
+    margin-left: 80px;
   }
 
   .site-header__brand--mobile {
@@ -550,10 +550,6 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   }
 
   @media (min-width: 500px) {
-    .site-header__bar {
-      justify-content: space-evenly;
-    }
-
     .site-header__nav {
       display: flex;
       gap: 0.85rem;
@@ -566,7 +562,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     }
 
     .site-header__brand {
-      margin-left: 0;
+      margin-left: 65px;
     }
 
     .site-header__logo {
@@ -628,7 +624,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     }
 
     .site-header__brand {
-      margin-left: 8px;
+      margin-left: 80px;
     }
 
     .site-header__chevron {
