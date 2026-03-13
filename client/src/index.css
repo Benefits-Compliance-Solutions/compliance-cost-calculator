@@ -299,7 +299,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   }
 
   .site-header__brand--mobile {
-    max-width: min(17rem, 72vw);
+    max-width: min(18rem, 62vw);
   }
 
   .site-header__logo-frame {
@@ -328,7 +328,7 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
   }
 
   .site-header__logo--mobile {
-    max-width: 8.5rem;
+    max-width: 7.5rem;
   }
 
   .site-header__nav {
@@ -470,11 +470,12 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border: 0;
     background: transparent;
     color: white;
+    padding: 0;
   }
 
   .site-header__mobile-nav {
@@ -561,6 +562,10 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
       max-width: 6.5rem;
     }
 
+    .site-header__logo--mobile {
+      max-width: 6.5rem;
+    }
+
     .site-header__link,
     .site-header__link--button {
       gap: 0.2rem;
@@ -590,6 +595,10 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
       max-width: 7.25rem;
     }
 
+    .site-header__logo--mobile {
+      max-width: 7.25rem;
+    }
+
     .site-header__nav {
       gap: 1.1rem;
       margin-left: 0.75rem;
@@ -604,6 +613,10 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
 
   @media (min-width: 960px) {
     .site-header__logo {
+      max-width: 7.9rem;
+    }
+
+    .site-header__logo--mobile {
       max-width: 7.9rem;
     }
 
