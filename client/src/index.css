@@ -555,6 +555,8 @@ Design Philosophy: Corporate Minimalism with Data Visualization Focus
       gap: 0.85rem;
       margin-left: 0.5rem;
       margin-right: 0;
+      position: relative;
+      left: -120px;
     }
 
     .site-header__menu-toggle {
